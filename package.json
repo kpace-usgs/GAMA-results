@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
+    "esri-leaflet": "^2.0.8",
     "leaflet": "^1.0.3",
     "vue": "^2.2.2",
+    "vue-spinner": "^1.0.2",
     "vue2-leaflet": "0.0.44"
   },
   "devDependencies": {

@@ -1,0 +1,547 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dataroot xmlns:od="urn:schemas-microsoft-com:officedata" generated="2016-07-21T18:40:34">
+<Cons>
+<ID>1</ID>
+<Chemical_Name>Aluminum </Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01106</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 500</Low_Thresh>
+<Mod_Thresh> 500 -  1000</Mod_Thresh>
+<Hi_Thresh>&gt; 1000</Hi_Thresh>
+<Thresh_Val>1000</Thresh_Val>
+<Thresh_Src>MCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>2</ID>
+<Chemical_Name>Antimony</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01095</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 3</Low_Thresh>
+<Mod_Thresh> 3 -  6</Mod_Thresh>
+<Hi_Thresh>&gt; 6</Hi_Thresh>
+<Thresh_Val>6</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Action level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>3</ID>
+<Chemical_Name>Arsenic</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01000</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 5</Low_Thresh>
+<Mod_Thresh> 5 -  10</Mod_Thresh>
+<Hi_Thresh>&gt; 10</Hi_Thresh>
+<Thresh_Val>10</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Action level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>4</ID>
+<Chemical_Name>Barium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01005</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 500</Low_Thresh>
+<Mod_Thresh> 500 -  1000</Mod_Thresh>
+<Hi_Thresh>&gt; 1000</Hi_Thresh>
+<Thresh_Val>1000</Thresh_Val>
+<Thresh_Src>MCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>5</ID>
+<Chemical_Name>Beryllium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01010</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 2</Low_Thresh>
+<Mod_Thresh> 2 -  4</Mod_Thresh>
+<Hi_Thresh>&gt; 4</Hi_Thresh>
+<Thresh_Val>4</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Action level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>7</ID>
+<Chemical_Name>Boron</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01020</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 3000</Low_Thresh>
+<Mod_Thresh> 3000 -  6000</Mod_Thresh>
+<Hi_Thresh>&gt; 6000</Hi_Thresh>
+<Thresh_Val>6000</Thresh_Val>
+<Thresh_Src>HBSL</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>8</ID>
+<Chemical_Name>Cadmium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01025</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 2.5</Low_Thresh>
+<Mod_Thresh> 2.5 -  5</Mod_Thresh>
+<Hi_Thresh>&gt; 5</Hi_Thresh>
+<Thresh_Val>5</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Action level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>9</ID>
+<Chemical_Name>Carbon-14</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>49933</USGS_Pcode>
+<Units>percent</Units>
+<Low_Thresh>&lt;30</Low_Thresh>
+<Mod_Thresh>30 - 95</Mod_Thresh>
+<Hi_Thresh>&gt;95</Hi_Thresh>
+</Cons>
+<Cons>
+<ID>10</ID>
+<Chemical_Name>Chloride</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>00940</USGS_Pcode>
+<Units>mg/L</Units>
+<Low_Thresh>&lt; 250</Low_Thresh>
+<Mod_Thresh> 250 -  500</Mod_Thresh>
+<Hi_Thresh>&gt; 500</Hi_Thresh>
+<Thresh_Val>500</Thresh_Val>
+<Thresh_Src>SMCL-CA</Thresh_Src>
+<Thresh_Acr>Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>11</ID>
+<Chemical_Name>Chromium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01030</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 25</Low_Thresh>
+<Mod_Thresh> 25 -  50</Mod_Thresh>
+<Hi_Thresh>&gt; 50</Hi_Thresh>
+<Thresh_Val>50</Thresh_Val>
+<Thresh_Src>MCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>15</ID>
+<Chemical_Name>Fungicides</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>16</ID>
+<Chemical_Name>Gasolines</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>17</ID>
+<Chemical_Name>Herbicides</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>18</ID>
+<Chemical_Name>Herbicides</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>19</ID>
+<Chemical_Name>Insecticides</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>24</ID>
+<Chemical_Name>Microbiology</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>35</ID>
+<Chemical_Name>Refrigerants</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>29</ID>
+<Chemical_Name>Organic Synthesis</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>40</ID>
+<Chemical_Name>Solvents</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>44</ID>
+<Chemical_Name>Trihalomethanes</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+<Cons>
+<ID>37</ID>
+<Chemical_Name>Specific conductivity</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>00095</USGS_Pcode>
+<Units>µS/cm</Units>
+<Low_Thresh>&lt; 800</Low_Thresh>
+<Mod_Thresh> 800 -  1600</Mod_Thresh>
+<Hi_Thresh>&gt; 1600</Hi_Thresh>
+<Thresh_Val>1600</Thresh_Val>
+<Thresh_Src>SMCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>39</ID>
+<Chemical_Name>Silver</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01075</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 50</Low_Thresh>
+<Mod_Thresh> 50 -  100</Mod_Thresh>
+<Hi_Thresh>&gt; 100</Hi_Thresh>
+<Thresh_Val>100</Thresh_Val>
+<Thresh_Src>HBSL</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>6</ID>
+<Chemical_Name>Gross Beta 72hr</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>62642</USGS_Pcode>
+<Units>pCi/L</Units>
+<Low_Thresh>&lt; 25</Low_Thresh>
+<Mod_Thresh> 25 -  50</Mod_Thresh>
+<Hi_Thresh>&gt; 50</Hi_Thresh>
+<Thresh_Val>50</Thresh_Val>
+<Thresh_Src>MCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>20</ID>
+<Chemical_Name>Iron</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01046</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 150</Low_Thresh>
+<Mod_Thresh> 150 -  300</Mod_Thresh>
+<Hi_Thresh>&gt; 300</Hi_Thresh>
+<Thresh_Val>300</Thresh_Val>
+<Thresh_Src>SMCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>45</ID>
+<Chemical_Name>Tritium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>07000</USGS_Pcode>
+<Units>percent</Units>
+<Low_Thresh>&lt;0.3</Low_Thresh>
+<Mod_Thresh>0.3 - 2</Mod_Thresh>
+<Hi_Thresh>&gt;2</Hi_Thresh>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>21</ID>
+<Chemical_Name>Lead</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01049</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 7.5</Low_Thresh>
+<Mod_Thresh> 7.5 -  15</Mod_Thresh>
+<Hi_Thresh>&gt; 15</Hi_Thresh>
+<Thresh_Val>15</Thresh_Val>
+<Thresh_Src>AL-US</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>22</ID>
+<Chemical_Name>Manganese</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01056</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 150</Low_Thresh>
+<Mod_Thresh> 150 -  300</Mod_Thresh>
+<Hi_Thresh>&gt; 300</Hi_Thresh>
+<Thresh_Val>300</Thresh_Val>
+<Thresh_Src>HBSL</Thresh_Src>
+<Thresh_Acr>Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>23</ID>
+<Chemical_Name>Mercury</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>71890</USGS_Pcode>
+<Units>mg/L</Units>
+<Low_Thresh>&lt; 1</Low_Thresh>
+<Mod_Thresh> 1 -  2</Mod_Thresh>
+<Hi_Thresh>&gt; 2</Hi_Thresh>
+<Thresh_Val>2</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>43</ID>
+<Chemical_Name>Thallium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01057</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 1</Low_Thresh>
+<Mod_Thresh> 1 -  2</Mod_Thresh>
+<Hi_Thresh>&gt; 2</Hi_Thresh>
+<Thresh_Val>2</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>25</ID>
+<Chemical_Name>Molybdenum</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01060</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 20</Low_Thresh>
+<Mod_Thresh> 20 -  40</Mod_Thresh>
+<Hi_Thresh>&gt; 40</Hi_Thresh>
+<Thresh_Val>40</Thresh_Val>
+<Thresh_Src>HBSL</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>26</ID>
+<Chemical_Name>Nickel</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01065</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 50</Low_Thresh>
+<Mod_Thresh> 50 -  100</Mod_Thresh>
+<Hi_Thresh>&gt; 100</Hi_Thresh>
+<Thresh_Val>100</Thresh_Val>
+<Thresh_Src>MCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>27</ID>
+<Chemical_Name>Nitrite</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>00613</USGS_Pcode>
+<Units>mg/L</Units>
+<Low_Thresh>&lt; .5</Low_Thresh>
+<Mod_Thresh> .5 -  1</Mod_Thresh>
+<Hi_Thresh>&gt; 1</Hi_Thresh>
+<Thresh_Val>1</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Action level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>0</ID>
+<Chemical_Name>Gross Alpha 72hr</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>62636</USGS_Pcode>
+<Units>pCi/L</Units>
+<Low_Thresh>&lt; 7.5</Low_Thresh>
+<Mod_Thresh> 7.5 -  15</Mod_Thresh>
+<Hi_Thresh>&gt; 15</Hi_Thresh>
+<Thresh_Val>15</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>28</ID>
+<Chemical_Name>Nitrite plus Nitrate</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>00631</USGS_Pcode>
+<Units>mg/L</Units>
+<Low_Thresh>&lt; 5</Low_Thresh>
+<Mod_Thresh> 5 -  10</Mod_Thresh>
+<Hi_Thresh>&gt; 10</Hi_Thresh>
+<Thresh_Val>10</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Action level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>30</ID>
+<Chemical_Name>Perchlorate</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>63790 61209</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 3</Low_Thresh>
+<Mod_Thresh> 3 -  6</Mod_Thresh>
+<Hi_Thresh>&gt; 6</Hi_Thresh>
+<Thresh_Val>6</Thresh_Val>
+<Thresh_Src>MCL-CA</Thresh_Src>
+<Thresh_Acr>Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>48</ID>
+<Chemical_Name>Zinc</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01090</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 1000</Low_Thresh>
+<Mod_Thresh> 1000 -  2000</Mod_Thresh>
+<Hi_Thresh>&gt; 2000</Hi_Thresh>
+<Thresh_Val>2000</Thresh_Val>
+<Thresh_Src>HBSL</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>31</ID>
+<Chemical_Name>pH</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>00400</USGS_Pcode>
+<Units>unitless</Units>
+<Low_Thresh>&lt; 6.5</Low_Thresh>
+<Mod_Thresh> 6.5 -  8.5</Mod_Thresh>
+<Hi_Thresh>&gt; 8.5</Hi_Thresh>
+<Thresh_Val>8.5</Thresh_Val>
+<Thresh_Src>SMCL-US</Thresh_Src>
+<Thresh_Acr>Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>33</ID>
+<Chemical_Name>Radium-226</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>09511</USGS_Pcode>
+<Units>pCi/L</Units>
+<Low_Thresh>&lt; 2.5</Low_Thresh>
+<Mod_Thresh> 2.5 -  5</Mod_Thresh>
+<Hi_Thresh>&gt; 5</Hi_Thresh>
+<Thresh_Val>5</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>14</ID>
+<Chemical_Name>Fluoride</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>00950</USGS_Pcode>
+<Units>mg/L</Units>
+<Low_Thresh>&lt; 1</Low_Thresh>
+<Mod_Thresh> 1 -  2</Mod_Thresh>
+<Hi_Thresh>&gt; 2</Hi_Thresh>
+<Thresh_Val>2</Thresh_Val>
+<Thresh_Src>MCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>46</ID>
+<Chemical_Name>Uranium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>22703</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 15</Low_Thresh>
+<Mod_Thresh> 15 -  30</Mod_Thresh>
+<Hi_Thresh>&gt; 30</Hi_Thresh>
+<Thresh_Val>30</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>13</ID>
+<Chemical_Name>Copper</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01040</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 650</Low_Thresh>
+<Mod_Thresh> 650 -  1300</Mod_Thresh>
+<Hi_Thresh>&gt; 1300</Hi_Thresh>
+<Thresh_Val>1300</Thresh_Val>
+<Thresh_Src>AL-US</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>12</ID>
+<Chemical_Name>Chromium VI</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01032</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 5</Low_Thresh>
+<Mod_Thresh> 5 -  10</Mod_Thresh>
+<Hi_Thresh>&gt; 10</Hi_Thresh>
+<Thresh_Val>10</Thresh_Val>
+<Thresh_Src>MCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>41</ID>
+<Chemical_Name>Strontium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01080</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 2000</Low_Thresh>
+<Mod_Thresh> 2000 -  4000</Mod_Thresh>
+<Hi_Thresh>&gt; 4000</Hi_Thresh>
+<Thresh_Val>4000</Thresh_Val>
+<Thresh_Src>HBSL</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>34</ID>
+<Chemical_Name>Radium-228</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>81366</USGS_Pcode>
+<Units>pCi/L</Units>
+<Low_Thresh>&lt; 2.5</Low_Thresh>
+<Mod_Thresh> 2.5 -  5</Mod_Thresh>
+<Hi_Thresh>&gt; 5</Hi_Thresh>
+<Thresh_Val>5</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>36</ID>
+<Chemical_Name>Residue</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>70300</USGS_Pcode>
+<Units>mg/L</Units>
+<Low_Thresh>&lt; 500</Low_Thresh>
+<Mod_Thresh> 500 -  1000</Mod_Thresh>
+<Hi_Thresh>&gt; 1000</Hi_Thresh>
+<Thresh_Val>1000</Thresh_Val>
+<Thresh_Src>SMCL-CA</Thresh_Src>
+<Thresh_Acr>Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>47</ID>
+<Chemical_Name>Vanadium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01085</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 25</Low_Thresh>
+<Mod_Thresh> 25 -  50</Mod_Thresh>
+<Hi_Thresh>&gt; 50</Hi_Thresh>
+<Thresh_Val>50</Thresh_Val>
+<Thresh_Src>NL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>42</ID>
+<Chemical_Name>Sulfate</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>00945</USGS_Pcode>
+<Units>mg/L</Units>
+<Low_Thresh>&lt; 250</Low_Thresh>
+<Mod_Thresh> 250 -  500</Mod_Thresh>
+<Hi_Thresh>&gt; 500</Hi_Thresh>
+<Thresh_Val>500</Thresh_Val>
+<Thresh_Src>SMCL-CA</Thresh_Src>
+<Thresh_Acr>Maximum Contaminant Level established by the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>38</ID>
+<Chemical_Name>Selenium</Chemical_Name>
+<Chemical_Type>Inorganic</Chemical_Type>
+<USGS_Pcode>01145</USGS_Pcode>
+<Units>µg/L</Units>
+<Low_Thresh>&lt; 25</Low_Thresh>
+<Mod_Thresh> 25 -  50</Mod_Thresh>
+<Hi_Thresh>&gt; 50</Hi_Thresh>
+<Thresh_Val>50</Thresh_Val>
+<Thresh_Src>MCL-US</Thresh_Src>
+<Thresh_Acr>Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency.</Thresh_Acr>
+</Cons>
+<Cons>
+<ID>32</ID>
+<Chemical_Name>Pharmaceuticals</Chemical_Name>
+<Chemical_Type>Organic</Chemical_Type>
+</Cons>
+</dataroot>

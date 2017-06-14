@@ -1,0 +1,31 @@
+Chemical_Name,ChemicalType,USGS_Pcode,Units,Low_Thresh,Mod_Thresh,Hi_Thresh,ThreshVal,ThreshSrc
+Aluminum,Inorganic,01106,µg/L,<500,500 - 1000,>1000,1000,MCL-CA
+Antimony,Inorganic,01095,µg/L,<3,3 - 6,>6,6,MCL-US
+Arsenic,Inorganic,01000,µg/L,<5,5 - 10,>10,10,MCL-US
+Barium,Inorganic,01005,µg/L,<500,500 - 1000,>1000,1000,MCL-CA
+Beryllium,Inorganic,01010,µg/L,<2,2 - 4,>4,4,MCL-US
+Boron,Inorganic,01020,µg/L,<3000,3000 - 6000,>6000,6000,HBSL
+Cadmium,Inorganic,01025,µg/L,<2.5,2.5 - 5,>5,5,MCL-US
+Chromium,Inorganic,01030,µg/L,<25,25 - 50,>50,50,MCL-CA
+Chromium (VI),Inorganic,01032,µg/L,<25,25 - 50,>50,50,MCL-CA
+Copper,Inorganic,01040,µg/L,<650,650 - 1300,>1300,1300,AL-US
+Fluoride,Inorganic,00950,mg/L,<1,1 - 2,>2,2,MCL-CA
+Lead,Inorganic,01049,µg/L,<7.5,7.5 - 15,>15,15,AL-US
+Manganese,Inorganic,01056,µg/L,<150,150 - 300,>300,300,HBSL
+Mercury,Inorganic,71890,mg/L,<1,1 - 2,>2,2,MCL-US
+Molybdenum,Inorganic,01060,µg/L,<20,20 - 40,>40,40,HBSL
+Nickel,Inorganic,01065,µg/L,<50,50 - 100,>100,100,MCL-CA
+Selenium,Inorganic,01145,µg/L,<25,25 - 50,>50,50,MCL-US
+Silver,Inorganic,01075,µg/L,<50,50 - 100,>100,100,HBSL
+Strontium,Inorganic,01080,µg/L,<2000,2000 - 4000,>4000,4000,HBSL
+Thallium,Inorganic,01057,µg/L,<1,1 - 2,>2,2,MCL-US
+Uranium,Inorganic,22703,µg/L,<15,15 - 30,>30,30,MCL-US
+Zinc,Inorganic,01090,µg/L,<1000,1000 - 2000,>2000,2000,HBSL
+"Nitrate plus nitrite, as nitrogen",Inorganic,00631,mg/L,<5,5 - 10,>10,10,MCL-US
+Tetrachloroethylene (PCE),Organic,34475,µg/L,<0.5,0.5 - 5,>5,5,MCL-US
+Trichloroethylene (TCE),Organic,39180,µg/L,<0.5,0.5 - 5,>5,5,MCL-US
+Benzene,Organic,34030,µg/L,<0.1,0.1 - 1,>1,1,MCL-CA
+Atrazine,Organic,39632,µg/L,<0.1,0.1 - 1,>1,1,MCL-CA
+Chloroform (trichloromethane) (THM),Organic,32106,µg/L,<8,8 - 80,>80,80,MCL-US
+Specific cond at 25C,Inorganic,00095,µs/cm,<800,800 - 1600,>1600,1600,SMCL-CA
+pH,Inorganic,00400,,<6.5,6.5 - 8.5,>8.5,6.5–8.5,SMCL

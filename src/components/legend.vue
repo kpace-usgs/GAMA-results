@@ -2,9 +2,9 @@
 	<div id='map_legend' class='leaflet-bar'>
 		<div class='toggleBar'>
 			<h2 v-if='param == "" && type.length < 1'>Legend</h2>
-			<a class='toggle' @click='toggleLegend' style="margin-left: auto; width: 100px;">
-				<span v-if='showLegend === false'>Show Legend +</span>
-				<span v-if='showLegend'>&times;</span>
+			<a class='toggle' @click='toggle' style="margin-left: auto; width: 100px;">
+				<span v-if='showControls === false'>Show Legend +</span>
+				<span v-if='showControls'>&times;</span>
 			</a>
 		</div>
 
@@ -300,18 +300,12 @@
 </template>
 
 <script>
+import toggle from '../mixins/toggle.vue'
 
 export default {
 	name: 'LegendDiv',
-	props: ['showLegend', 'layers', 'type', 'param'],
-	methods: {
-		toggleLegend() {
-			this.showLegend = !this.showLegend;
-		}
-	},
-	computed: {
-
-	}
+	props: ['layers', 'type', 'param'],
+	mixins: [toggle]
 }
 </script>
 

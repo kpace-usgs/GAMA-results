@@ -1,15 +1,15 @@
 <template>
 	<div id='app'>
-		<MapDiv @toggleLoading = 'toggleLoading'></MapDiv>
+		<MapDiv
+			:param='param'
+			:type='type'
+			:layerArr = 'layers'
+		></MapDiv>
 
-		<PulseLoader :loading='isLoading'></PulseLoader>
-
-		<LegendDiv 	:showLegend = 'showControls' 
-					:layers = 'layers' :type='type' :param='param'>
-			
+		<LegendDiv :layers = 'layers' :type='type' :param='param'>
 		</LegendDiv>
 
-		<MenuDiv :showControls='showControls' 
+		<MenuDiv 
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
 			@changeType='handleType'
@@ -21,33 +21,20 @@
 import MapDiv from './components/mapDiv';
 import LegendDiv from './components/legend';
 import MenuDiv from './components/menu';
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue';
-
 
 export default {
 	name: 'App',
 	data() {
 		return {
-			isLoading: true,
-			width: '',
-			showControls: '',
-			mobileBound: 600,
 			layers: [],
 			param: '',
 			type: ''
 		}
 	},
 	components: {
-		MapDiv, PulseLoader, MenuDiv, LegendDiv
+		MapDiv, MenuDiv, LegendDiv
 	},
 	methods: {
-		onResize() {
-			this.width = window.innerWidth;
-			this.showControls = this.width < this.mobileBound ? false : true;
-		},
-		toggleLoading() {
-			this.isLoading = !this.isLoading;
-		},
 		handleLayer(arr){
 			this.layers = arr;
 		},
@@ -56,14 +43,7 @@ export default {
 		},
 		handleType(string){
 			this.type = string;
-		},
-		change(){
-
 		}
-	},
-	mounted() {
-		window.addEventListener('resize', this.onResize);
-		this.onResize();
 	}
 }
 </script>
@@ -140,11 +120,5 @@ font-size: 14px;
 .leaflet-bar{
     background-color:white;
 }
-.v-spinner{
-    position: absolute;
-    top: 50px;
-    left: 50%;
-    right: 50%;
-    z-index: 1010;
-}
+
 </style>

@@ -9,6 +9,8 @@
 		</div>
 	    <!-- Begin Controller Form -->
 	    <div v-if='showControls' class='form'>
+
+	    
 	        <!-- Groundwater Study Type Selector -->
 	        <div>
 		        <label>Groundwater Study Type: </label>
@@ -34,6 +36,7 @@
 		        <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
 		        <label>Select Parameter:</label>
 	            <select style="width:300px;" v-model='param' @change='handleParam'>
+	            	<option default value=''></option>
 	            	<option v-for='parameter in parameterGroup.parameters' :value='parameter'>{{parameter.name}}</option>
 	            </select>
 	        </div>
@@ -42,8 +45,8 @@
 		        <!-- Shapefile Selector -->
 		        <label>Select Layers:</label>
 		        <div v-for='(layer, index) in layers'>
-					<input type='checkbox' :id='layer' :value='layer' v-model='layerName' @click='handleLayer' :key='index'>
-					<label for='layer'>{{layer}}</label>
+					<input type='checkbox' :id='layer' :value='layer.pane' v-model='layerName' @click='handleLayer' :key='index'>
+					<label for='layer'>{{layer.string}}</label>
 		        </div>
      		</div>
 	      
@@ -58,10 +61,11 @@
 
 <script>
 import listOfParameters from '../assets/listOfParameters.json';
+import toggle from '../mixins/toggle.vue'
 
 export default {
 	name: 'MenuDiv',
-	props: ['showControls'],
+	mixins: [toggle],
 	data() {
 		return {
 			type: '',
@@ -73,17 +77,26 @@ export default {
 				}]
 			},
 			param: '',
-			layers: ['Domestic-supply Aquifer Grid Cells', 'Public-supply Aquifer Grid Cells', 
-				'Domestic-supply Aquifer Study Units', 
-				'Public-supply Aquifer Study Units',
-				'Hydrogeologic Provinces'],
+			layers: [{
+				"string": 'Domestic-supply Aquifer Grid Cells',
+				"pane": 'shallowGridCells'
+			}, {
+				"string": 'Public-supply Aquifer Grid Cells', 
+				"pane": 'deepGridCells'
+			}, {
+				"string": 'Domestic-supply Aquifer Study Units', 
+				"pane": 'shallowStudyUnits'
+			}, {
+				"string": 'Public-supply Aquifer Study Units',
+				"pane": 'deepStudyUnits'
+			}, {
+				"string": 'Hydrogeologic Provinces',
+				"pane": 'provinces'
+			}],
 			layerName: []
 		}
 	},
 	methods: {
-		toggle(){
-			this.showControls = !this.showControls
-		},
 		handleLayer(){
 			this.$emit('changeLayer', this.layerName);
 		},

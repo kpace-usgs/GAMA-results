@@ -2,6 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var CopyWebpackPlugin = require('copy-webpack-plugin')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -27,15 +28,6 @@ module.exports = {
   },
   module: {
     rules: [
-      // {
-      //   test: /\.(js|vue)$/,
-      //   loader: 'eslint-loader',
-      //   enforce: "pre",
-      //   include: [resolve('src'), resolve('test')],
-      //   options: {
-      //     formatter: require('eslint-friendly-formatter')
-      //   }
-      // },
       {
         test: /\.json/,
         loader: 'json-loader'
@@ -67,5 +59,17 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    // copy custom static assets
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, '../src/assets/geojsons'),
+        to: process.env.NODE_ENV === 'production'
+          ? config.build.assetsPublicPath + '/geojsons/'
+          : config.dev.assetsPublicPath + '/geojsons/',
+        ignore: ['.*']
+      }
+    ])
+  ]
 }

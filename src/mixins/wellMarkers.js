@@ -76,7 +76,7 @@ export default function(feature, latlng, param){
 		color: 'black',
 		radius: 4,
 		zIndexOffset: 4
- 	}).bindPopup(() => {
+ 	}).bindPopup((paramString, feature) => {
  		L.Util.template(paramString, feature.properties);
  	});
 

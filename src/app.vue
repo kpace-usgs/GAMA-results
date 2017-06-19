@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import MapDiv from './components/mapDiv';
+import MapDiv from './components/mapDiv.vue';
 import LegendDiv from './components/legend';
 import MenuDiv from './components/menu';
 

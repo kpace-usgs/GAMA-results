@@ -65,9 +65,7 @@ module.exports = {
     new CopyWebpackPlugin([
       {
         from: path.resolve(__dirname, '../src/assets/geojsons'),
-        to: process.env.NODE_ENV === 'production'
-          ? config.build.assetsPublicPath + '/geojsons/'
-          : config.dev.assetsPublicPath + '/geojsons/',
+        to: '../dist/static/geojsons',
         ignore: ['.*']
       }
     ])

@@ -120,9 +120,8 @@ export default {
 
 .toggleBar{
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
 	align-items: baseline;
-	width: 100%;
 }
 
 </style>

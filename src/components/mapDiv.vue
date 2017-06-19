@@ -20,12 +20,12 @@ export default {
 	data() {
 		return {
 			map: '',
-			overlays: '',
 			baseLayers: '',
 			view: [37.7, -120.57],
 			zoom: 6,
-			typeLayer: L.featureGroup(),
-			paramLayer: L.featureGroup(),
+			polygonLayer: L.featureGroup(),
+			polygons: {},
+			pointLayer: L.featureGroup(),
 			wells: ''
 		}
 	},
@@ -33,25 +33,31 @@ export default {
 	props: ['param', 'type', 'layerArr'],
 	watch: {
 		type(){
+			this.clearLayer(this.pointLayer);
+			console.log(this.pointLayer.getLayers());
 			if(this.param == ''){
 				//load data according to type and change this.wells
 				this.importTypeJson();
-				// importTypeJson function filters wells
 			} else{
+				this.toggleLoading();
 				// change which of this.wells are shown
-				var that = this;
-				this.filterWells(wellMarkers, wellFilter);
+				this.addWells(wellMarkers, wellFilter);
 			}
 		},
 
 		layerArr(){
 			//clear L.featureGroup when user changes menu selection
-			if(this.typeLayer.getLayers().length > 0){
-				this.typeLayer.clearLayers();
-			}
+			this.clearLayer(this.polygonLayer);
+
 			// get each selected pane layer
 			for(var i = 0; i < this.layerArr.length; i++){
-				this.importPaneJson(this.layerArr[i]);
+				var layerName = this.layerArr[i];
+				// if not already saved in this.polygons, import
+				if(!this.polygons.hasOwnProperty(layerName)){
+					this.importPaneJson(layerName);
+				} else {
+					this.polygonLayer.addLayer(this.polygons[layerName]);
+				}
 			}
 		},
 
@@ -83,7 +89,7 @@ export default {
 		importTypeJson(){
 			this.toggleLoading();
 			var that = this;
-
+			var callback = this.addWells;;
 			// if any other type than status is selected, only import one json file
 			if(this.type !== 'STATUS'){
 				var string = this.type.toLowerCase();
@@ -91,73 +97,83 @@ export default {
 				d3.json(url, function(err, result){
 					if(err) throw err;
 					that.wells = result;
-					that.filterWells(wellIcons, function(){return true}); //add results to map with no filtering 2nd callback function
+					return callback(wellIcons, function(){return true}); //add results to map with no filtering 2nd callback function
 				})
 			} else{
 				// if status is selected, then import all json files 
-				that.wells += d3.json('./static/geojsons/deep.json');
-				that.wells += d3.json('./static/geojsons/shallow.json');
-				that.wells += d3.json('./static/geojsons/trends.json');
-		
-				// need to call filterWells when all jsons have been collected
-				this.filterWells(wellIcons, function(){return true});
+				d3.json('./static/geojsons/deep.json', function(err, deep){
+					that.wells = deep;
+					callback();
+					d3.json('./static/geojsons/shallow.json', function(err, shallow){
+						if(err) throw err;
+						that.wells = shallow;
+						callback();
+						d3.json('./static/geojsons/trends.json', function(err, trends){
+							that.wells = trends;
+							callback(wellIcons, function(){return true});
+						})
+					})
+				});
 			}
 		},
 
 		importParamJson(){
-			this.toggleLoading();
 			var that = this;
 			var url = './static/geojsons/'+this.param.value+'.json';
+			this.toggleLoading();
+
 			d3.json(url, function(err, result){
 				if(err) throw err;
 				that.wells = result;
-				that.filterWells(wellMarkers, wellFilter);
-				that.toggleLoading();
+				that.addWells(wellMarkers, wellFilter);
 			});
 		},
 
 		importPaneJson(string){
 			this.toggleLoading();
 			var url = './static/geojsons/' + string + '.json';
+			var that = this;
+
 			d3.json(url, function(err, result){
 				if(err) throw err;
-				var arr = [];
-				for(var i = 0; i < wells.features.length; i++){
-					arr.push({
-						"type": "Feature",
-						"properties": wells.features[i].attributes,
-						"geometry": {
-							"type": "Polygon",
-							"coordinates": wells.features[i].geometry.rings
-						}
-					});
-				}
-				this.typeLayer.addLayer(L.geoJson(arr, {
+				var geoJson = L.geoJSON(result, {
 					style: feature => {
-						paneStyle(feature)
+						return paneStyle(feature);
 					}
-				}));
+				});
+
+				that.polygonLayer.addLayer(geoJson); //add to map
+				that.polygons[string] = geoJson; // save to state
+
+				that.toggleLoading();
 			});
 		},
 
-		filterWells(callback1, callback2){
-			// clear paramLayer if it has any content
-			if(this.paramLayer.getLayers().length != 0){
-				this.paramLayer.clearLayers();
+		clearLayer(layer){
+			// clear layer if it has any content
+			if(layer.getLayers().length > 0){
+				layer.clearLayers();
 			}
+		},
+
+		addWells(callback1, callback2){
+			// this is a separate function since we sometimes want to change the pointLayer without having imported new data
+			// by contrast, polygons loaded by importPaneJson() are added to a layer then and there.
+
 			var that = this;
 			var param = this.param;
 			var studyType = this.studyType;
-			
-			// add geojson to paramLayer and call correct function for pointToLayer
+			console.log(studyType);
 
-			this.paramLayer.addLayer(
+			console.log(that.wells);
+			// add geojson to pointLayer and call correct function for pointToLayer
+			this.pointLayer.addLayer(
 				L.geoJSON(that.wells, {
 						pointToLayer: (feature, latlng) => {
 							return callback1(feature, latlng, param, studyType);
 						},
 
-						filter: (feature, studyType) => {
+						filter: (feature) => {
 							return callback2(feature, studyType)
 						}
 					}
@@ -184,21 +200,7 @@ export default {
 			// set landscape layer as default
 			this.baseLayers['Topography'].addTo(this.map);
 
-			// //save provinces as L.GeoJSON layer
-			// import('../../../trendsMap/src/assets/hydrologicProvinces_shrunk.json').then((provinces) => {
-			// 	this.overlays = {
-			// 		"Show Provinces" : L.geoJSON(provinces, {
-			// 			style: feature => {
-			// 				provinceStyle(feature);
-			// 			}
-			// 		})
-			// 	};
-			// })
-			// .then( () => {
-			// 	// define baselayers that can be toggled between
-			
-			// });
-			L.control.layers(this.baseLayers).setPosition('topleft').addTo(this.map);
+			L.control.layers(this.baseLayers, {}, {collapsed: false}).setPosition('topleft').addTo(this.map);
 
 			this.toggleLoading(); //turn off loader spinner
 		}
@@ -207,8 +209,8 @@ export default {
 	mounted() {
 		this.map = L.map('mapDiv').setView(this.view, this.zoom); 
 		this.loadOverlays();
-		this.typeLayer.addTo(this.map);
-		this.paramLayer.addTo(this.map);
+		this.polygonLayer.addTo(this.map);
+		this.pointLayer.addTo(this.map);
 	}
 }
 </script>

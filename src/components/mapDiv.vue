@@ -121,6 +121,7 @@ export default {
 			var that = this;
 			var url = './static/geojsons/'+this.param.value+'.json';
 			this.toggleLoading();
+			this.clearLayer(this.pointLayer);
 
 			d3.json(url, function(err, result){
 				if(err) throw err;
@@ -163,9 +164,7 @@ export default {
 			var that = this;
 			var param = this.param;
 			var studyType = this.studyType;
-			console.log(studyType);
-
-			console.log(that.wells);
+	
 			// add geojson to pointLayer and call correct function for pointToLayer
 			this.pointLayer.addLayer(
 				L.geoJSON(that.wells, {
@@ -209,6 +208,7 @@ export default {
 	mounted() {
 		this.map = L.map('mapDiv').setView(this.view, this.zoom); 
 		this.loadOverlays();
+		this.polygonLayer.setZIndex(-10);
 		this.polygonLayer.addTo(this.map);
 		this.pointLayer.addTo(this.map);
 	}

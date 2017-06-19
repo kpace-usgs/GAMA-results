@@ -12,7 +12,7 @@ export default function(param, cat){
 			color = '#5D9664';
 			return color;
 		} else if(cat == 'High' || parseInt(cat) > 3){
-			color = 'white';
+			color = '#EDE852';
 			return color;
 		}
 	}

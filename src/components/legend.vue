@@ -53,7 +53,7 @@
 		    	<div><p>Benchmark</p><p>Symbology</p></div>
 		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
 		    	<div><p>Moderate</p><div><img src='../assets/images/mod.png'/><p>{{param.mod}}</p></div></div>
-		    	<div><p>High</p><div><img src='../assets/images/low.png'/><p>{{param.low}}</p></div></div>
+		    	<div><p>Low</p><div><img src='../assets/images/low.png'/><p>{{param.low}}</p></div></div>
 		    	<div><p>Benchmark:</p><div><p> {{param.thresh_val}} {{param.thresh_src}}</p><img src='../assets/images/moreInfo.png' :alt='param.acr' :title='param.acr' /></div></div>
 		    </div>
 

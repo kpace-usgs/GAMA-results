@@ -66,16 +66,16 @@ export default function(feature, latlng, param){
 			break;
 	}
 
-	var opacity = category == 'High' || parseInt(category) > 3 ? 0.3 : 1;
+	//var opacity = category == 'High' || parseInt(category) > 3 ? 0.3 : 1;
 
 	return L.circleMarker(latlng, {
 		fillColor: wellColor(param, category),
-		fillOpacity: opacity,
+		fillOpacity: 1,
 		weight: 1,
-		opacity: opacity,
+		opacity: 1,
 		color: 'black',
 		radius: 4,
-		zIndexOffset: 4
+		zIndexOffset: 40
  	}).bindPopup(() => {
  		return L.Util.template(paramString, feature.properties);
  	});

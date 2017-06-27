@@ -11,16 +11,16 @@
 		<div v-if='showControls'>
 		    <!-- Groundwater Study Type Legend -->
 		    <div v-if='type.length > 0' id="mainLayerLegend" class='subLegend'>
-		    	<h3 v-if='type.includes("STATUS")'>All GAMA Sites</h3>
-		        <div v-if='type.includes("TRENDS") || type.includes("STATUS") '>
+		    	<h3 v-if='type.includes("0")'>All GAMA Sites</h3>
+		        <div v-if='type.includes("1") || type.includes("0") '>
 					<img src="../assets/images/trends.png"/>
 					<p>GAMA Trends Sites</p>
 				</div>
-				<div v-if='type.includes("SHALLOW") || type.includes("STATUS")'>
+				<div v-if='type.includes("2") || type.includes("0")'>
 		        	<img src="../assets/images/shallow.png"/>
 		        	<p>GAMA Domestic-supply Aquifer Sites</p>
 		        </div>
-		        <div v-if='type.includes("DEEP") || type.includes("STATUS")'>
+		        <div v-if='type.includes("3") || type.includes("0")'>
 		        	<img src="../assets/images/deep.png"/>
 		        	<p>GAMA Public-supply Aquifer Sites</p>
 		        </div>
@@ -59,21 +59,21 @@
 
 		    <!-- Shapefiles Legend -->
 		    <div id="extraLayerLegend" style="max-height:300px;overflow:auto;">
-		    	<div v-if='layers.includes("Domestic-supply Aquifer Grid Cells")' class='subLegend'>
+		    	<div v-if='layers.includes(0)' class='subLegend'>
 			    	<h3>Domestic-supply Aquifer Grid Cells</h3>
 			     	<div>
 			     		<div style="border:1px solid rgb(078,078,078);"></div>
 			        </div>
 			    </div>
 
-				<div v-if='layers.includes("Public-supply Aquifer Grid Cells")' class='subLegend'>
+				<div v-if='layers.includes(1)' class='subLegend'>
 			    	<h3>Public-supply Aquifer Grid Cells</h3>
 			     	<div>
 			     		<div style="border:1px solid black;"></div>
 			        </div>
 			    </div>
 
-				<div v-if='layers.includes("Domestic-supply Aquifer Study Units")' class='subLegend'>
+				<div v-if='layers.includes(2)' class='subLegend'>
 			    	<h3>Domestic-supply Aquifers <br/>Study Unit Boundaries</h3>
 			     	<div>
 			     		<div style="background-color:#9c8a5a;"></div>
@@ -97,7 +97,7 @@
 			        </div>
 			    </div>
 
-				<div v-if='layers.includes("Public-supply Aquifer Study Units")' class="subLegend">
+				<div v-if='layers.includes(3)' class="subLegend">
 					<h3>Public-supply Aquifers <br/>Study Unit Boundaries</h3>
 					<div>
 						<div style="background-color:#ffcd66"></div>
@@ -248,7 +248,7 @@
 					</div>
 				</div>	
 
-		  		<div v-if='layers.includes("Hydrogeologic Provinces")' class="subLegend">
+		  		<div v-if='layers.includes(4)' class="subLegend">
 		  			<h3>Hydrogeologic Provinces</h3>
 		  			<div>
 		  				<div style="background-color:#bf8d56; "></div>
@@ -364,10 +364,11 @@ export default {
 	width: 40%;
 }
 .paramLayerLegend.detects>div{
-	width: 45%;
+	width: 90%;
 	text-align: center;
 }
 .paramLayerLegend.detects>div>p{
+	width: 100%;
 	text-align: center;
 }
 .paramLayerLegend>div>div{

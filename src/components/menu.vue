@@ -16,10 +16,10 @@
 		        <label>Groundwater Study Type: </label>
 	            <select id="base" style="width:300px;" v-model='type' @change='handleType'>
 	                <option value=""> </option>
-	                <option value="STATUS">All Sites</option>
-	                <option value="SHALLOW">Domestic-supply Aquifer Sites</option>
-	                <option value="DEEP">Public-supply Aquifer Sites</option>
-	                <option value="TRENDS">Trends</option>
+	                <option value="0">All Sites</option>
+	                <option value="2">Domestic-supply Aquifer Sites</option>
+	                <option value="3">Public-supply Aquifer Sites</option>
+	                <option value="1">Trends</option>
 	            </select>
 	        </div>
 
@@ -45,7 +45,7 @@
 		        <!-- Shapefile Selector -->
 		        <label>Select Layers:</label>
 		        <div v-for='(layer, index) in layers'>
-					<input type='checkbox' :id='layer' :value='layer.pane' v-model='layerName' @click='handleLayer' :key='index'>
+					<input type='checkbox' :id='layer' :value='index' v-model='layerName' @click='handleLayer' :key='index'>
 					<label for='layer'>{{layer.string}}</label>
 		        </div>
      		</div>

@@ -40,6 +40,7 @@ export default {
 			this.importWells();
 		},
 		param(){
+			console.log('param changed');
 			this.importWells();
 		},
 		layerArr(){
@@ -62,6 +63,12 @@ export default {
 		studyType(){
 			// used to filter wells returned from parameter value
 			switch(this.type){
+				case '0':
+					return 'All Sites'
+					break;
+				case '1':
+					return 'Trends'
+					break;
 				case '2': 
 					return 'Domestic-supply' 
 					//have to change value because geojson property is recorded as 'domestic-supply' instead of 'shallow'
@@ -76,21 +83,40 @@ export default {
 	},
 	methods: {
 		importWells(){
+			this.toggleLoading();
 			this.clearLayer(this.pointLayer);
-			if(this.param != ''){
+
+			console.log(this.param.value);
+
+			// if a specific well type has been selected and there is a parameter value, return a subset of the parameter value's wells
+			if((this.type == 1 || this.type == 2 || this.type == 3) && typeof(this.param.value) == "number"){
+				console.log('import filtered param');
+				this.importFilteredParam();
+			} 
+
+			// otherwise just import all of the parameter's wells
+			else if(typeof(this.param.value) == "number"){
+				console.log('import param data')
 				this.importParamJson(); //import parameter's json when param changes
-			} else {
+			} 
+
+			// otherwise just import all wells of that type
+			else if(this.type != ''){
+				console.log('import type')
 				this.importTypeJson();
+			} 
+
+			// otherwise the user wants to reset the map
+			else {
+				console.log('dont load anything');
+				this.toggleLoading();
 			}
 		},
 
 		importTypeJson(){
-			this.toggleLoading();
-			var that = this;
 			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/' + this.type;
-			console.log(url);
 
-			this.pointLayer.addLayer(esri.featureLayer({
+			var layer = esri.featureLayer({
 				url: url,
 				onEachFeature: (feature, layer) => {
 					var popupText = getType(feature);
@@ -98,65 +124,76 @@ export default {
 						return L.Util.template(popupText)
 					})
 				}
-			}));
-			this.toggleLoading();
+			});
+			layer.on('load', e => {
+				this.toggleLoading();
+			});
+			this.pointLayer.addLayer(layer);
+		},
+
+		importFilteredParam(){
+			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.param.value;
+			var paramString = getParamString(this.param.value);
+			var studyType = this.studyType;
+	
+			var layer = esri.featureLayer({
+				url: url,
+				onEachFeature: function(feature, layer){
+					return layer.bindPopup(() => {
+						return L.Util.template(paramString, feature.properties);
+					})
+				},
+				where: "StudyType = '"+studyType+"'"
+			});
+
+			layer.on('load', e => {
+				this.toggleLoading();
+			})
+
+			this.pointLayer.addLayer(layer);
 		},
 
 		importParamJson(){
 			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.param.value;
-			var type = this.studyType;
 			var paramString = getParamString(this.param.value);
 
-			this.pointLayer.addLayer(esri.featureLayer({
+			var layer = esri.featureLayer({
 				url: url,
 				onEachFeature: function(feature, layer){
 					return layer.bindPopup(() => {
 						return L.Util.template(paramString, feature.properties);
 					})
 				}
-			}));
+			});
+
+			layer.on('load', e => {
+				this.toggleLoading();
+			})
+
+			this.pointLayer.addLayer(layer);
 		},
 
 		importPaneJson(val){
 			this.toggleLoading();
+			// use this for all values when arcServer has all data
+			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/baselayers_fix/MapServer/' + val;
+			var that = this;
 
-			if(val == 2 || val == 4){
-				// use this for all values when arcServer has all data
-				var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/' + val;
+			var layer = esri.featureLayer({
+				url: url,
+				onEachFeature: (feature, layer) => {
+					return layer.bindPopup(() => {
+						return L.Util.template('{PROVINCE}', feature.properties)
+					})
+				}
+			});
 
-				var layer = esri.featureLayer({
-					url: url,
-					onEachFeature: (feature, layer) => {
-						return layer.bindPopup(() => {
-							return L.Util.template('{PROVINCE}', feature.properties)
-						})
-					}
-				});
-				this.polygonLayer.addLayer(layer); // add to map
-				this.polygons.val = layer; //save to state
-				this.toggleLoading();
-			}
-			else {
-				var that = this;
-				var url = './static/geojsons/pane' + val + '.json';
-				d3.json(url, function(err, result){
-					if(err) throw err;
-					var geoJson = L.geoJSON(result, {
-						style: feature => {
-							return {
-								color: 'black',
-								weight: 0.5,
-								opacity: 0.8
-							}
-						}
-					});
-
-					that.polygonLayer.addLayer(geoJson); //add to map
-					that.polygons[string] = geoJson; // save to state
-					that.toggleLoading();
-				});
-			}
-						
+			layer.on('load', function(e) {
+				that.toggleLoading();
+			})
+			
+			this.polygonLayer.addLayer(layer); // add to map
+			this.polygons.val = layer; //save to state					
 		},
 
 		clearLayer(layer){
@@ -165,31 +202,6 @@ export default {
 				layer.clearLayers();
 			}
 		},
-
-		// addWells(callback1, callback2){
-		// 	// this is a separate function since we sometimes want to change the pointLayer without having imported new data
-		// 	// by contrast, polygons loaded by importPaneJson() are added to a layer then and there.
-
-		// 	var that = this;
-		// 	var param = this.param;
-		// 	var studyType = this.studyType;
-	
-		// 	// add geojson to pointLayer and call correct function for pointToLayer
-		// 	this.pointLayer.addLayer(
-		// 		L.geoJSON(that.wells, {
-		// 				pointToLayer: (feature, latlng) => {
-		// 					return callback1(feature, latlng, param, studyType);
-		// 				},
-
-		// 				filter: (feature) => {
-		// 					return callback2(feature, studyType)
-		// 				}
-		// 			}
-		// 		)
-		// 	);
-
-		// 	this.toggleLoading();
-		// },
 
 		loadOverlays(){
 			this.baseLayers = {

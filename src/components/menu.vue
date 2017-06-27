@@ -52,7 +52,7 @@
 	      
 
 		    <!-- Download Button -->
-		    <button type="button" style="width:200px;display:block; margin-left:auto; margin-right:auto;">Download Data from Selected Parameter Group</button>
+		    <button type="button" style="width:200px;display:block; margin-left:auto; margin-right:auto; cursor:not-allowed;" disabled>Download Data from Selected Parameter Group</button>
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
 		    <!-- insert study_unit_code.html in future -->
 	    </div>

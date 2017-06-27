@@ -59,15 +59,5 @@ module.exports = {
         }
       }
     ]
-  },
-  plugins: [
-    // copy custom static assets
-    new CopyWebpackPlugin([
-      {
-        from: path.resolve(__dirname, '../src/assets/geojsons'),
-        to: '../dist/static/geojsons',
-        ignore: ['.*']
-      }
-    ])
-  ]
+  }
 }

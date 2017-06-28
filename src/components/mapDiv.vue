@@ -175,12 +175,17 @@ export default {
 
 		importPaneJson(val){
 			this.toggleLoading();
-			// use this for all values when arcServer has all data
-			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/baselayers_fix/MapServer/' + val;
+			console.log('import pane');
+			console.log(val);
+
+			//url changes depending on layer
+			var url = val == 2 ? 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/2' : 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/baselayers_fix/MapServer/' + val;
 			var that = this;
 
 			var layer = esri.featureLayer({
 				url: url,
+				precision: 2,
+				simplifyFactor: 0.9,
 				onEachFeature: (feature, layer) => {
 					return layer.bindPopup(() => {
 						return L.Util.template('{PROVINCE}', feature.properties)

@@ -10,7 +10,7 @@
 
 		<div v-if='showControls'>
 		    <!-- Groundwater Study Type Legend -->
-		    <div v-if='type.length > 0' id="mainLayerLegend" class='subLegend'>
+		    <div v-if='type.length > 0 && param == ""' id="mainLayerLegend" class='subLegend'>
 		    	<h3 v-if='type.includes("0")'>All GAMA Sites</h3>
 		        <div v-if='type.includes("1") || type.includes("0") '>
 					<img src="../assets/images/trends.png"/>

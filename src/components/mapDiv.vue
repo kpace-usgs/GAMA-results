@@ -10,12 +10,6 @@ import 'leaflet/dist/leaflet.css';
 import Loader from '../mixins/loader.vue'
 import getParamString from '../mixins/getParamString.js'
 import getType from '../mixins/getType.js'
-// import wellFilter from '../mixins/wellFilter.js'
-// import wellIcons from '../mixins/wellIcons.js'
-// import wellMarkers from '../mixins/wellMarkers.js'
-// import provinceStyle from '../mixins/provinceStyle.js'
-// import paneStyle from '../mixins/paneStyle.js'
-import * as d3 from 'd3-request';
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
 
@@ -30,7 +24,8 @@ export default {
 			polygonLayer: L.featureGroup(),
 			polygons: {},
 			pointLayer: L.featureGroup(),
-			wells: ''
+			wells: [],
+			csvHeader: ''
 		}
 	},
 	mixins: [Loader],
@@ -85,6 +80,8 @@ export default {
 		importWells(){
 			this.toggleLoading();
 			this.clearLayer(this.pointLayer);
+			this.csvHeader = '';
+			this.wells = []; //reset data to be downloaded
 
 			console.log(this.param.value);
 
@@ -113,6 +110,56 @@ export default {
 			}
 		},
 
+		importFilteredParam(){
+			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.param.value;
+
+			var paramString = getParamString(this.param.value);
+			var studyType = this.studyType;
+			var that = this;
+
+			var layer = esri.featureLayer({
+				url: url,
+				onEachFeature: function(feature, layer){
+					that.saveData(feature.properties);
+	
+					return layer.bindPopup(() => {
+						return L.Util.template(paramString, feature.properties);
+					})
+				},
+				where: "StudyType = '"+studyType+"'"
+			});
+
+			layer.on('load', e => {
+				this.toggleLoading();
+			})
+
+			this.pointLayer.addLayer(layer);
+		},
+
+		importParamJson(){
+			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.param.value;
+
+			var paramString = getParamString(this.param.value);
+			var that = this;
+
+			var layer = esri.featureLayer({
+				url: url,
+				onEachFeature: function(feature, layer){
+					that.saveData(feature.properties);
+
+					return layer.bindPopup(() => {
+						return L.Util.template(paramString, feature.properties);
+					})
+				}
+			});
+
+			layer.on('load', e => {
+				this.toggleLoading();
+			})
+
+			this.pointLayer.addLayer(layer);
+		},
+
 		importTypeJson(){
 			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/' + this.type;
 
@@ -131,52 +178,8 @@ export default {
 			this.pointLayer.addLayer(layer);
 		},
 
-		importFilteredParam(){
-			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.param.value;
-			var paramString = getParamString(this.param.value);
-			var studyType = this.studyType;
-	
-			var layer = esri.featureLayer({
-				url: url,
-				onEachFeature: function(feature, layer){
-					return layer.bindPopup(() => {
-						return L.Util.template(paramString, feature.properties);
-					})
-				},
-				where: "StudyType = '"+studyType+"'"
-			});
-
-			layer.on('load', e => {
-				this.toggleLoading();
-			})
-
-			this.pointLayer.addLayer(layer);
-		},
-
-		importParamJson(){
-			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.param.value;
-			var paramString = getParamString(this.param.value);
-
-			var layer = esri.featureLayer({
-				url: url,
-				onEachFeature: function(feature, layer){
-					return layer.bindPopup(() => {
-						return L.Util.template(paramString, feature.properties);
-					})
-				}
-			});
-
-			layer.on('load', e => {
-				this.toggleLoading();
-			})
-
-			this.pointLayer.addLayer(layer);
-		},
-
 		importPaneJson(val){
 			this.toggleLoading();
-			console.log('import pane');
-			console.log(val);
 
 			//url changes depending on layer
 			var url = val == 2 ? 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/2' : 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/baselayers_fix/MapServer/' + val;
@@ -206,6 +209,26 @@ export default {
 			if(layer.getLayers().length > 0){
 				layer.clearLayers();
 			}
+		},
+
+		saveData(obj) {
+			// if first feature, add keys to wells array
+			// will become header row in csv
+			if(this.csvHeader == ''){
+				this.csvHeader = Object.keys(obj).join(",");
+				console.log(this.csvHeader);
+				this.wells.push(this.csvHeader);
+			}
+	
+			// remove commas from any value strings
+			var arrOfValues = Object.values(obj);
+			for(var i = 0; i < arrOfValues.length; i++){
+				if(typeof(arrOfValues[i]) == 'string'){
+					 arrOfValues[i] = arrOfValues[i].replace(/,/g, ' ');
+				}
+			}
+
+			return this.wells.push(arrOfValues.join(","));
 		},
 
 		loadOverlays(){

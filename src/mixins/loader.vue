@@ -13,6 +13,11 @@ export default{
 		toggleLoading(){
 			console.log('toggle loader');
 			this.isLoading = !this.isLoading
+
+			// if data have finished loading, send updated well data to app.vue
+			if(this.isLoading == false){
+				this.$emit('wellsLoaded', this.wells);
+			}
 		}
 	}
 }

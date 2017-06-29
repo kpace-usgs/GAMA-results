@@ -2,7 +2,7 @@
 	<div id='container' class='leaflet-bar'>
 		<div class='toggleBar'>
 	    	<h1 v-if='showControls'>GAMA - Priority Basin Project<br />Water-Quality Results*</h1>
-	    	<a class="toggle" @click='toggle' style="width: 100px;">
+	    	<a class="toggle" @click='toggle'>
 				<span v-if='showControls === false' >Show Menu +</span>
 				<span v-if='showControls'>&times;</span>
 			</a>
@@ -52,7 +52,11 @@
 	      
 
 		    <!-- Download Button -->
-		    <button type="button" style="width:200px;display:block; margin-left:auto; margin-right:auto; cursor:not-allowed;" disabled>Download Data from Selected Parameter Group</button>
+		    <a :href='encodedUri' 
+		    	:download='fileName' id='downloadButton'
+		    	:class='{disabled : wellsLength == 0}'>
+		    	<p>Download Data from Selected Parameter Group</p>
+			</a>
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
 		    <!-- insert study_unit_code.html in future -->
 	    </div>
@@ -66,6 +70,7 @@ import toggle from '../mixins/toggle.vue'
 export default {
 	name: 'MenuDiv',
 	mixins: [toggle],
+	props: ['wells'],
 	data() {
 		return {
 			type: '',
@@ -106,6 +111,24 @@ export default {
 		handleType(){
 			this.$emit('changeType', this.type);
 		}
+	},
+	computed: {
+		wellsLength(){
+			return this.wells.length;
+		},
+		fileName(){
+			return this.param.name + '.csv'
+		},
+		encodedUri(){
+			var csvContent = "data:text/csv;charset=utf-8,";
+			csvContent += this.csvHeader;
+
+			for(var i = 0; i < this.wellsLength; i++){
+				var dataString = this.wells[i];
+				csvContent += i < this.wellsLength ? dataString+ "\n" : dataString;
+			} 
+			return encodeURI(csvContent);
+		}
 	}
 }
 </script>
@@ -121,16 +144,25 @@ export default {
 .toggleBar{
 	display: flex;
 	justify-content: flex-end;
-	align-items: baseline;
+	align-items: flex-start;
 }
-
+.toggleBar>a{
+	margin-left: auto;
+	width: 100px;
+	text-align: right;
+	padding: 0 10px;
+}
+.toggleBar a:hover{
+	background-color: transparent;
+	width: 100px;
+	text-align: right;
+	padding: 0 10px;
+}
 </style>
 
 
 <style scoped>
 #container{
-	max-height: 80vh;
-	overflow-y: auto;
 	overflow-x: hidden;
 }
 h2{
@@ -149,6 +181,21 @@ select{
 select:hover, input:hover, button:hover{
 	box-shadow: 1px 1px 10px grey;
 	cursor: pointer;
+}
+#downloadButton{
+	text-align: center;
+	width: 100%;
+	display: block;
+	height: 50px;
+	border-radius: 5px;
+	border: 1px solid grey;
+}
+#downloadButton:not(.disabled):hover{
+	box-shadow: 2px 2px 10px 1px grey;
+}
+#downloadButton.disabled{
+	cursor: not-allowed;
+	color: grey;
 }
 
 </style>

@@ -1,8 +1,8 @@
 <template>
 	<div id='map_legend' class='leaflet-bar'>
 		<div class='toggleBar'>
-			<h2 v-if='param == "" && type.length < 1 && showControls'>Legend</h2>
-			<a class='toggle' @click='toggle' style="margin-left: auto; width: 100%; text-align: right; padding-left: 10px;">
+			<h2 v-if='showControls'>Legend</h2>
+			<a class='toggle' @click='toggle'>
 				<span v-if='showControls === false'>Show Legend +</span>
 				<span v-if='showControls'>&times;</span>
 			</a>

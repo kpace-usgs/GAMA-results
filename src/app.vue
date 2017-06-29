@@ -4,6 +4,7 @@
 			:param='param'
 			:type='type'
 			:layerArr = 'layers'
+			@wellsLoaded='handleWellsLoaded'
 		></MapDiv>
 
 		<LegendDiv :layers = 'layers' :type='type' :param='param'>
@@ -13,6 +14,7 @@
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
 			@changeType='handleType'
+			:wells = 'wells'
 		></MenuDiv>
 	</div>
 </template>
@@ -28,7 +30,8 @@ export default {
 		return {
 			layers: [],
 			param: '',
-			type: ''
+			type: '',
+			wells: []
 		}
 	},
 	components: {
@@ -43,6 +46,11 @@ export default {
 		},
 		handleType(string){
 			this.type = string;
+		},
+		handleWellsLoaded(arr){
+			console.log(arr[0]);
+			console.log(arr[1]);
+			this.wells = arr;
 		}
 	}
 }

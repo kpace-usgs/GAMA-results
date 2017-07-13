@@ -52,11 +52,16 @@
 	      
 
 		    <!-- Download Button -->
-		    <a :href='encodedUri' 
+		  <!--   <a :href='encodedUri' 
 		    	:download='fileName' id='downloadButton'
 		    	:class='{disabled : wellsLength == 0}'>
 		    	<p>Download Data from Selected Parameter Group</p>
-			</a>
+			</a> -->
+			<button id='dowloadButton'
+				@click='downloadContent'
+			>
+				Download Data from Selected Parameter Group	
+			</button>
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
 		    <!-- insert study_unit_code.html in future -->
 	    </div>
@@ -98,7 +103,9 @@ export default {
 				"string": 'Hydrogeologic Provinces',
 				"pane": 'provinces'
 			}],
-			layerName: []
+			layerName: [],
+			thresholds: '',
+			readme: ''
 		}
 	},
 	methods: {
@@ -110,6 +117,39 @@ export default {
 		},
 		handleType(){
 			this.$emit('changeType', this.type);
+		},
+		downloadContent(){
+
+			var encodedUri = this.makeUri();
+			//this will probably trigger the browser to block downloading multiple files
+
+			this.createAndOpenLink(encodedUri, this.fileName);
+			this.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
+			this.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
+
+		},
+
+		createAndOpenLink(href, filename){
+			var link = window.document.createElement('a');
+			link.href = href;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		},
+
+		makeUri(){
+			var csvContent = "data:text/csv;charset=utf-8,";
+
+			csvContent += this.csvHeader;
+
+			for(var i = 0; i < this.wellsLength; i++){
+				var dataString = this.wells[i];
+
+				//add the row and if we're not yet at the end of the wells array, add a \n to the string to start a new line
+				csvContent += i < this.wellsLength ? dataString+ "\n" : dataString;
+			} 
+			return encodeURI(csvContent);
 		}
 	},
 	computed: {
@@ -119,16 +159,19 @@ export default {
 		fileName(){
 			return this.param.name + '.csv'
 		},
-		encodedUri(){
-			var csvContent = "data:text/csv;charset=utf-8,";
-			csvContent += this.csvHeader;
+		// encodedUri(){
+		// 	var csvContent = "data:text/csv;charset=utf-8,";
 
-			for(var i = 0; i < this.wellsLength; i++){
-				var dataString = this.wells[i];
-				csvContent += i < this.wellsLength ? dataString+ "\n" : dataString;
-			} 
-			return encodeURI(csvContent);
-		}
+		// 	csvContent += this.csvHeader;
+
+		// 	for(var i = 0; i < this.wellsLength; i++){
+		// 		var dataString = this.wells[i];
+
+		// 		//add the row and if we're not yet at the end of the wells array, add a \n to the string to start a new line
+		// 		csvContent += i < this.wellsLength ? dataString+ "\n" : dataString;
+		// 	} 
+		// 	return encodeURI(csvContent);
+		// }
 	}
 }
 </script>

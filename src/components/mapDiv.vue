@@ -12,6 +12,7 @@ import getParamString from '../mixins/getParamString.js'
 import getType from '../mixins/getType.js'
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
+import moment from 'moment'
 
 export default {
 	name: 'MapDiv',
@@ -215,20 +216,23 @@ export default {
 			// if first feature, add keys to wells array
 			// will become header row in csv
 			if(this.csvHeader == ''){
-				this.csvHeader = Object.keys(obj).join(",");
+				this.csvHeader = Object.keys(obj).slice(1).join(",");
 				console.log(this.csvHeader);
 				this.wells.push(this.csvHeader);
 			}
 	
 			// remove commas from any value strings
 			var arrOfValues = Object.values(obj);
+
 			for(var i = 0; i < arrOfValues.length; i++){
 				if(typeof(arrOfValues[i]) == 'string'){
 					 arrOfValues[i] = arrOfValues[i].replace(/,/g, ' ');
-				}
+				} 
 			}
 
-			return this.wells.push(arrOfValues.join(","));
+			// change SampleDate to moment.js string
+			arrOfValues[8] = moment(arrOfValues[8]).format('YYYY-MM-DD');
+			return this.wells.push(arrOfValues.slice(1));
 		},
 
 		loadOverlays(){

@@ -10,14 +10,17 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "csv": "^1.1.1",
     "d3-request": "^1.0.5",
     "esri-leaflet": "^2.0.8",
     "esri-leaflet-renderers": "^2.0.6",
     "leaflet": "^1.0.3",
+    "moment": "^2.18.1",
     "vue": "^2.2.2",
     "vue-spinner": "^1.0.2"
   },
   "devDependencies": {
+    "async": "^2.5.0",
     "autoprefixer": "^6.7.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^7.1.1",
@@ -40,7 +43,7 @@
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
     "eventsource-polyfill": "^0.9.6",
-    "express": "^4.14.1",
+    "express": "^4.15.3",
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "^0.10.0",
     "friendly-errors-webpack-plugin": "^1.1.3",

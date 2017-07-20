@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -15,4 +16,190 @@
    	<div id='app'></div>
 
   </body>
+=======
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta http-equiv="paramtent-Type" paramtent="text/html; charset=us-ascii" />
+	<meta name='viewport' paramtent='initial-scale=1,maximum-scale=1' content='width=device-width'/>
+	<title>GAMA - Priority Basin Project Webmap</title>
+	<link rel="stylesheet" href="./styles/style.css"/>
+	<link rel="stylesheet" type="text/css" href="./scripts/leaflet.css">
+</head>
+<body>
+	
+	<!-- HTML -->
+	<!-- MAP LEGEND -->
+	<div id="map_legend" class="leaflet-bar">
+		<b><a href="#" id="togLegend" onclick="return false;"><span style="display:none;width:100px;">Show Legend +</span><span>&times;</span></a>
+		</b>
+
+	    <!-- Groundwater Study Type Legend -->
+	    <div id="mainLayerLegend">
+	        <table style="text-align:left;"><tr id="all"><th colspan=2>All GAMA Sites</th></tr>
+	        <tr id="trend"><td><img src="images/trends.png"/></td><td>GAMA Trends Sites</td></tr>
+	        <tr id="shallow"><td><img src="images/shallow.png"/></td><td>GAMA Domestic-supply Aquifer Sites</td></tr>
+	        <tr id="deep"><td><img src="images/deep.png"/></td><td>GAMA Public-supply Aquifer Sites</td></tr></table>
+	    </div>
+
+	    <!-- Parameter Legend -->
+	    <div id="paramLayerLegend">
+	    </div>
+
+	    <!-- Shapefiles Legend -->
+	    <div id="extraLayerLegend" style="max-height:200px;overflow:auto;">
+	        <table style="text-align:left;" id="shallowGrid"><tr><th colspan=2>Domestic-supply Aquifer Grid Cells</th>
+	        </tr><tr><td style="border:1px solid rgb(078,078,078);width:15px; height:15px;"></td><td></td></tr></table>
+
+	        <table style="text-align:left;" id="deepGrid"><tr><th colspan=2>Public-supply Aquifer Grid Cells</th>
+	        </tr><tr><td style="border:1px solid black;width:15px; height:15px;"></td><td></td></tr></table>
+
+	        <table style="text-align:left;" id="shallowStudyUnits"><tr><th colspan=2>Domestic-supply Aquifer<br />Study Unit Boundaries</th></tr>
+	        <tr><td><div style="background-color:#9c8a5a; width:15px; height:15px;"></div></td><td>Madera-Chowchilla and Kings basins</td></tr>
+	        <tr><td><div style="background-color:#bda621; width:15px; height:15px;"></div></td><td>Monterey Bay and Salinas Valley basins and adjacent watersheds</td></tr>
+	        <tr><td><div style="background-color:#ce7952; width:15px; height:15px;"></div></td><td>North San Francisco Bay basins and adjacent watersheds</td></tr>
+	        <tr><td><div style="background-color:#7b9a84; width:15px; height:15px;"></div></td><td>Kaweah, Tule, and Tulare Lake basins and adjacent watersheds</td></tr>
+	        <tr><td><div style="background-color:#a54100; width:15px; height:15px;"></div></td><td>Yuba and Bear River watersheds</td></tr></table>
+
+	        <table style="text-align:left;" id="deepStudyUnits"><tr><th colspan=2>Public-supply Aquifer<br />Study Unit Boundaries</th></tr>
+	        <tr><td><div style="background-color:#ffcd66; width:15px; height:15px;"></div></td><td>Antelope Valley</td></tr>
+	        <tr><td><div style="background-color:#c9d25a; width:15px; height:15px;"></div></td><td>Bear Valley & Lake Arrowhead watershed</td></tr>
+	        <tr><td><div style="background-color:#bee8ff; width:15px; height:15px;"></div></td><td>Cascade Range & Modoc Plateau</td></tr>
+	        <tr><td><div style="background-color:#946100; width:15px; height:15px;"></div></td><td>Central Eastside San Joaquin Valley</td></tr>
+	        <tr><td><div style="background-color:#5360a6; width:15px; height:15px;"></div></td><td>Coastal Los Angeles basins</td></tr>
+	        <tr><td><div style="background-color:#886f45; width:15px; height:15px;"></div></td><td>Borrego, Central Desert, and other desert basins</td></tr>
+	        <tr><td><div style="background-color:#9fa9d7; width:15px; height:15px;"></div></td><td>Colorado River Valley</td></tr>
+	        <tr><td><div style="background-color:#7b639a; width:15px; height:15px;"></div></td><td>Central Sierra Nevada</td></tr>
+	        <tr><td><div style="background-color:#87a06c; width:15px; height:15px;"></div></td><td>Coachella Valley</td></tr>
+	        <tr><td><div style="background-color:#5d008c; width:15px; height:15px;"></div></td><td>Santa Cruz Mtns & San Gabriel Mtns & Peninsular Ranges</td></tr>
+	        <tr><td><div style="background-color:#a88130; width:15px; height:15px;"></div></td><td>Southeast San Joaquin Valley</td></tr>
+	        <tr><td><div style="background-color:#e1d3b4; width:15px; height:15px;"></div></td><td>Kern basin</td></tr>
+	        <tr><td><div style="background-color:#b87272; width:15px; height:15px;"></div></td><td>Klamath Mountains</td></tr>
+	        <tr><td><div style="background-color:#823d3d; width:15px; height:15px;"></div></td><td>Mojave Valley</td></tr>
+	        <tr><td><div style="background-color:#90d96b; width:15px; height:15px;"></div></td><td>Middle Sacramento Valley</td></tr>
+	        <tr><td><div style="background-color:#ffffbe; width:15px; height:15px;"></div></td><td>Madera-Chowchilla basins</td></tr>
+	        <tr><td><div style="background-color:#7d87a6; width:15px; height:15px;"></div></td><td>Monterey Bay and Salinas Valley basins</td></tr>
+	        <tr><td><div style="background-color:#c98282; width:15px; height:15px;"></div></td><td>Northern San Joaquin Valley</td></tr>
+	        <tr><td><div style="background-color:#a1a3e6; width:15px; height:15px;"></div></td><td>North San Francisco Bay basins</td></tr>
+	        <tr><td><div style="background-color:#698c00; width:15px; height:15px;"></div></td><td>Northern Coast Ranges basins</td></tr>
+	        <tr><td><div style="background-color:#e6cfa1; width:15px; height:15px;"></div></td><td>Owens & Indian Wells Valleys</td></tr>
+	        <tr><td><div style="background-color:#558c7b; width:15px; height:15px;"></div></td><td>Northern Sacramento Valley</td></tr>
+	        <tr><td><div style="background-color:#ffa900; width:15px; height:15px;"></div></td><td>Santa Maria R., San Antonio Ck., and Santa Ynez R. Valleys</td></tr>
+	        <tr><td><div style="background-color:#74a000; width:15px; height:15px;"></div></td><td>Livermore, Gilroy-Hollister, and Cuyama Valleys</td></tr>
+	        <tr><td><div style="background-color:#90badd; width:15px; height:15px;"></div></td><td>South and East San Francisco Bay basins</td></tr>
+	        <tr><td><div style="background-color:#c2f3c2; width:15px; height:15px;"></div></td><td>Sierra Nevada Regional</td></tr>
+	        <tr><td><div style="background-color:#938fbf; width:15px; height:15px;"></div></td><td>Southern Sacramento Valley</td></tr>
+	        <tr><td><div style="background-color:#ffffd9; width:15px; height:15px;"></div></td><td>San Diego region</td></tr>
+	        <tr><td><div style="background-color:#247400; width:15px; height:15px;"></div></td><td>Santa Barbara area basins</td></tr>
+	        <tr><td><div style="background-color:#517f4d; width:15px; height:15px;"></div></td><td>Southern Sierra Nevada</td></tr>
+	        <tr><td><div style="background-color:#7f5f00; width:15px; height:15px;"></div></td><td>Lake Tahoe and Martis Valley watersheds</td></tr>
+	        <tr><td><div style="background-color:#ffbe00; width:15px; height:15px;"></div></td><td>San Gabriel & San Fernando Valleys</td></tr>
+	        <tr><td><div style="background-color:#66ceab; width:15px; height:15px;"></div></td><td>Upper Santa Ana Watershed basins</td></tr>
+	        <tr><td><div style="background-color:#ff6c19; width:15px; height:15px;"></div></td><td>Santa Clara River Valley basins</td></tr>
+	        <tr><td><div style="background-color:#475a96; width:15px; height:15px;"></div></td><td>Western San Joaquin Valley</td></tr></table>
+
+	        <table style="text-align:left;" id="hydroprov"><tr><th colspan=2>Hydrologic Provinces</th></tr>
+	        <tr><td><div style="background-color:#bf8d56; width:15px; height:15px;"></div></td><td>Basin and Range</td></tr>
+	        <tr><td><div style="background-color:#95a894; width:15px; height:15px;"></div></td><td>Central Valley</td></tr>
+	        <tr><td><div style="background-color:#d1c478; width:15px; height:15px;"></div></td><td>Desert</td></tr>
+	        <tr><td><div style="background-color:#9c8aaa; width:15px; height:15px;"></div></td><td>Klamath Mountains</td></tr>
+	        <tr><td><div style="background-color:#b46772; width:15px; height:15px;"></div></td><td>Modoc Plateu and Cascades</td></tr>
+	        <tr><td><div style="background-color:#6fb0a3; width:15px; height:15px;"></div></td><td>Northern Coast Ranges</td></tr>
+	        <tr><td><div style="background-color:#ac7c7d; width:15px; height:15px;"></div></td><td>San Diego</td></tr>
+	        <tr><td><div style="background-color:#669a66; width:15px; height:15px;"></div></td><td>Sierra Nevada</td></tr>
+	        <tr><td><div style="background-color:#b8c1e0; width:15px; height:15px;"></div></td><td>Southern Cal Islands (Group)</td></tr>
+	        <tr><td><div style="background-color:#858b9c; width:15px; height:15px;"></div></td><td>Southern Coast Ranges</td></tr>
+	        <tr><td><div style="background-color:#ba898a; width:15px; height:15px;"></div></td><td>Transverse and Selected Peninsular Range</td></tr></table>
+	    </div>
+	</div>
+
+	<!-- MAP -->
+	<div id="map"></div>
+
+
+	<!-- BASEMAP SWITCHER -->
+	<!-- <a href="#">
+	<div id="next" class="leaflet-bar">
+	    <p style="font-size:small;text-align:center;">Click to switch basemaps<br/>
+	    <span id="updateBase"></span></p>
+	</div>
+	</a> -->
+
+	<!-- LAYER CONTROLLER -->
+	<div id="container" class="leaflet-bar">
+	<b><a href="#" id="togContainer" onclick="return false;"><span style="display:none;">Show Controls +</span><span>&times;</span></a></b>
+	    <!-- Portion of controller that toggles -->
+	    <div id="query">
+	        <h1>GAMA - Priority Basin Project<br />Water-Quality Results*</h1>
+	        <!-- Begin Controller Form -->
+	        <form id="frm">
+	            <!-- Groundwater Study Type Selector -->
+	            <label>Groundwater Study Type: <br/>
+	                <select id="base" style="width:300px;">
+	                    <option value=""> </option>
+	                    <option value="STATUS">All Sites</option>
+	                    <option value="SHALLOW">Domestic-supply Aquifer Sites</option>
+	                    <option value="DEEP">Public-supply Aquifer Sites</option>
+	                    <option value="TRENDS">Trends</option>
+	                </select>
+	            </label>
+	            <br/>
+	            <br/>
+
+	            <!-- Parameter Group Selector -->
+	            <label>Select Parameter Group:<br />
+	                <select id="paramGroup" style="width:300px;">
+	                    <option value=""> </option>
+	                    <option value="parametersOfSpecialInterest">Parameters of Special Interest</option>
+	                    <option value="FieldParameters">Field Water Quality Indicators</option>
+	                    <option value="GeochemicalAgeTracers">Geochemical and Age-Dating Tracers</option>
+	                    <option value="MajorAndMinorIons">Major and Minor Ions</option>
+	                    <option value="Microbiologicalparameters">Microbial parameters</option>
+	                    <option value="Nutrients">Nutrients</option>
+	                    <option value="Pesticides">Pesticides and Pesticide Degradates</option>
+	                    <option value="Pharmaceuticals">Pharmaceuticals</option>
+	                    <option value="Radioactivity">Radioactivity</option>
+	                    <option value="TraceElements">Trace Elements</option>
+	                    <option value="VolatileOrganicCompounds">Volatile Organic Compounds</option>
+	                </select>
+	            </label>
+	            <br />
+	            <br />
+
+	            <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
+	            <label>Select Parameter:<br />
+	                <select id="param" style="width:300px;">
+	                </select>
+	            </label>
+	            <br/>
+	            <br/>
+
+	            <!-- Shapefile Selector -->
+	            <label>Select Layers:<br />
+	                <input type="checkbox" name="shallowGrid" value="shallowGrid" id="shallowg">Domestic-supply Aquifer Grid Cells<br/>
+	                <input type="checkbox" name="deepGrid" value="deepGrid" id="deepg">Public-supply Aquifer Grid Cells<br/>
+	                <input type="checkbox" name="shallowStudyUnits" value="shallowStudyUnits" id="shallowsu">Domestic-supply Aquifer Study Units<br/>
+	                <input type="checkbox" name="deepStudyUnits" value="deepStudyUnits" id="deepsu">Public-supply Aquifer Study Units<br/>
+	                <input type="checkbox" name="provinces" value="provinces" id="provinces">Hydrogeologic Provinces<br/>
+	          </label>
+	          <br />
+
+	          <!-- Download Button -->
+	          <button type="button" style="width:200px;display:block; margin-left:auto; margin-right:auto;">Download Data from Selected Parameter Group</button>
+	          <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
+	          <!-- insert study_unit_code.html in future -->
+	        </form>
+	    </div>
+	</div>
+	<!-- END HTML -->
+	<script type="text/javascript" src='./scripts/leaflet.js'></script>
+	<script src="https://www2.usgs.gov/ajax/libs/jquery/2.0/jquery.min.js"></script>
+	<script src="../js/spin.min.js"></script>
+	<script src="../js/leaflet.spin.js"></script>
+	<script type="text/javascript" src="./catiline.js"></script>
+	<script type="text/javascript" src="./shp.js"></script>
+	<script type="text/javascript" src="./leaflet.shpfile.js"></script>
+	<script type="text/javascript" src='./kylie.js'></script>
+</body>
+>>>>>>> 4f8047501bc467a356da71247820d143c9fd7302
 </html>

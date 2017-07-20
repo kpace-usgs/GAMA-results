@@ -1,5 +1,5 @@
 # GAMA - Priority Basin Project Water-Quality Results
-![screenshot]('https://gitlab.cr.usgs.gov/GAMA/basinResults/blob/esri/screenshot.png')
+![screenshot](../screenshot.png)
 
 node.js code that converted parameter result jsons by well into geojson format
 

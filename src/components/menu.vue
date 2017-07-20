@@ -121,14 +121,15 @@ export default {
 			this.$emit('changeType', this.type);
 		},
 		downloadContent(){
+			// make sure there is data available to be downloaded
+			if(this.wellsLength > 0){
+				var encodedUri = this.makeUri();
+				//this will probably trigger the browser to block downloading multiple files
 
-			var encodedUri = this.makeUri();
-			//this will probably trigger the browser to block downloading multiple files
-
-			this.createAndOpenLink(encodedUri, this.fileName);
-			this.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
-			this.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
-
+				this.createAndOpenLink(encodedUri, this.fileName);
+				this.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
+				this.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
+			} 
 		},
 
 		createAndOpenLink(href, filename){

@@ -188,8 +188,8 @@ export default {
 
 			var layer = esri.featureLayer({
 				url: url,
-				precision: 2,
-				simplifyFactor: 0.9,
+				precision: 2, // how many digits of precision to request from the server
+				simplifyFactor: 20, // how much to simplify polygons
 				onEachFeature: (feature, layer) => {
 					return layer.bindPopup(() => {
 						return L.Util.template('{PROVINCE}', feature.properties)

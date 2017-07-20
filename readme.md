@@ -1,5 +1,10 @@
 # GAMA - Priority Basin Project Water-Quality Results
-![screenshot](../screenshot_new.png)
+![screenshot](./screenshot.png)
+
+
+
+most files in src/mixins/ are not being used as rendering is now coming from arcServer, but I left them in there in case we want to use them in the future
+
 
 node.js code that converted parameter result jsons by well into geojson format
 

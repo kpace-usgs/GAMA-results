@@ -1,5 +1,5 @@
 # GAMA - Priority Basin Project Water-Quality Results
-![screenshot]('./screenshot.png')
+![screenshot]('../screenshot.png')
 
 node.js code that converted parameter result jsons by well into geojson format
 

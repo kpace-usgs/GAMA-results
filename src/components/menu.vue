@@ -57,11 +57,13 @@
 		    	:class='{disabled : wellsLength == 0}'>
 		    	<p>Download Data from Selected Parameter Group</p>
 			</a> -->
-			<button id='dowloadButton'
-				@click='downloadContent'
+			<a id='downloadButton' 
+				@click='downloadContent' 
+				:class='{disabled : wellsLength == 0}'
 			>
-				Download Data from Selected Parameter Group	
-			</button>
+				<p>Download Data from Selected Parameter Group</p>
+			</a>
+
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
 		    <!-- insert study_unit_code.html in future -->
 	    </div>
@@ -232,7 +234,9 @@ select:hover, input:hover, button:hover{
 	height: 50px;
 	border-radius: 5px;
 	border: 1px solid grey;
+	cursor: pointer;
 }
+
 #downloadButton:not(.disabled):hover{
 	box-shadow: 2px 2px 10px 1px grey;
 }

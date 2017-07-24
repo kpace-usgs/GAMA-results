@@ -181,7 +181,9 @@ export default {
 
 		importPaneJson(val){
 			this.toggleLoading();
-
+			console.log('import pane');
+			var simplifyFactor = 0.8;
+			console.log(simplifyFactor);
 			//url changes depending on layer
 			var url = val == 2 ? 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/2' : 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/baselayers_fix/MapServer/' + val;
 			var that = this;
@@ -189,7 +191,7 @@ export default {
 			var layer = esri.featureLayer({
 				url: url,
 				precision: 2, // how many digits of precision to request from the server
-				simplifyFactor: 20, // how much to simplify polygons
+				simplifyFactor: simplifyFactor, // how much to simplify polygons
 				onEachFeature: (feature, layer) => {
 					return layer.bindPopup(() => {
 						return L.Util.template('{PROVINCE}', feature.properties)

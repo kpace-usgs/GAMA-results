@@ -38,6 +38,11 @@ module.exports = merge(baseWebpackConfig, {
         to: 'downloads',
         //to: config.dev.assetsSubDirectory,
         ignore: ['.*']
+      }, 
+      {
+        from: 'dist/downloads/build.zip',
+        to: 'downloads',
+        ignore: ['.*']
       }
     ])
     

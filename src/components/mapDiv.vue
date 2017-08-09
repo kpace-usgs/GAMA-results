@@ -22,6 +22,7 @@ export default {
 			baseLayers: '',
 			view: [37.7, -120.57],
 			zoom: 6,
+			maxZoom: 8,
 			polygonLayer: L.featureGroup(),
 			polygons: {},
 			pointLayer: L.featureGroup(),
@@ -263,11 +264,17 @@ export default {
 	},
 
 	mounted() {
-		this.map = L.map('mapDiv').setView(this.view, this.zoom); 
+		this.map = L.map('mapDiv').setView(this.view, this.zoom).setMaxZoom(this.maxZoom);
+		L.control.scale({position: 'bottomright'}).addTo(this.map); 
 		this.loadOverlays();
 		this.polygonLayer.setZIndex(-10);
 		this.polygonLayer.addTo(this.map);
 		this.pointLayer.addTo(this.map);
+
+		var map = this.map;
+		this.map.on('zoom', function(){
+			console.log(map.getZoom())
+		})
 	}
 }
 </script>

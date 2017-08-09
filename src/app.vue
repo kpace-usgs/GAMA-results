@@ -48,8 +48,6 @@ export default {
 			this.type = string;
 		},
 		handleWellsLoaded(arr){
-			console.log(arr[0]);
-			console.log(arr[1]);
 			this.wells = arr;
 		}
 	}

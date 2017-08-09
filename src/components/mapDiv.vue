@@ -155,6 +155,7 @@ export default {
 			});
 
 			layer.on('load', e => {
+				console.log('layer loading');
 				this.toggleLoading();
 			})
 
@@ -200,6 +201,7 @@ export default {
 			});
 
 			layer.on('load', function(e) {
+				console.log('layer loading');
 				that.toggleLoading();
 			})
 			

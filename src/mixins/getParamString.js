@@ -41,7 +41,7 @@ export default function(param){
 			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {TrihalomethaneCatg}<br/># Detections: {TrihalomethaneCt}</p>';
 			break;
 		default:
-			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {Category}<br/># Detections: {Concentration}</p>';
+			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {Category}<br/>Concentration: {Concentration}</p>';
 			break;
 		}
 }

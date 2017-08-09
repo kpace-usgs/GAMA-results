@@ -19,13 +19,16 @@
 	                <option value="0">All Sites</option>
 	                <option value="2">Domestic-supply Aquifer Sites</option>
 	                <option value="3">Public-supply Aquifer Sites</option>
-	                <option value="1">Trends</option>
+	                <option value="1">Trends Sites</option>
 	            </select>
 	        </div>
 
 			<div>
 		        <!-- Parameter Group Selector -->
-		        <label>Select Parameter Group:</label>
+		        <label>Select Constituent Class:</label>
+		        <div style="border: 1px solid black; width: 50px; height: 50px;">
+		        <img title="like this"/>
+		        </div>
 	            <select style="width:300px;" v-model='parameterGroup'>
 	                <option default value=''>Select One</option>
 	            	<option v-for='paramGroup in listOfParameters' :value='paramGroup'>{{paramGroup.groupName}}</option>
@@ -34,7 +37,7 @@
 
 			<div>
 		        <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
-		        <label>Select Parameter:</label>
+		        <label>Select Constituent:</label>
 	            <select style="width:300px;" v-model='param' @change='handleParam'>
 	            	<option default value=''></option>
 	            	<option v-for='parameter in parameterGroup.parameters' :value='parameter'>{{parameter.name}}</option>
@@ -67,7 +70,7 @@
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
 		    <!-- insert study_unit_code.html in future -->
 
-		    <a id='downloadSite' href='./downloads/build.zip'>Download site</a>
+		   <!--  <a id='downloadSite' href='./downloads/build.zip'>Download site</a> -->
 	    </div>
 	</div>
 </template>

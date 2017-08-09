@@ -13,7 +13,7 @@ module.exports = {
     // Surge or Netlify already gzip all static assets for you.
     // Before setting to `true`, make sure to:
     // npm install --save-dev compression-webpack-plugin
-    productionGzip: false,
+    productionGzip: true,
     productionGzipExtensions: ['js', 'css'],
     // Run the build command with an extra argument to
     // View the bundle analyzer report after build finishes:
@@ -34,5 +34,15 @@ module.exports = {
     // In our experience, they generally work as expected,
     // just be aware of this issue when enabling this option.
     cssSourceMap: false
+  },
+  download: {
+    env: { NODE_ENV: '"production"'},
+    index: path.resolve(__dirname, '../dist/entireSite/index.html'),
+    assetsRoot: path.resolve(__dirname, '../dist/entireSite'),
+    assetsSubDirectory: 'static',
+    assetsPublicPath: './',
+    productionGzip: true,
+    productionGzipExtensions: ['js', 'css'],
+    bundleAnalyzerReport: false
   }
 }

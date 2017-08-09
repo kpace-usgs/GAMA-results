@@ -11,7 +11,7 @@ export default{
 	},
 	methods: {
 		toggleLoading(){
-			console.log('toggle loader');
+			console.log('toggle loader to: ' + !this.isLoading);
 			this.isLoading = !this.isLoading
 
 			// if data have finished loading, send updated well data to app.vue

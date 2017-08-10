@@ -33,6 +33,15 @@
 	                <option default value=''>Select One</option>
 	            	<option v-for='paramGroup in listOfParameters' :value='paramGroup'>{{paramGroup.groupName}}</option>
 	            </select>
+
+				<!-- Download Button -->
+
+	            <a id='downloadButton' 
+	            	v-if='parameterGroup.groupName'
+	            	@click='downloadContent' 
+	            >
+	            	<p>Download Data from Constituent Class</p>
+	            </a>
 	        </div>
 
 			<div>
@@ -54,19 +63,6 @@
      		</div>
 	      
 
-		    <!-- Download Button -->
-		  <!--   <a :href='encodedUri' 
-		    	:download='fileName' id='downloadButton'
-		    	:class='{disabled : wellsLength == 0}'>
-		    	<p>Download Data from Selected Parameter Group</p>
-			</a> -->
-			<a id='downloadButton' 
-				@click='downloadContent' 
-				:class='{disabled : wellsLength == 0}'
-			>
-				<p>Download Data from Selected Parameter</p>
-			</a>
-
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
 		    <!-- insert study_unit_code.html in future -->
 
@@ -78,10 +74,11 @@
 <script>
 import listOfParameters from '../assets/listOfParameters.json';
 import toggle from '../mixins/toggle.vue'
+import ParamData from '../mixins/getParamData.vue'
 
 export default {
 	name: 'MenuDiv',
-	mixins: [toggle],
+	mixins: [toggle, ParamData],
 	props: ['wells'],
 	data() {
 		return {
@@ -112,7 +109,8 @@ export default {
 			}],
 			layerName: [],
 			thresholds: '',
-			readme: ''
+			readme: '',
+			constituentLayer: ''
 		}
 	},
 	methods: {
@@ -126,15 +124,13 @@ export default {
 			this.$emit('changeType', this.type);
 		},
 		downloadContent(){
-			// make sure there is data available to be downloaded
-			if(this.wellsLength > 0){
-				var encodedUri = this.makeUri();
-				//this will probably trigger the browser to block downloading multiple files
+			var encodedUri = this.makeUri();
+			//this will probably trigger the browser to block downloading multiple files
 
-				this.createAndOpenLink(encodedUri, this.fileName);
-				this.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
-				this.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
-			} 
+			this.createAndOpenLink(encodedUri, this.fileName);
+			this.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
+			this.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
+	 
 		},
 
 		createAndOpenLink(href, filename){
@@ -148,7 +144,10 @@ export default {
 
 		makeUri(){
 			var csvContent = "data:text/csv;charset=utf-8,";
-
+			// get json data for every parameter in parameterGroup.parameters array
+			for(var i = 0; i < this.parameterGroup.parameters.length; i++){
+				this.importParamData(this.parameterGroup.parameters[i].value);
+			}
 			csvContent += this.csvHeader;
 
 			for(var i = 0; i < this.wellsLength; i++){

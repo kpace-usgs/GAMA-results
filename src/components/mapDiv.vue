@@ -8,11 +8,11 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
 import Loader from '../mixins/loader.vue'
-import getParamString from '../mixins/getParamString.js'
+import ParamData from '../mixins/getParamData.vue'
 import getType from '../mixins/getType.js'
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
-import moment from 'moment'
+
 
 export default {
 	name: 'MapDiv',
@@ -23,26 +23,51 @@ export default {
 			view: [37.7, -120.57],
 			zoom: 6,
 			maxZoom: 8,
-			polygonLayer: L.featureGroup(),
+			polygonGroup: L.featureGroup(),
 			polygons: {},
-			pointLayer: L.featureGroup(),
+			pointGroup: L.featureGroup(),
+			typeLayer: '',
+			constituentLayer: '',
 			wells: [],
-			csvHeader: ''
+
 		}
 	},
-	mixins: [Loader],
+	mixins: [Loader, ParamData],
 	props: ['param', 'type', 'layerArr'],
 	watch: {
 		type(){
-			this.importWells();
+			this.toggleLoading();
+		
+			// if a constituent has already been selected, this.constituentLayer will already be populated
+			if(typeof(this.param.value) == 'number') {
+				this.filterConstituentLayer();
+
+			} else {
+				this.pointGroup.clearLayers();
+				this.importTypeJson();
+			}
+			
 		},
+
 		param(){
 			console.log('param changed');
-			this.importWells();
+			this.toggleLoading();
+	
+			this.importParamGeometry(this.param.value);
+			this.addConstituentLayer(); // add to this.pointGroup if not there already
+			
+
+			// if the groundwater study type is also selected, run a query() on the param layer
+			if(this.type != ''){
+				this.pointGroup.removeLayer(this.typeLayer); // remove any typeLayer existing on the map
+				return this.filterConstituentLayer();
+			} 
+			
 		},
+
 		layerArr(){
 			//clear L.featureGroup when user changes menu selection
-			this.clearLayer(this.polygonLayer);
+			this.clearLayer(this.polygonGroup);
 
 			// get each selected pane layer
 			for(var i = 0; i < this.layerArr.length; i++){
@@ -51,7 +76,7 @@ export default {
 				if(!this.polygons.hasOwnProperty(layerName)){
 					this.importPaneJson(layerName);
 				} else {
-					this.polygonLayer.addLayer(this.polygons[layerName]);
+					this.polygonGroup.addLayer(this.polygons[layerName]);
 				}
 			}
 		}
@@ -61,10 +86,10 @@ export default {
 			// used to filter wells returned from parameter value
 			switch(this.type){
 				case '0':
-					return 'All Sites'
+					return 'STATUS'
 					break;
 				case '1':
-					return 'Trends'
+					return 'TRENDS'
 					break;
 				case '2': 
 					return 'Domestic-supply' 
@@ -79,94 +104,11 @@ export default {
 		}
 	},
 	methods: {
-		importWells(){
-			this.toggleLoading();
-			this.clearLayer(this.pointLayer);
-			this.csvHeader = '';
-			this.wells = []; //reset data to be downloaded
-
-			console.log(this.param.value);
-
-			// if a specific well type has been selected and there is a parameter value, return a subset of the parameter value's wells
-			if((this.type == 1 || this.type == 2 || this.type == 3) && typeof(this.param.value) == "number"){
-				console.log('import filtered param');
-				this.importFilteredParam();
-			} 
-
-			// otherwise just import all of the parameter's wells
-			else if(typeof(this.param.value) == "number"){
-				console.log('import param data')
-				this.importParamJson(); //import parameter's json when param changes
-			} 
-
-			// otherwise just import all wells of that type
-			else if(this.type != ''){
-				console.log('import type')
-				this.importTypeJson();
-			} 
-
-			// otherwise the user wants to reset the map
-			else {
-				console.log('dont load anything');
-				this.toggleLoading();
-			}
-		},
-
-		importFilteredParam(){
-			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.param.value;
-
-			var paramString = getParamString(this.param.value);
-			var studyType = this.studyType;
-			var that = this;
-
-			var layer = esri.featureLayer({
-				url: url,
-				onEachFeature: function(feature, layer){
-					that.saveData(feature.properties);
-	
-					return layer.bindPopup(() => {
-						return L.Util.template(paramString, feature.properties);
-					})
-				},
-				where: "StudyType = '"+studyType+"'"
-			});
-
-			layer.on('load', e => {
-				this.toggleLoading();
-			})
-
-			this.pointLayer.addLayer(layer);
-		},
-
-		importParamJson(){
-			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.param.value;
-
-			var paramString = getParamString(this.param.value);
-			var that = this;
-
-			var layer = esri.featureLayer({
-				url: url,
-				onEachFeature: function(feature, layer){
-					that.saveData(feature.properties);
-
-					return layer.bindPopup(() => {
-						return L.Util.template(paramString, feature.properties);
-					})
-				}
-			});
-
-			layer.on('load', e => {
-				console.log('layer loading');
-				this.toggleLoading();
-			})
-
-			this.pointLayer.addLayer(layer);
-		},
 
 		importTypeJson(){
 			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/' + this.type;
 
-			var layer = esri.featureLayer({
+			this.typeLayer = esri.featureLayer({
 				url: url,
 				onEachFeature: (feature, layer) => {
 					var popupText = getType(feature);
@@ -175,10 +117,11 @@ export default {
 					})
 				}
 			});
-			layer.on('load', e => {
+
+			this.typeLayer.on('load', e => {
 				this.toggleLoading();
 			});
-			this.pointLayer.addLayer(layer);
+			this.pointGroup.addLayer(this.typeLayer);
 		},
 
 		importPaneJson(val){
@@ -206,7 +149,7 @@ export default {
 				that.toggleLoading();
 			})
 			
-			this.polygonLayer.addLayer(layer); // add to map
+			this.polygonGroup.addLayer(layer); // add to map
 			this.polygons.val = layer; //save to state					
 		},
 
@@ -217,27 +160,33 @@ export default {
 			}
 		},
 
-		saveData(obj) {
-			// if first feature, add keys to wells array
-			// will become header row in csv
-			if(this.csvHeader == ''){
-				this.csvHeader = Object.keys(obj).slice(1).join(",");
-				console.log(this.csvHeader);
-				this.wells.push(this.csvHeader);
-			}
-	
-			// remove commas from any value strings
-			var arrOfValues = Object.values(obj);
+		addConstituentLayer(){
+			// if constituent layer of markers not already added to map, add it now
+			if(!this.pointGroup.hasLayer(this.constituentLayer)){
+				console.log('add layer');
+				this.pointGroup.addLayer(this.constituentLayer);
 
-			for(var i = 0; i < arrOfValues.length; i++){
-				if(typeof(arrOfValues[i]) == 'string'){
-					 arrOfValues[i] = arrOfValues[i].replace(/,/g, ' ');
-				} 
+				// also set condition to toggle loader when done loading
+				this.constituentLayer.on('load', e => {
+					console.log('layer loading');
+					this.toggleLoading();
+				});
 			}
+		},
 
-			// change SampleDate to moment.js string
-			arrOfValues[8] = moment(arrOfValues[8]).format('YYYY-MM-DD');
-			return this.wells.push(arrOfValues.slice(1));
+		filterConstituentLayer(){
+			console.log('filter constituent layer');
+			console.log(this.studyType);
+			console.log(this.type);
+
+			if(this.type != 0 && this.type != 1){
+				this.filterByType(this.studyType);
+			} else {
+				console.log('filter by status')
+				this.filterByStatus(this.studyType);
+			}
+			
+			this.constituentLayer.redraw();
 		},
 
 		loadOverlays(){
@@ -265,16 +214,13 @@ export default {
 
 	mounted() {
 		this.map = L.map('mapDiv').setView(this.view, this.zoom).setMaxZoom(this.maxZoom);
+
 		L.control.scale({position: 'bottomright'}).addTo(this.map); 
 		this.loadOverlays();
-		this.polygonLayer.setZIndex(-10);
-		this.polygonLayer.addTo(this.map);
-		this.pointLayer.addTo(this.map);
+		this.polygonGroup.setZIndex(-10);
+		this.polygonGroup.addTo(this.map);
+		this.pointGroup.addTo(this.map);
 
-		var map = this.map;
-		this.map.on('zoom', function(){
-			console.log(map.getZoom())
-		})
 	}
 }
 </script>

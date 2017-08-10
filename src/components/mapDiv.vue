@@ -10,6 +10,7 @@ import 'leaflet/dist/leaflet.css';
 import Loader from '../mixins/loader.vue'
 import ParamData from '../mixins/getParamData.vue'
 import getType from '../mixins/getType.js'
+import getLayerPopup from '../mixins/getLayerPopup.js'
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
 
@@ -88,17 +89,6 @@ export default {
 	methods: {
 
 		importTypeJson(){
-			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/' + this.type;
-
-			// this.constituentLayer = esri.featureLayer({
-			// 	url: url,
-			// 	onEachFeature: (feature, layer) => {
-			// 		var popupText = getType(feature);
-			// 		return layer.bindPopup(() => {
-			// 			return L.Util.template(popupText)
-			// 		})
-			// 	}
-			// });
 
 			this.constituentLayer = esri.dynamicMapLayer({
 				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/',
@@ -110,36 +100,25 @@ export default {
 					return 'Well type: ' + getType(featureCollection.features[0]);
 				}
 			})
-
 		},
 
 		importPaneJson(val){
-			this.toggleLoading();
-			console.log('import pane');
-			var simplifyFactor = 0.8;
-			console.log(simplifyFactor);
-			//url changes depending on layer
-			var url = val == 2 ? 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/2' : 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/baselayers_fix/MapServer/' + val;
-			var that = this;
+			console.log(val);
 
-			var layer = esri.featureLayer({
-				url: url,
-				precision: 2, // how many digits of precision to request from the server
-				simplifyFactor: simplifyFactor, // how much to simplify polygons
-				onEachFeature: (feature, layer) => {
-					return layer.bindPopup(() => {
-						return L.Util.template('{PROVINCE}', feature.properties)
-					})
+			var layer = esri.dynamicMapLayer({
+				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/',
+				layers: [val]
+			}).bindPopup( (err, featureCollection) => {
+				if(err || featureCollection.features.length === 0) {
+					return false;
+				} else {
+					console.log(featureCollection.features[0].properties);
+					return featureCollection.features[0].properties[getLayerPopup(val)]
 				}
+				
 			});
 
-			layer.on('load', function(e) {
-				console.log('layer loading');
-				that.toggleLoading();
-			})
-			
-			this.polygonGroup.addLayer(layer); // add to map
-			this.polygons.val = layer; //save to state					
+			this.polygonGroup.addLayer(layer); // add to map			
 		},
 
 		addConstituentLayer(){

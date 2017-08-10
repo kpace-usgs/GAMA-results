@@ -171,7 +171,7 @@ export default {
 			return encodeURI(csvContent);
 		},
 		reset() {
-			this.layerName = '',
+			this.layerName = [],
 			this.param = '';
 			this.type = '';
 			this.parameterGroup = {
@@ -275,7 +275,7 @@ select:hover, input:hover, button:hover{
 }
 
 #reset{
-	margin-bottom: 20px;
+	margin-bottom: 0px;
 	padding: 0px;
 	height: 20px;
 	border-bottom: 1px solid grey;

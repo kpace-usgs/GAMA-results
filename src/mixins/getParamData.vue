@@ -2,21 +2,28 @@
 import moment from 'moment'
 import getParamString from './getParamString.js'
 import esri from 'esri-leaflet'
+import 'esri-leaflet-renderers'
 
 export default {
 	data() {
 		return {
-			csvHeader: '',
-			wellArr: [],
-			value: ''
+			csvHeader: '', // builds the first string for the csv file
+			wellArr: [], // holds the data for the csv file
+			value: '' // the param number passed to the REST functions
 		}
 	},
+
 	computed: {
+
+		// compute the url from the param number
 		url(){
 			return 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.value;
 		}
 	},
+
 	methods: {
+
+		// get well markers
 		importParamGeometry(value){
 			console.log(value);
 			this.value = value;
@@ -27,7 +34,9 @@ export default {
 					return layer.bindPopup(() => {
 						return L.Util.template(getParamString(value), feature.properties);
 					})
-				}
+				},
+				renderer: L.canvas(),  //  can do either L.canvas() or L.svg() (default)
+				ignoreRenderer: false
 			});
 		},
 
@@ -40,6 +49,7 @@ export default {
 			this.constituentLayer.setWhere("Purpose = '" + status + "'");
 		},
 
+		// get well data but not markers
 		importParamData(value) {
 			this.value = value;
 

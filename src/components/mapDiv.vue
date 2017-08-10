@@ -90,15 +90,26 @@ export default {
 		importTypeJson(){
 			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/' + this.type;
 
-			this.constituentLayer = esri.featureLayer({
-				url: url,
-				onEachFeature: (feature, layer) => {
-					var popupText = getType(feature);
-					return layer.bindPopup(() => {
-						return L.Util.template(popupText)
-					})
+			// this.constituentLayer = esri.featureLayer({
+			// 	url: url,
+			// 	onEachFeature: (feature, layer) => {
+			// 		var popupText = getType(feature);
+			// 		return layer.bindPopup(() => {
+			// 			return L.Util.template(popupText)
+			// 		})
+			// 	}
+			// });
+
+			this.constituentLayer = esri.dynamicMapLayer({
+				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/',
+				layers: [this.type]
+			}).bindPopup( (err, featureCollection) => {
+				if(err || featureCollection.features.length === 0) {
+					return false;
+				} else {
+					return 'Well type: ' + getType(featureCollection.features[0]);
 				}
-			});
+			})
 
 		},
 

@@ -35,39 +35,42 @@ export default {
 	mixins: [Loader, ParamData],
 	props: ['param', 'type', 'layerArr'],
 	watch: {
-		type(){
-			this.toggleLoading();
-		
-			// if a constituent has already been selected, this.constituentLayer will already be populated
-			if(typeof(this.param.value) == 'number') {
-				this.filterConstituentLayer();
+		type(){	
+			if(this.type){
+				// if a constituent has already been selected, this.constituentLayer will already be populated
+				if(typeof(this.param.value) == 'number') {
+					this.filterConstituentLayer();
 
-			} else {
-				this.pointGroup.clearLayers();
-				this.importTypeJson();
+				} else {
+					// load the wells by type and add to the map
+					this.pointGroup.clearLayers();
+					this.importTypeJson();
+					this.addConstituentLayer();
+				}
 			}
-			
 		},
 
 		param(){
 			console.log('param changed');
-			this.toggleLoading();
-	
-			this.importParamGeometry(this.param.value);
-			this.addConstituentLayer(); // add to this.pointGroup if not there already
-			
-
-			// if the groundwater study type is also selected, run a query() on the param layer
-			if(this.type != ''){
-				this.pointGroup.removeLayer(this.typeLayer); // remove any typeLayer existing on the map
-				return this.filterConstituentLayer();
-			} 
-			
+			if(this.param.value){
+				this.importParamGeometry(this.param.value);
+				
+				// if the groundwater study type is also selected, run a query() on the param layer
+				if(this.type != ''){
+					this.pointGroup.clearLayers();
+					this.filterConstituentLayer();
+				} 
+				
+				this.addConstituentLayer(); // add to this.pointGroup if not there already
+			}
+			else {
+				this.pointGroup.clearLayers();
+			}
 		},
 
 		layerArr(){
 			//clear L.featureGroup when user changes menu selection
-			this.clearLayer(this.polygonGroup);
+			this.polygonGroup.clearLayers();
 
 			// get each selected pane layer
 			for(var i = 0; i < this.layerArr.length; i++){
@@ -81,34 +84,13 @@ export default {
 			}
 		}
 	},
-	computed: {
-		studyType(){
-			// used to filter wells returned from parameter value
-			switch(this.type){
-				case '0':
-					return 'STATUS'
-					break;
-				case '1':
-					return 'TRENDS'
-					break;
-				case '2': 
-					return 'Domestic-supply' 
-					//have to change value because geojson property is recorded as 'domestic-supply' instead of 'shallow'
-					break;
-				case '3':
-					return 'Public-supply'
-					break;
-				default:
-					return this.type;
-			}
-		}
-	},
+	
 	methods: {
 
 		importTypeJson(){
 			var url = 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/' + this.type;
 
-			this.typeLayer = esri.featureLayer({
+			this.constituentLayer = esri.featureLayer({
 				url: url,
 				onEachFeature: (feature, layer) => {
 					var popupText = getType(feature);
@@ -118,10 +100,6 @@ export default {
 				}
 			});
 
-			this.typeLayer.on('load', e => {
-				this.toggleLoading();
-			});
-			this.pointGroup.addLayer(this.typeLayer);
 		},
 
 		importPaneJson(val){
@@ -153,19 +131,16 @@ export default {
 			this.polygons.val = layer; //save to state					
 		},
 
-		clearLayer(layer){
-			// clear layer if it has any content
-			if(layer.getLayers().length > 0){
-				layer.clearLayers();
-			}
-		},
-
 		addConstituentLayer(){
 			// if constituent layer of markers not already added to map, add it now
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){
 				console.log('add layer');
 				this.pointGroup.addLayer(this.constituentLayer);
 
+				// toggle loading when beginning to load
+				this.constituentLayer.on('loading', e => {
+					this.toggleLoading();
+				})
 				// also set condition to toggle loader when done loading
 				this.constituentLayer.on('load', e => {
 					console.log('layer loading');
@@ -176,8 +151,6 @@ export default {
 
 		filterConstituentLayer(){
 			console.log('filter constituent layer');
-			console.log(this.studyType);
-			console.log(this.type);
 
 			if(this.type != 0 && this.type != 1){
 				this.filterByType(this.studyType);
@@ -221,7 +194,30 @@ export default {
 		this.polygonGroup.addTo(this.map);
 		this.pointGroup.addTo(this.map);
 
-	}
+	},
+
+	computed: {
+		studyType(){
+			// used to filter wells returned from parameter value
+			switch(this.type){
+				case '0':
+					return 'STATUS'
+					break;
+				case '1':
+					return 'TRENDS'
+					break;
+				case '2': 
+					return 'Domestic-supply' 
+					//have to change value because geojson property is recorded as 'domestic-supply' instead of 'shallow'
+					break;
+				case '3':
+					return 'Public-supply'
+					break;
+				default:
+					return this.type;
+			}
+		}
+	},
 }
 </script>
 

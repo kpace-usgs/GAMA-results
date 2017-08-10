@@ -14,7 +14,7 @@
 	        <!-- Groundwater Study Type Selector -->
 	        <div>
 		        <label>Groundwater Study Type: </label>
-	            <select id="base" style="width:300px;" v-model='type' @change='handleType'>
+	            <select id="base" style="width:300px;" v-model='type'>
 	                <option value=""> </option>
 	                <option value="0">All Sites</option>
 	                <option value="2">Domestic-supply Aquifer Sites</option>
@@ -26,9 +26,11 @@
 			<div>
 		        <!-- Parameter Group Selector -->
 		        <label>Select Constituent Class:</label>
+
 		        <div style="border: 1px solid black; width: 50px; height: 50px;">
-		        <img title="like this"/>
+		        	<img title="like this"/>
 		        </div>
+
 	            <select style="width:300px;" v-model='parameterGroup'>
 	                <option default value=''>Select One</option>
 	            	<option v-for='paramGroup in listOfParameters' :value='paramGroup'>{{paramGroup.groupName}}</option>
@@ -36,7 +38,8 @@
 
 				<!-- Download Button -->
 
-	            <a id='downloadButton' 
+	            <a id='downloadButton'
+	            	class='button' 
 	            	v-if='parameterGroup.groupName'
 	            	@click='downloadContent' 
 	            >
@@ -47,7 +50,7 @@
 			<div>
 		        <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
 		        <label>Select Constituent:</label>
-	            <select style="width:300px;" v-model='param' @change='handleParam'>
+	            <select style="width:300px;" v-model='param'>
 	            	<option default value=''></option>
 	            	<option v-for='parameter in parameterGroup.parameters' :value='parameter'>{{parameter.name}}</option>
 	            </select>
@@ -57,16 +60,22 @@
 		        <!-- Shapefile Selector -->
 		        <label>Select Layers:</label>
 		        <div v-for='(layer, index) in layers'>
-					<input type='checkbox' :id='layer' :value='index' v-model='layerName' @click='handleLayer' :key='index'>
+					<input type='checkbox' :id='layer' :value='index' v-model='layerName'  :key='index'>
 					<label for='layer'>{{layer.string}}</label>
 		        </div>
      		</div>
 	      
 
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
-		    <!-- insert study_unit_code.html in future -->
+		    
 
-		   <!--  <a id='downloadSite' href='./downloads/build.zip'>Download site</a> -->
+		    <a @click='reset' 
+		    	id='reset'
+		    	class='button'
+		    >
+				<p>Reset Map</p>
+		    </a>
+
 	    </div>
 	</div>
 </template>
@@ -113,16 +122,19 @@ export default {
 			constituentLayer: ''
 		}
 	},
+	watch: {
+		layerName(){
+			return this.$emit('changeLayer', this.layerName);
+		},
+		param(){
+			return this.$emit('changeParam', this.param);
+		},
+		type(){
+			return this.$emit('changeType', this.type);
+		}
+	},
 	methods: {
-		handleLayer(){
-			this.$emit('changeLayer', this.layerName);
-		},
-		handleParam(){
-			this.$emit('changeParam', this.param);
-		},
-		handleType(){
-			this.$emit('changeType', this.type);
-		},
+
 		downloadContent(){
 			var encodedUri = this.makeUri();
 			//this will probably trigger the browser to block downloading multiple files
@@ -157,6 +169,17 @@ export default {
 				csvContent += i < this.wellsLength ? dataString+ "\n" : dataString;
 			} 
 			return encodeURI(csvContent);
+		},
+		reset() {
+			this.layerName = '',
+			this.param = '';
+			this.type = '';
+			this.parameterGroup = {
+				"parameters": [{
+					"name": "Select parameter group first",
+					"value": ""
+				}]
+			};
 		}
 	},
 	computed: {
@@ -232,7 +255,7 @@ select:hover, input:hover, button:hover{
 	box-shadow: 1px 1px 10px grey;
 	cursor: pointer;
 }
-#downloadButton{
+#downloadButton, .button{
 	text-align: center;
 	width: 100%;
 	display: block;
@@ -240,6 +263,7 @@ select:hover, input:hover, button:hover{
 	border-radius: 5px;
 	border: 1px solid grey;
 	cursor: pointer;
+	text-decoration: none;
 }
 
 #downloadButton:not(.disabled):hover{
@@ -249,9 +273,19 @@ select:hover, input:hover, button:hover{
 	cursor: not-allowed;
 	color: grey;
 }
-#downloadSite{
+
+#reset{
+	margin-bottom: 20px;
+	padding: 0px;
+	height: 20px;
+	border-bottom: 1px solid grey;
+}
+#reset p{
+	margin: 0;
+	height: 90%;
+}
+#reset:hover{
+	box-shadow: 2px 2px 10px 1px grey;
 	width: 100%;
-	text-align: left;
-	text-decoration: underline;
 }
 </style>

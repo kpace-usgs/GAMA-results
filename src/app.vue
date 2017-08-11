@@ -1,10 +1,11 @@
 <template>
 	<div id='app'>
 		<MapDiv
-			:param='param'
-			:type='type'
+			:param = 'param'
+			:type = 'type'
 			:layerArr = 'layers'
-			@wellsLoaded='handleWellsLoaded'
+			@wellsLoaded = 'handleWellsLoaded'
+			@sendZoom = 'handleZoom'
 		></MapDiv>
 
 		<LegendDiv :layers = 'layers' :type='type' :param='param'>
@@ -15,6 +16,7 @@
 			@changeParam='handleParam'
 			@changeType='handleType'
 			:wells = 'wells'
+			:zoom = 'zoom'
 		></MenuDiv>
 	</div>
 </template>
@@ -31,7 +33,8 @@ export default {
 			layers: [],
 			param: '',
 			type: '',
-			wells: []
+			wells: [],
+			zoom: ''
 		}
 	},
 	components: {
@@ -49,6 +52,9 @@ export default {
 		},
 		handleWellsLoaded(arr){
 			this.wells = arr;
+		},
+		handleZoom(level){
+			this.zoom = level;
 		}
 	}
 }

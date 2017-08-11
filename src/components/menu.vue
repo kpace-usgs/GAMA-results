@@ -13,7 +13,10 @@
 	    
 	        <!-- Groundwater Study Type Selector -->
 	        <div>
-		        <label>Groundwater Study Type: </label>
+		        <label>Groundwater Study Type: 
+					<img src='../assets/images/moreInfo.png' alt='Define study type' title='Define study type' />
+		        </label>
+
 	            <select id="base" style="width:300px;" v-model='type'>
 	                <option value=""> </option>
 	                <option value="0">All Sites</option>
@@ -25,12 +28,11 @@
 
 			<div>
 		        <!-- Parameter Group Selector -->
-		        <label>Select Constituent Class:</label>
+		        <label>Select Constituent Class:
+					<img src='../assets/images/moreInfo.png' alt='Define constituent class' title='Define constituent class' />
+		        </label>
 
-		        <div style="border: 1px solid black; width: 50px; height: 50px;">
-		        	<img title="like this"/>
-		        </div>
-
+		       
 	            <select style="width:300px;" v-model='parameterGroup'>
 	                <option default value=''>Select One</option>
 	            	<option v-for='paramGroup in listOfParameters' :value='paramGroup'>{{paramGroup.groupName}}</option>
@@ -49,19 +51,36 @@
 
 			<div>
 		        <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
-		        <label>Select Constituent:</label>
+		        <label>Select Constituent: 
+		        	<img src='../assets/images/moreInfo.png' alt='Define constituent' title='Define constituent' />
+		        </label>
+
 	            <select style="width:300px;" v-model='param'>
 	            	<option default value=''></option>
 	            	<option v-for='parameter in parameterGroup.parameters' :value='parameter'>{{parameter.name}}</option>
 	            </select>
 	        </div>
 
-			<div>
+			<div id='layerSelector'>
 		        <!-- Shapefile Selector -->
-		        <label>Select Layers:</label>
-		        <div v-for='(layer, index) in layers'>
-					<input type='checkbox' :id='layer' :value='index' v-model='layerName'  :key='index'>
-					<label for='layer'>{{layer.string}}</label>
+		        <label>Select Layers:
+					<img src='../assets/images/moreInfo.png' alt='Define layers' title='Define layer' />
+		        </label>
+
+		        <!-- only show checkbox options depending on which groundwater study type is selected -->
+		        <div v-for='(layer, index) in layers' 
+		        	v-if='layer.type != "" ? type == layer.type : true'
+		        	:class='{ disabled: zoom < layer.zoom }'
+		        >
+					<input type='checkbox' 
+					:disabled='zoom < layer.zoom ? true : false'
+					:id='layer' :value='index' 
+					v-model='layerName'  :key='index'
+					:title='zoom < layer.zoom ? "zoom in to view" : ""' >
+					<label for='layer' 
+					:title='zoom < layer.zoom ? "zoom in to view" : ""'>
+						{{layer.string}}
+					</label>
 		        </div>
      		</div>
 	      
@@ -69,10 +88,7 @@
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
 		    
 
-		    <a @click='reset' 
-		    	id='reset'
-		    	class='button'
-		    >
+		    <a @click='reset' id='reset' class='button' >
 				<p>Reset Map</p>
 		    </a>
 
@@ -88,7 +104,7 @@ import ParamData from '../mixins/getParamData.vue'
 export default {
 	name: 'MenuDiv',
 	mixins: [toggle, ParamData],
-	props: ['wells'],
+	props: ['wells', 'zoom'],
 	data() {
 		return {
 			type: '',
@@ -101,20 +117,31 @@ export default {
 			},
 			param: '',
 			layers: [{
-				"string": 'Domestic-supply Aquifer Grid Cells',
-				"pane": 'shallowGridCells'
+				"string": "Aquifer Grid Cells",
+				// "string": 'Domestic-supply Aquifer Grid Cells',
+				"pane": 'shallowGridCells',
+				"type": 2,
+				"zoom": 8
 			}, {
-				"string": 'Public-supply Aquifer Grid Cells', 
-				"pane": 'deepGridCells'
+				"string": "Aquifer Grid Cells",
+				// "string": 'Public-supply Aquifer Grid Cells', 
+				"pane": 'deepGridCells',
+				"type": 3,
+				"zoom": 8
 			}, {
-				"string": 'Domestic-supply Aquifer Study Units', 
-				"pane": 'shallowStudyUnits'
+				"string": "Aquifer Study Cells",
+				// "string": 'Domestic-supply Aquifer Study Units', 
+				"pane": 'shallowStudyUnits',
+				"type": 2
 			}, {
-				"string": 'Public-supply Aquifer Study Units',
-				"pane": 'deepStudyUnits'
+				"string": "Aquifer Study Cells",
+				// "string": 'Public-supply Aquifer Study Units',
+				"pane": 'deepStudyUnits',
+				"type": 3
 			}, {
 				"string": 'Hydrogeologic Provinces',
-				"pane": 'provinces'
+				"pane": 'provinces',
+				"type": ''
 			}],
 			layerName: [],
 			thresholds: '',
@@ -188,7 +215,7 @@ export default {
 		},
 		fileName(){
 			return this.param.name + '.csv'
-		},
+		}
 		// encodedUri(){
 		// 	var csvContent = "data:text/csv;charset=utf-8,";
 
@@ -276,7 +303,7 @@ select:hover, input:hover, button:hover{
 
 #reset{
 	margin-bottom: 0px;
-	padding: 0px;
+	padding: 0 0 5px;
 	height: 20px;
 	border-bottom: 1px solid grey;
 }
@@ -287,5 +314,12 @@ select:hover, input:hover, button:hover{
 #reset:hover{
 	box-shadow: 2px 2px 10px 1px grey;
 	width: 100%;
+}
+#layerSelector>div.disabled>input{
+	cursor: not-allowed;
+}
+#layerSelector>div.disabled>label{
+	text-decoration: line-through;
+	color: grey;
 }
 </style>

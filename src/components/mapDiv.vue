@@ -22,8 +22,9 @@ export default {
 			map: '',
 			baseLayers: '',
 			view: [37.7, -120.57],
-			zoom: 6,
-			maxZoom: 8,
+			zoom: 8,
+			minZoom: 6,
+			maxZoom: 10,
 			polygonGroup: L.featureGroup(),
 			polygons: {},
 			pointGroup: L.featureGroup(),
@@ -103,11 +104,12 @@ export default {
 		},
 
 		importPaneJson(val){
-			console.log(val);
+			console.log('layer to import as dynamicMapLayer: ' + val);
 
 			var layer = esri.dynamicMapLayer({
 				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/',
-				layers: [val]
+				layers: [val],
+				minZoom: 4
 			}).bindPopup( (err, featureCollection) => {
 				if(err || featureCollection.features.length === 0) {
 					return false;
@@ -176,7 +178,13 @@ export default {
 	},
 
 	mounted() {
-		this.map = L.map('mapDiv').setView(this.view, this.zoom).setMaxZoom(this.maxZoom);
+		this.map = L.map('mapDiv').setView(this.view, this.zoom).setMaxZoom(this.maxZoom).setMinZoom(this.minZoom);
+
+		var that = this;
+		this.map.on('zoom', () => {
+			console.log(that.map.getZoom());
+			that.$emit('sendZoom', that.map.getZoom());
+		});
 
 		L.control.scale({position: 'bottomright'}).addTo(this.map); 
 		this.loadOverlays();

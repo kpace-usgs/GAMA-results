@@ -27,7 +27,9 @@ export default {
 			maxZoom: 10,
 			polygonGroup: L.featureGroup(),
 			polygons: {},
-			pointGroup: L.featureGroup(),
+			pointGroup: L.featureGroup({
+				pane: 'markerPane'
+			}),
 			typeLayer: '',
 			constituentLayer: '',
 			wells: [],
@@ -56,10 +58,11 @@ export default {
 			console.log('param changed');
 			if(this.param.value){
 				this.importParamGeometry(this.param.value);
-				
+				this.pointGroup.clearLayers(); //clear the existing layer
+
+
 				// if the groundwater study type is also selected, run a query() on the param layer
 				if(this.type != ''){
-					this.pointGroup.clearLayers();
 					this.filterConstituentLayer();
 				} 
 				
@@ -100,7 +103,7 @@ export default {
 				} else {
 					return 'Well type: ' + getType(featureCollection.features[0]);
 				}
-			})
+			});
 		},
 
 		importPaneJson(val){
@@ -109,7 +112,8 @@ export default {
 			var layer = esri.dynamicMapLayer({
 				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/',
 				layers: [val],
-				minZoom: 4
+				minZoom: 4,
+				position: val == 4 ? 'back' : 'front',
 			}).bindPopup( (err, featureCollection) => {
 				if(err || featureCollection.features.length === 0) {
 					return false;
@@ -127,7 +131,7 @@ export default {
 			// if constituent layer of markers not already added to map, add it now
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){
 				console.log('add layer');
-				this.pointGroup.addLayer(this.constituentLayer);
+				this.pointGroup.addLayer(this.constituentLayer).bringToFront();
 
 				// toggle loading when beginning to load
 				this.constituentLayer.on('loading', e => {
@@ -186,9 +190,12 @@ export default {
 			that.$emit('sendZoom', that.map.getZoom());
 		});
 
+		// initially emit the zoom level
+		this.$emit('sendZoom', this.map.getZoom());
+
 		L.control.scale({position: 'bottomright'}).addTo(this.map); 
 		this.loadOverlays();
-		this.polygonGroup.setZIndex(-10);
+
 		this.polygonGroup.addTo(this.map);
 		this.pointGroup.addTo(this.map);
 

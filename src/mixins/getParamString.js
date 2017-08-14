@@ -2,7 +2,7 @@ export default function(param){
 
 	switch(param){
 		case 15: 
-			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {FungicideC}<br/># Detections: {Fungicid_1}</p>';
+			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {FungicideCatg}<br/># Detections: {FungicideCt}</p>';
 			break;
 		case 16: 
 			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {GasolineCatg}<br/># Detections: {GasolineCt}</p>';
@@ -14,7 +14,7 @@ export default function(param){
 			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {HerbicideCatg}<br/># Detections: {HerbicideCt}</p>';
 			break;
 		case 19:
-			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {Insecticid}<br/># Detections: {Insectic_1}</p>';
+			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {InsecticideCatg}<br/># Detections: {InsecticideCt}</p>';
 			break;
 		case 24:
 			return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/># Detections: {DetectCounts}</p>';

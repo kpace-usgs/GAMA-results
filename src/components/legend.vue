@@ -44,7 +44,7 @@
 		    	<div><p>>3</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
 		    	<div><p>2-3</p><div><img src='../assets/images/mod.png'/><p>{{param.mod}}</p></div></div>
 		    	<div><p>1</p><div><img src='../assets/images/low.png'/><p>{{param.low}}</p></div></div>
-		    	<div><p>0</p><div><img src='../assets/images/zero.png'/></div></div>
+		    	<div><p>0 or null</p><div><img src='../assets/images/zero.png'/></div></div>
 		    </div>
 
 		    <!-- main -->

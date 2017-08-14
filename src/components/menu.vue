@@ -117,24 +117,24 @@ export default {
 			},
 			param: '',
 			layers: [{
-				"string": "Aquifer Grid Cells",
+				"string": "Grid Cells",
 				// "string": 'Domestic-supply Aquifer Grid Cells',
 				"pane": 'shallowGridCells',
 				"type": 2,
 				"zoom": 8
 			}, {
-				"string": "Aquifer Grid Cells",
+				"string": "Grid Cells",
 				// "string": 'Public-supply Aquifer Grid Cells', 
 				"pane": 'deepGridCells',
 				"type": 3,
 				"zoom": 8
 			}, {
-				"string": "Aquifer Study Cells",
+				"string": "Study Cells",
 				// "string": 'Domestic-supply Aquifer Study Units', 
 				"pane": 'shallowStudyUnits',
 				"type": 2
 			}, {
-				"string": "Aquifer Study Cells",
+				"string": "Study Cells",
 				// "string": 'Public-supply Aquifer Study Units',
 				"pane": 'deepStudyUnits',
 				"type": 3
@@ -145,11 +145,13 @@ export default {
 			}],
 			layerName: [],
 			thresholds: '',
-			readme: '',
-			constituentLayer: ''
+			readme: ''
 		}
 	},
 	watch: {
+		// parameterGroup(){
+		// 	this.buildPromises();
+		// },
 		layerName(){
 			return this.$emit('changeLayer', this.layerName);
 		},
@@ -157,22 +159,46 @@ export default {
 			return this.$emit('changeParam', this.param);
 		},
 		type(){
+			console.log(this.layerName);
+			// clear selected layer if any layer other than hydrogeologic provinces
+			if(this.layerName.length >= 2){
+				console.log(this.layerName.length);
+				this.layerName = this.layerName.indexOf(4) === -1 ? [] : [4];
+			} 
+
+			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
 		}
 	},
 	methods: {
 
 		downloadContent(){
-			var encodedUri = this.makeUri();
-			//this will probably trigger the browser to block downloading multiple files
-
-			this.createAndOpenLink(encodedUri, this.fileName);
-			this.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
-			this.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
+			var that = this;
+			var getData = new Promise(
+				(resolve, reject) => {
+					resolve(that.importParamData(that.promises[0]));
+					
+			}).then(
+				function(res){
+					console.log('done');
+					that.createAndOpenLink(encodeURI(that.csvBody), that.fileName)
+				},
+				function(){
+					console.log('failed');
+				}
+			).catch(
+				(reason) => {
+					console.log('handle rejected promise ' + reason);
+				}
+			)
+			
+			// this.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
+			// this.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
 	 
 		},
 
 		createAndOpenLink(href, filename){
+			console.log('creating file');
 			var link = window.document.createElement('a');
 			link.href = href;
 			link.download = filename;
@@ -181,23 +207,8 @@ export default {
 			document.body.removeChild(link);
 		},
 
-		makeUri(){
-			var csvContent = "data:text/csv;charset=utf-8,";
-			// get json data for every parameter in parameterGroup.parameters array
-			for(var i = 0; i < this.parameterGroup.parameters.length; i++){
-				this.importParamData(this.parameterGroup.parameters[i].value);
-			}
-			csvContent += this.csvHeader;
-
-			for(var i = 0; i < this.wellsLength; i++){
-				var dataString = this.wells[i];
-
-				//add the row and if we're not yet at the end of the wells array, add a \n to the string to start a new line
-				csvContent += i < this.wellsLength ? dataString+ "\n" : dataString;
-			} 
-			return encodeURI(csvContent);
-		},
 		reset() {
+			// reset values on map and menu when reset button clicked
 			this.layerName = [],
 			this.param = '';
 			this.type = '';
@@ -214,21 +225,15 @@ export default {
 			return this.wells.length;
 		},
 		fileName(){
-			return this.param.name + '.csv'
+			return this.parameterGroup.groupName + '.csv'
+		},
+		promises(){
+			var arr = [];
+			for(var i = 0; i < this.parameterGroup.parameters.length; i++) {
+				arr.push(this.parameterGroup.parameters[i].value);
+			}
+			return arr;
 		}
-		// encodedUri(){
-		// 	var csvContent = "data:text/csv;charset=utf-8,";
-
-		// 	csvContent += this.csvHeader;
-
-		// 	for(var i = 0; i < this.wellsLength; i++){
-		// 		var dataString = this.wells[i];
-
-		// 		//add the row and if we're not yet at the end of the wells array, add a \n to the string to start a new line
-		// 		csvContent += i < this.wellsLength ? dataString+ "\n" : dataString;
-		// 	} 
-		// 	return encodeURI(csvContent);
-		// }
 	}
 }
 </script>

@@ -88,7 +88,7 @@
 		"high": "> 4",
 		"thresh_val": "4",
 		"thresh_src": "MCL-US",
-		"acr": "Action level established by the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Boron",
 		"value": 7,
@@ -100,7 +100,7 @@
 		"high": "> 6,000",
 		"thresh_val": "6,000",
 		"thresh_src": "HBSL",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
+		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Cadmium" ,
 		"value": 8,
@@ -112,7 +112,7 @@
 		"high": "> 5",
 		"thresh_val": "5",
 		"thresh_src": "MCL-US",
-		"acr": "Action level established by the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Chromium",
 		"value": 11,
@@ -131,12 +131,12 @@
 		"type": "Inorganic",
 		"pcode": "01032",
 		"units": "µg/L",
-		"low": "< 5",
-		"mod": "5 - 10",
-		"high": "> 10",
-		"thresh_val": "10",
-		"thresh_src": "MCL-CA",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
+		"low": "",
+		"mod": "",
+		"high": "",
+		"thresh_val": "",
+		"thresh_src": "",
+		"acr": ""
 	},{
 		"name": "Copper",
 		"value": 13,
@@ -148,7 +148,7 @@
 		"high": "> 1,300",
 		"thresh_val": "1,300",
 		"thresh_src": "AL-US",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Action level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Iron",
 		"value": 20,
@@ -160,7 +160,7 @@
 		"high": "> 300",
 		"thresh_val": "300",
 		"thresh_src": "SMCL-CA",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
+		"acr": "Secondary Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
 	},{
 		"name": "Lead",
 		"value": 21,
@@ -172,7 +172,7 @@
 		"high": "> 15",
 		"thresh_val": "15",
 		"thresh_src": "AL-US",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Action level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Manganese",
 		"value": 22,
@@ -208,7 +208,7 @@
 		"high": "> 40",
 		"thresh_val": "40",
 		"thresh_src": "HBSL",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
+		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Nickel",
 		"value": 26,
@@ -232,7 +232,7 @@
 		"high": "> 50",
 		"thresh_val": "50",
 		"thresh_src": "MCL-US",
-		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Silver",
 		"value": 39,
@@ -244,7 +244,7 @@
 		"high": "> 100",
 		"thresh_val": "100",
 		"thresh_src": "HBSL",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Strontium",
 		"value": 41,
@@ -256,7 +256,7 @@
 		"high": "> 4,000",
 		"thresh_val": "4000",
 		"thresh_src": "HBSL",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Thallium",
 		"value": 43,
@@ -292,7 +292,7 @@
 		"high": "> 50",
 		"thresh_val": "50",
 		"thresh_src": "NL-CA",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Notification Level established by the California State Water Resources Control Board Department of Drinking Water."
 	},{
 		"name": "Zinc",
 		"value": 48,
@@ -304,7 +304,7 @@
 		"high": "> 2,000",
 		"thresh_val": "2000",
 		"thresh_src": "HBSL",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	}]
 },{
 	"groupName": "Radioactivity",
@@ -332,7 +332,7 @@
 		"high": "> 50",
 		"thresh_val": "50",
 		"thresh_src": "MCL-CA",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
 	},{
 		"name": "Radium-226",
 		"value": 33,
@@ -344,7 +344,7 @@
 		"high": "> 5",
 		"thresh_val": "5",
 		"thresh_src": "MCL-US",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Radium-228",
 		"value": 34,
@@ -356,7 +356,7 @@
 		"high": "> 5",
 		"thresh_val": "5",
 		"thresh_src": "MCL-US",
-		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	}]
 },{
 	"groupName": "Pharmaceuticals",
@@ -396,7 +396,7 @@
 		"high": "> 1",
 		"thresh_val": "1",
 		"thresh_src": "MCL-US",
-		"acr": "Action level established by the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Nitrite plus Nitrate",
 		"value": 28,
@@ -408,7 +408,7 @@
 		"high": "> 10",
 		"thresh_val": "10",
 		"thresh_src": "MCL-US",
-		"acr": "Action level established by the U.S. Environmental Protection Agency"
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	}]
 },{
 	"groupName": "Microbiological Parameters",
@@ -444,7 +444,7 @@
 		"high": "> 2",
 		"thresh_val": "2",
 		"thresh_src": "MCL-CA",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
 	},{
 		"name": "Total Dissolved Solids",
 		"value": 36,
@@ -456,7 +456,7 @@
 		"high": "> 1,000",
 		"thresh_val": "1000",
 		"thresh_src": "SMCL-CA",
-		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
+		"acr": "Secondary Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
 	},{
 		"name": "Sulfate",
 		"value": 42,
@@ -468,7 +468,7 @@
 		"high": "> 500",
 		"thresh_val": "500",
 		"thresh_src": "SMCL-CA",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Secondary Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
 	}]
 },{
 	"groupName": "Geochemical and Age-Dating Tracers",
@@ -512,7 +512,7 @@
 		"high": "> 1,600",
 		"thresh_val": "1600",
 		"thresh_src": "SMCL-CA",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
+		"acr": "Secondary Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
 	},{
 		"name": "pH",
 		"value": 31,
@@ -524,7 +524,7 @@
 		"high": "> 8.5",
 		"thresh_val": "8.5",
 		"thresh_src": "SMCL-US",
-		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
+		"acr": "Secondary Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	}]
 },{
 	"groupName": "Parameters of Special Interest",
@@ -540,6 +540,6 @@
 		"high": "> 6",
 		"thresh_val": "6",
 		"thresh_src": "MCL-CA",
-		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
 	}]
 }]

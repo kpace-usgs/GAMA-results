@@ -36,7 +36,7 @@ export default {
 	props: ['param', 'type', 'layerArr'],
 	watch: {
 		type(){	
-			if(this.type){
+			if(this.type.length > 0){
 				// if a constituent has already been selected, this.constituentLayer will already be populated
 				if(typeof(this.param.value) == 'number') {
 					this.decideHowToFilter(this.constituentLayer);
@@ -48,10 +48,13 @@ export default {
 					this.addConstituentLayer();
 				}
 			}
+			// check to see if the map has been reset
+			else {
+				this.checkReset();
+			}
 		},
 
 		param(){
-			console.log('param changed');
 
 			/* if selection box has a value, save this.constituentLayer as an esri.featureLayer */
 			if(this.param.value){
@@ -93,7 +96,6 @@ export default {
 	methods: {
 
 		importTypeJson(){
-
 			this.constituentLayer = esri.dynamicMapLayer({
 				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/',
 				layers: [this.type]
@@ -118,7 +120,6 @@ export default {
 				if(err || featureCollection.features.length === 0) {
 					return false;
 				} else {
-					console.log(featureCollection.features[0].properties);
 					return featureCollection.features[0].properties[getLayerPopup(val)]
 				}
 				
@@ -130,7 +131,6 @@ export default {
 		addConstituentLayer(){
 			// if constituent layer of markers not already added to map, add it now
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){
-				console.log('add layer');
 				this.pointGroup.addLayer(this.constituentLayer).bringToFront();
 
 				// toggle loading when beginning to load
@@ -139,9 +139,18 @@ export default {
 				})
 				// also set condition to toggle loader when done loading
 				this.constituentLayer.on('load', e => {
-					console.log('layer loaded');
 					this.$emit('toggleLoading', false);
 				});
+			}
+		},
+
+		checkReset(){
+			// check that all other values have also been reset, in which case we think the reset button has been clicked
+			if(this.type.length == 0 && this.param.length == 0 && this.layerArr.length == 0){
+				this.pointGroup.clearLayers();
+				this.polygonGroup.clearLayers();
+				// recenter map to home position
+				this.map.setView(this.view, this.zoom);
 			}
 		},
 

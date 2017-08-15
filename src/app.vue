@@ -19,8 +19,6 @@
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
 			@changeType='handleType'
-			@reset='reset'
-			@toggleLoading = 'toggleLoading'
 			:zoom = 'zoom'
 		></MenuDiv>
 	</div>
@@ -55,13 +53,10 @@ export default {
 			this.param = string;
 		},
 		handleType(string){
-			this.type = string;
+			return this.type = string;
 		},
 		handleZoom(level){
 			this.zoom = level;
-		},
-		reset(){
-			
 		}
 	}
 }

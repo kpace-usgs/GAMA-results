@@ -39,7 +39,6 @@
 	            </select>
 
 				<!-- Download Button -->
-
 	            <a id='downloadButton'
 	            	class='button' 
 	            	v-if='parameterGroup.groupName'
@@ -113,7 +112,8 @@ export default {
 			parameterGroup: {
 				"parameters": [{
 					"name": "Select parameter group first",
-					"value": ""
+					"value": "",
+					"groupName" : ''
 				}]
 			},
 			param: '',
@@ -158,12 +158,8 @@ export default {
 			return this.$emit('changeParam', this.param);
 		},
 		type(){
-			console.log(this.layerName);
 			// clear selected layer if any layer other than hydrogeologic provinces
-			if(this.layerName.length >= 2){
-				console.log(this.layerName.length);
-				this.layerName = this.layerName.indexOf(4) === -1 ? [] : [4];
-			} 
+			this.layerName = this.layerName.indexOf(4) === -1 ? [] : [4];
 
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
@@ -175,7 +171,6 @@ export default {
 			var that = this;
 			// define callback function
 			var callback = function(){
-				console.log('callback');
 				that.createAndOpenLink(encodeURI(that.csvBody), that.fileName)
 				that.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
 				that.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
@@ -200,14 +195,6 @@ export default {
 			this.layerName = [],
 			this.param = '';
 			this.type = '';
-			this.parameterGroup = {
-				"parameters": [{
-					"name": "Select parameter group first",
-					"value": ""
-				}]
-			};
-
-			this.$emit('reset');
 		}
 	},
 	computed: {

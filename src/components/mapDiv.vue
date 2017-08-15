@@ -1,13 +1,11 @@
 <template>
-	<div id='mapDiv'>
-		<PulseLoader :loading='isLoading'></PulseLoader>
-	</div>
+	<div id='mapDiv'></div>
 </template>
 
 <script>
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
-import Loader from '../mixins/loader.vue'
+
 import ParamData from '../mixins/getParamData.vue'
 import getType from '../mixins/getType.js'
 import getLayerPopup from '../mixins/getLayerPopup.js'
@@ -31,19 +29,17 @@ export default {
 				pane: 'markerPane'
 			}),
 			typeLayer: '',
-			constituentLayer: '',
-			wells: [],
-
+			constituentLayer: ''
 		}
 	},
-	mixins: [Loader, ParamData],
+	mixins: [ParamData],
 	props: ['param', 'type', 'layerArr'],
 	watch: {
 		type(){	
 			if(this.type){
 				// if a constituent has already been selected, this.constituentLayer will already be populated
 				if(typeof(this.param.value) == 'number') {
-					this.filterConstituentLayer();
+					this.decideHowToFilter(this.constituentLayer);
 
 				} else {
 					// load the wells by type and add to the map
@@ -56,18 +52,22 @@ export default {
 
 		param(){
 			console.log('param changed');
+
+			/* if selection box has a value, save this.constituentLayer as an esri.featureLayer */
 			if(this.param.value){
-				this.importParamGeometry(this.param.value);
+				this.constituentLayer = this.importParamGeometry(this.param.value);
 				this.pointGroup.clearLayers(); //clear the existing layer
 
 
-				// if the groundwater study type is also selected, run a query() on the param layer
+				/* if the groundwater study type is also selected, run a query() on the param layer */
 				if(this.type != ''){
-					this.filterConstituentLayer();
+					this.decideHowToFilter(this.constituentLayer);
 				} 
 				
 				this.addConstituentLayer(); // add to this.pointGroup if not there already
 			}
+
+			/* if selection box was changed to no value, clear the layers */
 			else {
 				this.pointGroup.clearLayers();
 			}
@@ -135,27 +135,14 @@ export default {
 
 				// toggle loading when beginning to load
 				this.constituentLayer.on('loading', e => {
-					this.toggleLoading();
+					this.$emit('toggleLoading', true);
 				})
 				// also set condition to toggle loader when done loading
 				this.constituentLayer.on('load', e => {
-					console.log('layer loading');
-					this.toggleLoading();
+					console.log('layer loaded');
+					this.$emit('toggleLoading', false);
 				});
 			}
-		},
-
-		filterConstituentLayer(){
-			console.log('filter constituent layer');
-
-			if(this.type != 0 && this.type != 1){
-				this.filterByType(this.studyType);
-			} else {
-				console.log('filter by status')
-				this.filterByStatus(this.studyType);
-			}
-			
-			this.constituentLayer.redraw();
 		},
 
 		loadOverlays(){
@@ -177,7 +164,7 @@ export default {
 
 			L.control.layers(this.baseLayers, {}, {collapsed: false}).setPosition('topleft').addTo(this.map);
 
-			this.toggleLoading(); //turn off loader spinner
+			this.$emit('toggleLoading', false); //turn off loader spinner
 		}
 	},
 
@@ -199,30 +186,7 @@ export default {
 		this.polygonGroup.addTo(this.map);
 		this.pointGroup.addTo(this.map);
 
-	},
-
-	computed: {
-		studyType(){
-			// used to filter wells returned from parameter value
-			switch(this.type){
-				case '0':
-					return 'STATUS'
-					break;
-				case '1':
-					return 'TRENDS'
-					break;
-				case '2': 
-					return 'Domestic-supply' 
-					//have to change value because geojson property is recorded as 'domestic-supply' instead of 'shallow'
-					break;
-				case '3':
-					return 'Public-supply'
-					break;
-				default:
-					return this.type;
-			}
-		}
-	},
+	}
 }
 </script>
 

@@ -100,11 +100,12 @@
 import listOfParameters from '../assets/listOfParameters.json';
 import toggle from '../mixins/toggle.vue'
 import ParamData from '../mixins/getParamData.vue'
+import BuildCSV from '../mixins/buildCSV.vue'
 
 export default {
 	name: 'MenuDiv',
-	mixins: [toggle, ParamData],
-	props: ['wells', 'zoom'],
+	mixins: [toggle, ParamData, BuildCSV],
+	props: ['zoom'],
 	data() {
 		return {
 			type: '',
@@ -149,9 +150,7 @@ export default {
 		}
 	},
 	watch: {
-		// parameterGroup(){
-		// 	this.buildPromises();
-		// },
+	
 		layerName(){
 			return this.$emit('changeLayer', this.layerName);
 		},
@@ -171,30 +170,19 @@ export default {
 		}
 	},
 	methods: {
-
 		downloadContent(){
+			/* query data from arcServer for each parameter in the selected parameter group*/
 			var that = this;
-			var getData = new Promise(
-				(resolve, reject) => {
-					resolve(that.importParamData(that.promises[0]));
-					
-			}).then(
-				function(res){
-					console.log('done');
-					that.createAndOpenLink(encodeURI(that.csvBody), that.fileName)
-				},
-				function(){
-					console.log('failed');
-				}
-			).catch(
-				(reason) => {
-					console.log('handle rejected promise ' + reason);
-				}
-			)
-			
-			// this.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
-			// this.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
-	 
+			// define callback function
+			var callback = function(){
+				console.log('callback');
+				that.createAndOpenLink(encodeURI(that.csvBody), that.fileName)
+				that.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
+				that.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
+			};
+
+			// invoke promise defined in buildCSV.vue
+			this.importArrayOfValues(this.parameterGroup.parameters, callback);
 		},
 
 		createAndOpenLink(href, filename){
@@ -218,21 +206,13 @@ export default {
 					"value": ""
 				}]
 			};
+
+			this.$emit('reset');
 		}
 	},
 	computed: {
-		wellsLength(){
-			return this.wells.length;
-		},
 		fileName(){
 			return this.parameterGroup.groupName + '.csv'
-		},
-		promises(){
-			var arr = [];
-			for(var i = 0; i < this.parameterGroup.parameters.length; i++) {
-				arr.push(this.parameterGroup.parameters[i].value);
-			}
-			return arr;
 		}
 	}
 }

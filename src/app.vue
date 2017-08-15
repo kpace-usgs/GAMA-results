@@ -4,18 +4,23 @@
 			:param = 'param'
 			:type = 'type'
 			:layerArr = 'layers'
-			@wellsLoaded = 'handleWellsLoaded'
 			@sendZoom = 'handleZoom'
+			@toggleLoading = 'toggleLoading'
 		></MapDiv>
 
-		<LegendDiv :layers = 'layers' :type='type' :param='param'>
+		<PulseLoader :loading='isLoading'></PulseLoader>
+
+		<LegendDiv :layers = 'layers' 
+			:type='type' 
+			:param='param'>
 		</LegendDiv>
 
 		<MenuDiv 
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
 			@changeType='handleType'
-			:wells = 'wells'
+			@reset='reset'
+			@toggleLoading = 'toggleLoading'
 			:zoom = 'zoom'
 		></MenuDiv>
 	</div>
@@ -25,6 +30,8 @@
 import MapDiv from './components/mapDiv.vue';
 import LegendDiv from './components/legend';
 import MenuDiv from './components/menu';
+import Loader from './mixins/loader.vue';
+
 
 export default {
 	name: 'App',
@@ -33,13 +40,13 @@ export default {
 			layers: [],
 			param: '',
 			type: '',
-			wells: [],
 			zoom: ''
 		}
 	},
 	components: {
 		MapDiv, MenuDiv, LegendDiv
 	},
+	mixins: [ Loader ],
 	methods: {
 		handleLayer(arr){
 			this.layers = arr;
@@ -50,11 +57,11 @@ export default {
 		handleType(string){
 			this.type = string;
 		},
-		handleWellsLoaded(arr){
-			this.wells = arr;
-		},
 		handleZoom(level){
 			this.zoom = level;
+		},
+		reset(){
+			
 		}
 	}
 }

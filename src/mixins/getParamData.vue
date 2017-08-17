@@ -45,13 +45,19 @@ export default {
 			console.log(value);
 			this.value = value;
 
+			let layerDetails = getParamString(value);
+
 			return esri.featureLayer({
 				url: this.url,
 				onEachFeature: function(feature, layer){
+
 					return layer.bindPopup(() => {
-						return L.Util.template(getParamString(value), feature.properties);
+						
+						return L.Util.template(`<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {${layerDetails.category}}<br/>${layerDetails.lookFor}: {${layerDetails.value}}</p>`, feature.properties);
+						//return L.Util.template(getParamString(value), feature.properties);
 					})
 				},
+				where: `${layerDetails.value} IS NOT NULL` ,
 				renderer: L.canvas()  //  can do either L.canvas() or L.svg() (default)
 			});
 		},

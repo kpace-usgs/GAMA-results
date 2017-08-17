@@ -14,7 +14,9 @@
 	        <!-- Groundwater Study Type Selector -->
 	        <div>
 		        <label>Groundwater Study Type: 
-					<img src='../assets/images/moreInfo.png' alt='Define study type' title='Define study type' />
+					<img src='../assets/images/moreInfo.png' 
+					alt='Define study type' 
+					:title='defineType' />
 		        </label>
 
 	            <select id="base" style="width:300px;" v-model='type'>
@@ -29,7 +31,8 @@
 			<div>
 		        <!-- Parameter Group Selector -->
 		        <label>Select Constituent Class:
-					<img src='../assets/images/moreInfo.png' alt='Define constituent class' title='Define constituent class' />
+					<img src='../assets/images/moreInfo.png' alt='Define constituent class' 
+					:title='defineClass' />
 		        </label>
 
 		       
@@ -37,21 +40,13 @@
 	                <option default value=''>Select One</option>
 	            	<option v-for='paramGroup in listOfParameters' :value='paramGroup'>{{paramGroup.groupName}}</option>
 	            </select>
-
-				<!-- Download Button -->
-	            <a id='downloadButton'
-	            	class='button' 
-	            	v-if='parameterGroup.groupName'
-	            	@click='downloadContent' 
-	            >
-	            	<p>Download Data from Constituent Class</p>
-	            </a>
 	        </div>
 
 			<div>
 		        <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
 		        <label>Select Constituent: 
-		        	<img src='../assets/images/moreInfo.png' alt='Define constituent' title='Define constituent' />
+		        	<img src='../assets/images/moreInfo.png' alt='Define constituent' 
+		        	:title='defineConst' />
 		        </label>
 
 	            <select style="width:300px;" v-model='param'>
@@ -67,10 +62,7 @@
 		        </label>
 
 		        <!-- only show checkbox options depending on which groundwater study type is selected -->
-		        <div v-for='(layer, index) in layers' 
-		        	v-if='layer.type != "" ? type == layer.type : true'
-		        	:class='{ disabled: zoom < layer.zoom }'
-		        >
+		        <div v-for='(layer, index) in layers' >
 					<input type='checkbox' 
 					:disabled='zoom < layer.zoom ? true : false'
 					:id='layer' :value='index' 
@@ -83,6 +75,13 @@
 		        </div>
      		</div>
 	      
+			<!-- Download Button -->
+            <a id='downloadButton'
+            	:class='{disabled : !parameterGroup.groupName}' 
+            	@click='downloadContent' 
+            >
+            	<p>Download Data from Constituent Class</p>
+            </a>
 
 		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
 		    
@@ -118,25 +117,25 @@ export default {
 			},
 			param: '',
 			layers: [{
-				"string": "Grid Cells",
-				// "string": 'Domestic-supply Aquifer Grid Cells',
+				// "string": "Grid Cells",
+				"string": 'Domestic-supply Aquifer Grid Cells',
 				"pane": 'shallowGridCells',
 				"type": 2,
 				"zoom": 8
 			}, {
-				"string": "Grid Cells",
-				// "string": 'Public-supply Aquifer Grid Cells', 
+				//"string": "Grid Cells",
+				"string": 'Public-supply Aquifer Grid Cells', 
 				"pane": 'deepGridCells',
 				"type": 3,
 				"zoom": 8
 			}, {
-				"string": "Study Cells",
-				// "string": 'Domestic-supply Aquifer Study Units', 
+				//"string": "Study Units",
+				"string": 'Domestic-supply Aquifer Study Units', 
 				"pane": 'shallowStudyUnits',
 				"type": 2
 			}, {
-				"string": "Study Cells",
-				// "string": 'Public-supply Aquifer Study Units',
+				//"string": "Study Units",
+				"string": 'Public-supply Aquifer Study Units',
 				"pane": 'deepStudyUnits',
 				"type": 3
 			}, {
@@ -146,7 +145,10 @@ export default {
 			}],
 			layerName: [],
 			thresholds: '',
-			readme: ''
+			readme: '',
+			defineType: 'Groundwater study type refers to the three types of assessment conducted by the GAMA-PBP: Public-Supply Aquifer Assessments, Shallow Aquifer Assessment, and Trend Assessments. Users can display sites from all three assessment types by selecting "All Sites" or they can limit the display by Assessment Type',
+			defineClass: 'Mappable constituents are grouped by class. Constituent classes are groupings of constituents based on similar physical or chemical properties. Not all constituents analyzed by the GAMA-PBP are available to be mapped. The mapper is primarily focused on providing the ability to display constituents with health-based and non-health based benchmarks and other select constituents such as tracers of groundwater age',
+			defineConst: 'Some classes allow for individual constituents to be displayed (Trace Elements and Nutrients for example) while others (VOCs and Pesticides) use primary use categories to simplify the data for display'
 		}
 	},
 	watch: {
@@ -195,6 +197,7 @@ export default {
 			this.layerName = [],
 			this.param = '';
 			this.type = '';
+			this.$emit('resetClicked');
 		}
 	},
 	computed: {

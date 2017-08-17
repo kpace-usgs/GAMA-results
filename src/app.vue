@@ -4,6 +4,7 @@
 			:param = 'param'
 			:type = 'type'
 			:layerArr = 'layers'
+			:reset = 'reset'
 			@sendZoom = 'handleZoom'
 			@toggleLoading = 'toggleLoading'
 		></MapDiv>
@@ -19,6 +20,7 @@
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
 			@changeType='handleType'
+			@resetClicked = 'toggleReset'
 			:zoom = 'zoom'
 		></MenuDiv>
 	</div>
@@ -38,7 +40,8 @@ export default {
 			layers: [],
 			param: '',
 			type: '',
-			zoom: ''
+			zoom: '',
+			reset: false
 		}
 	},
 	components: {
@@ -57,6 +60,9 @@ export default {
 		},
 		handleZoom(level){
 			this.zoom = level;
+		},
+		toggleReset(){
+			this.reset = !this.reset;
 		}
 	}
 }

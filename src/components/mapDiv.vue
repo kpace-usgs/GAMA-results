@@ -20,9 +20,9 @@ export default {
 			map: '',
 			baseLayers: '',
 			view: [37.7, -120.57],
-			zoom: 8,
+			zoom: 6,
 			minZoom: 6,
-			maxZoom: 10,
+			maxZoom: 12,
 			polygonGroup: L.featureGroup(),
 			polygons: {},
 			pointGroup: L.featureGroup({
@@ -33,7 +33,7 @@ export default {
 		}
 	},
 	mixins: [ParamData],
-	props: ['param', 'type', 'layerArr'],
+	props: ['param', 'type', 'layerArr', 'reset'],
 	watch: {
 		type(){	
 			if(this.type.length > 0){
@@ -48,10 +48,7 @@ export default {
 					this.addConstituentLayer();
 				}
 			}
-			// check to see if the map has been reset
-			else {
-				this.checkReset();
-			}
+
 		},
 
 		param(){
@@ -90,6 +87,10 @@ export default {
 					this.polygonGroup.addLayer(this.polygons[layerName]);
 				}
 			}
+		},
+
+		reset(){
+			this.checkReset();
 		}
 	},
 	
@@ -145,13 +146,11 @@ export default {
 		},
 
 		checkReset(){
-			// check that all other values have also been reset, in which case we think the reset button has been clicked
-			if(this.type.length == 0 && this.param.length == 0 && this.layerArr.length == 0){
-				this.pointGroup.clearLayers();
-				this.polygonGroup.clearLayers();
-				// recenter map to home position
-				this.map.setView(this.view, this.zoom);
-			}
+			console.log('reset');
+			this.pointGroup.clearLayers();
+			this.polygonGroup.clearLayers();
+			// recenter map to home position
+			this.map.setView(this.view, this.zoom);
 		},
 
 		loadOverlays(){

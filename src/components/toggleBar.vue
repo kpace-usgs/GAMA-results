@@ -5,7 +5,7 @@
 			<icon name='times' scale='1.5'></icon>
 		</div>
 		<div v-else>
-			<slot name='elseTitle'><h2>Show Legend</h2></slot>
+			<slot name='elseTitle'><h2>Show Legend +</h2></slot>
 		</div>
 	</div>
 </template>
@@ -35,7 +35,7 @@ export default{
 		justify-content: space-between;
 		width: 100%;
 	}
-	h1, h2{
+	.toggleBar h1, .toggleBar h2{
 		margin: 0;
 		font-size: 18px;
 	}

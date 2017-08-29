@@ -35,7 +35,7 @@
 
 		       
 	            <select style="width:300px;" v-model='parameterGroup'>
-	                <option default value=''>Select One</option>
+	                <option default :value='{"groupName": ""}'>Select One</option>
 	            	<option v-for='paramGroup in listOfParameters' :value='paramGroup'>{{paramGroup.groupName}}</option>
 	            </select>
 	        </div>
@@ -87,12 +87,21 @@
      		</div>
 	      
 			<!-- Download Button -->
-            <a id='downloadButton' c
+         <!--    <a id='downloadButton' c
             	:class='{ disabled : parameterGroup.groupName === ""}'
             	:title='parameterGroup.groupName === "" ? "Please select a constituent class" : ""'
             	@click='downloadContent' 
             >
             	<p>Download Data from Constituent Class</p>
+            </a> -->
+
+            <a id="downloadButton" 
+            	:href='zipHref'
+            	:download = 'fileName'
+            	:class='{ disabled : parameterGroup.groupName === ""}'
+            	:title='parameterGroup.groupName === "" ? "Please select a constituent class" : ""'
+            >
+            	<p>Download Data from Constituent Class</p>	
             </a>
 
 		    <p>*The GAMA - PBP is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>US Geological Survey</a>.</p>
@@ -198,21 +207,21 @@ export default {
 	},
 	methods: {
 		downloadContent(){
-			/* query data from arcServer for each parameter in the selected parameter group*/
 			var that = this;
-			// define callback function
-			var callback = function(){
-				that.createAndOpenLink(encodeURI(that.csvBody), that.fileName)
-				that.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
-				that.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
-			};
+			// /* query data from arcServer for each parameter in the selected parameter group*/
 
-			// invoke promise defined in buildCSV.vue
-			this.importArrayOfValues(this.parameterGroup.parameters, callback);
+			// // define callback function
+			// var callback = function(){
+			// 	that.createAndOpenLink(encodeURI(that.csvBody), that.fileName)
+			// 	that.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
+			// 	that.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
+			// };
+
+			// // invoke promise defined in buildCSV.vue
+			// this.importArrayOfValues(this.parameterGroup.parameters, callback);
 		},
 
 		createAndOpenLink(href, filename){
-			console.log('creating file');
 			var link = window.document.createElement('a');
 			link.href = href;
 			link.download = filename;
@@ -238,7 +247,17 @@ export default {
 	},
 	computed: {
 		fileName(){
-			return this.parameterGroup.groupName + '.csv'
+			return this.parameterGroup.groupName + '.zip';
+			//return this.parameterGroup.groupName + '.csv'
+		},
+
+		zipHref(){
+			console.log(this.parameterGroup.groupName);
+			if(this.parameterGroup.groupName !== ""){
+				
+				var stringName = this.parameterGroup.groupName.replace(/\s/g, '');
+				return 'downloads/groups/'+ stringName + '.zip'
+			}
 		}
 	}
 }
@@ -263,7 +282,8 @@ h2{
 select{
 	margin: 5px 0px;
 	height: 20px;
-	font-size: 16px;
+	font-size: 14px;
+	font-family: 'Calibri';
 }
 select:hover, input:hover, button:hover{
 	box-shadow: 1px 1px 10px grey;

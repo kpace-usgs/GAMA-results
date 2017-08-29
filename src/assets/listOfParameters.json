@@ -502,7 +502,7 @@
 	"groupName": "Field Water Quality Indicators",
 	"value": 9,
 	"parameters": [{
-		"name": "SC",
+		"name": "Specific Conductance",
 		"value": 37,
 		"type": "Inorganic",
 		"pcode": "00095",

@@ -1,12 +1,7 @@
 <template>
-	<div id='map_legend' class='leaflet-bar'>
-		<div class='toggleBar'>
-			<h2 v-if='showControls'>Legend</h2>
-			<a class='toggle' @click='toggle'>
-				<span v-if='showControls === false'>Show Legend +</span>
-				<span v-if='showControls'>&times;</span>
-			</a>
-		</div>
+	<div id='map_legend' class='leaflet-bar container'>
+
+		<ToggleBar :show='showControls' @click='toggle'></ToggleBar>
 
 		<div v-if='showControls'>
 		    <!-- Groundwater Study Type Legend -->
@@ -303,16 +298,21 @@
 
 <script>
 import toggle from '../mixins/toggle.vue'
+import ToggleBar from './toggleBar.vue';
 
 export default {
 	name: 'LegendDiv',
 	props: ['layers', 'type', 'param'],
-	mixins: [toggle]
+	mixins: [toggle],
+	components: {
+		ToggleBar
+	}
 }
 </script>
 
 
 <style scoped>
+
 .subLegend>div{
 	display: flex;
 	align-items: flex-start;
@@ -323,6 +323,7 @@ export default {
 }
 .subLegend>div>p{
 	margin: 0;
+	font-size: 16px;
 }
 .subLegend>div>div{
 	height:15px;
@@ -330,16 +331,10 @@ export default {
 	flex: 0 0 15px;
 }
 #map_legend{
-	font-size: small;
+	bottom: 50px;
+	left: 10px;
 }
-#togLegend{
-	text-align: right;
-	font-size:small;
-	margin-top:-5px;
-}
-#togLegend:hover{
-	cursor: pointer;
-}
+
 .paramLayerLegend>div{
 	display: flex;
 	width: 90%;
@@ -356,7 +351,7 @@ export default {
 	width: 50%;
 	margin: 0;
 	text-align: left;
-	font-size: small;
+	font-size: 16px;
 }
 .paramLayerLegend.hasInfo>div>p:first-child{
 	text-align: right;

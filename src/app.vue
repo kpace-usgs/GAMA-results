@@ -52,8 +52,8 @@ export default {
 		handleLayer(arr){
 			this.layers = arr;
 		},
-		handleParam(string){
-			this.param = string;
+		handleParam(obj){
+			this.param = obj;
 		},
 		handleType(string){
 			return this.type = string;
@@ -71,13 +71,12 @@ export default {
 <style>
 
 body {
-    font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-family: 'Calibri', 'Helvetica Neue', Arial, Helvetica, sans-serif;
     margin:0;
     padding:0;
     height: 100vh;
     width: 100vw;
     overflow: hidden;
-    font-size: 14px;
     line-height: 1.428;
 }
 
@@ -99,16 +98,16 @@ font-size: 14px;
 }
 
 /* Container CSS */
-#container {
+.container{
     position: absolute;
-    top: 50px;
-    right: 10px;
     z-index: 1000;
     max-width:300px;
     background: white;
     padding: .5em;
-    font-size:10pt;
+    font-size: 14px;
 }
+
+
 #query{
     display:show;
 }
@@ -118,19 +117,6 @@ font-size: 14px;
 }
 
 /* Legend CSS */
-#legend{
-    display:show;
-}
-#map_legend {
-    padding:.5em;
-	font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
-	color: #404040;
-	position: absolute;
-	bottom: 10px;
-	left: 10px;
-	z-index: 1000;
-    padding-bottom:20px;
-}
 
 .ShutL{
   width:110px !important;
@@ -141,4 +127,8 @@ font-size: 14px;
     background-color:white;
 }
 
+.leaflet-control-container{
+	font-family: 'Calibri', 'Hevetica Neue', sans-serif;
+	font-size: 16px;
+}
 </style>

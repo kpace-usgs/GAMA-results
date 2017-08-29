@@ -1,22 +1,19 @@
 <template>
-	<div id='container' class='leaflet-bar'>
-		<div class='toggleBar'>
-	    	<h1 v-if='showControls'>GAMA - Priority Basin Project<br />Water-Quality Results*</h1>
-	    	<a class="toggle" @click='toggle'>
-				<span v-if='showControls === false' >Show Menu +</span>
-				<span v-if='showControls'>&times;</span>
-			</a>
-		</div>
+	<div id='menu' class='leaflet-bar container'>
+		<ToggleBar @click='toggle' :show='showControls'>
+			<h1 slot='title'>GAMA - Priority Basin Project<br />Water-Quality Results*</h1>
+			<h2 slot='elseTitle'>Show Menu +</h2>
+		</ToggleBar>
+
 	    <!-- Begin Controller Form -->
 	    <div v-if='showControls' class='form'>
-
-	    
 	        <!-- Groundwater Study Type Selector -->
 	        <div>
-		        <label>Groundwater Study Type: 
-					<img src='../assets/images/moreInfo.png' 
+		        <label class='labelDiv'>Groundwater Study Type: 
+					<!-- <img src='../assets/images/moreInfo.png' 
 					alt='Define study type' 
-					:title='defineType' />
+					:title='defineType' /> -->
+					<Guidance :text='defineType'></Guidance>
 		        </label>
 
 	            <select id="base" style="width:300px;" v-model='type'>
@@ -30,9 +27,10 @@
 
 			<div>
 		        <!-- Parameter Group Selector -->
-		        <label>Select Constituent Class:
-					<img src='../assets/images/moreInfo.png' alt='Define constituent class' 
-					:title='defineClass' />
+		        <label class='labelDiv'>Select Constituent Class:
+		        	<Guidance :text='defineClass'></Guidance>
+					<!-- <img src='../assets/images/moreInfo.png' alt='Define constituent class' 
+					:title='defineClass' /> -->
 		        </label>
 
 		       
@@ -44,9 +42,10 @@
 
 			<div>
 		        <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
-		        <label>Select Constituent: 
-		        	<img src='../assets/images/moreInfo.png' alt='Define constituent' 
-		        	:title='defineConst' />
+		        <label class='labelDiv'>Select Constituent: 
+		        	<Guidance :text='defineConst'></Guidance>
+		        	<!-- <img src='../assets/images/moreInfo.png' alt='Define constituent' 
+		        	:title='defineConst' /> -->
 		        </label>
 
 	            <select style="width:300px;" v-model='param'>
@@ -57,33 +56,46 @@
 
 			<div id='layerSelector'>
 		        <!-- Shapefile Selector -->
-		        <label>Select Layers:
-					<img src='../assets/images/moreInfo.png' alt='Define layers' title='Define layer' />
+		        <label class='labelDiv'>Select Layers:
+		        	<Guidance text='Polygons showing how the state is divided into grid cells, study units, and hydrogeologic provinces'></Guidance>
+					<!-- <img src='../assets/images/moreInfo.png' alt='Define layers' title='Define layer' /> -->
 		        </label>
 
 		        <!-- only show checkbox options depending on which groundwater study type is selected -->
-		        <div v-for='(layer, index) in layers' >
+				<!-- show all options when "all" or "trends" are checked -->
+				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
+		        <div v-for='(layer, index) in layers'
+
+		        	v-if='type != 2 && type != 3 ? true: type == layer.type ? true : layer.type == "all" ? true : false' 
+		        	:class='{ disabled: zoom < layer.zoom }'
+		        >
+
+		        	<!-- disable checkbox according to zoom -->
 					<input type='checkbox' 
 					:disabled='zoom < layer.zoom ? true : false'
-					:id='layer' :value='index' 
+					:id='layer' :value='layer.value' 
 					v-model='layerName'  :key='index'
 					:title='zoom < layer.zoom ? "zoom in to view" : ""' >
+
 					<label for='layer' 
-					:title='zoom < layer.zoom ? "zoom in to view" : ""'>
-						{{layer.string}}
+					:title='zoom < layer.zoom ? "zoom in to view" : "" '>
+
+						<!-- show prefix ("domestic-supply", "public-supply") if no type selection, if all types, or if trend types -->
+						<span v-if='type == "" || type == 1 || type == 0'>{{layer.prefix}}</span> {{layer.string}}
 					</label>
 		        </div>
      		</div>
 	      
 			<!-- Download Button -->
-            <a id='downloadButton'
-            	:class='{disabled : !parameterGroup.groupName}' 
+            <a id='downloadButton' c
+            	:class='{ disabled : parameterGroup.groupName === ""}'
+            	:title='parameterGroup.groupName === "" ? "Please select a constituent class" : ""'
             	@click='downloadContent' 
             >
             	<p>Download Data from Constituent Class</p>
             </a>
 
-		    <p style="font-size:xx-small">*The GAMA - PBP is a cooperative program between the California State Water Resources Control Board and the US Geological Survey.</p>
+		    <p>*The GAMA - PBP is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>US Geological Survey</a>.</p>
 		    
 
 		    <a @click='reset' id='reset' class='button' >
@@ -97,6 +109,8 @@
 <script>
 import listOfParameters from '../assets/listOfParameters.json';
 import toggle from '../mixins/toggle.vue'
+import ToggleBar from './toggleBar.vue';
+import Guidance from './Guidance.vue';
 import ParamData from '../mixins/getParamData.vue'
 import BuildCSV from '../mixins/buildCSV.vue'
 
@@ -104,6 +118,9 @@ export default {
 	name: 'MenuDiv',
 	mixins: [toggle, ParamData, BuildCSV],
 	props: ['zoom'],
+	components: {
+		ToggleBar, Guidance
+	},
 	data() {
 		return {
 			type: '',
@@ -111,37 +128,48 @@ export default {
 			parameterGroup: {
 				"parameters": [{
 					"name": "Select parameter group first",
-					"value": "",
-					"groupName" : ''
-				}]
+					"value": ""
+				}],
+				"groupName": ''
 			},
 			param: '',
 			layers: [{
-				// "string": "Grid Cells",
-				"string": 'Domestic-supply Aquifer Grid Cells',
+				"string": "Grid Cells",
+				"prefix": "Domestic-supply",
+				// "string": 'Domestic-supply Aquifer Grid Cells',
 				"pane": 'shallowGridCells',
 				"type": 2,
-				"zoom": 8
-			}, {
-				//"string": "Grid Cells",
-				"string": 'Public-supply Aquifer Grid Cells', 
+				"zoom": 8,
+				"value": 0
+			}, 
+		
+			{
+				"string": "Grid Cells",
+				"prefix": "Public-supply",
+				// "string": 'Public-supply Aquifer Grid Cells', 
 				"pane": 'deepGridCells',
 				"type": 3,
-				"zoom": 8
+				"zoom": 8,
+				"value": 1
 			}, {
-				//"string": "Study Units",
-				"string": 'Domestic-supply Aquifer Study Units', 
+				"string": "Study Units",
+				"prefix": "Domestic-supply",
+				// "string": 'Domestic-supply Aquifer Study Units', 
 				"pane": 'shallowStudyUnits',
-				"type": 2
+				"type": 2,
+				"value": 2
 			}, {
-				//"string": "Study Units",
-				"string": 'Public-supply Aquifer Study Units',
+				"string": "Study Units",
+				"prefix": "Public-supply",
+				// "string": 'Public-supply Aquifer Study Units',
 				"pane": 'deepStudyUnits',
-				"type": 3
+				"type": 3,
+				"value": 3
 			}, {
 				"string": 'Hydrogeologic Provinces',
 				"pane": 'provinces',
-				"type": ''
+				"type": 'all',
+				"value": 4
 			}],
 			layerName: [],
 			thresholds: '',
@@ -160,6 +188,7 @@ export default {
 			return this.$emit('changeParam', this.param);
 		},
 		type(){
+			console.log(this.type);
 			// clear selected layer if any layer other than hydrogeologic provinces
 			this.layerName = this.layerName.indexOf(4) === -1 ? [] : [4];
 
@@ -197,6 +226,13 @@ export default {
 			this.layerName = [],
 			this.param = '';
 			this.type = '';
+			this.parameterGroup = {
+				"parameters": [{
+					"name": "Select parameter group first",
+					"value": ""
+				}],
+				"groupName": ''
+			};
 			this.$emit('resetClicked');
 		}
 	},
@@ -208,55 +244,38 @@ export default {
 }
 </script>
 
-<style> 
-.toggle{
-	font-size: small;
-}
-.toggle:hover{
-	cursor: pointer;
-}
-
-.toggleBar{
-	display: flex;
-	justify-content: flex-end;
-	align-items: flex-start;
-}
-.toggleBar>a{
-	margin-left: auto;
-	width: 100px;
-	text-align: right;
-	padding: 0 10px;
-}
-.toggleBar a:hover{
-	background-color: transparent;
-	width: 100px;
-	text-align: right;
-	padding: 0 10px;
-}
-</style>
-
 
 <style scoped>
-#container{
-	
+#menu {
+    top: 50px;
+    right: 10px;
+    font-size: 16px;
 }
 h2{
 	font-size: 14px;
 	font-weight: bold;
 	margin: 0;
 }
+
 .form>div{
 	margin-bottom: 10px;
-	font-size: 1.2em;
 }
 select{
 	margin: 5px 0px;
 	height: 20px;
+	font-size: 16px;
 }
 select:hover, input:hover, button:hover{
 	box-shadow: 1px 1px 10px grey;
 	cursor: pointer;
+	font-family: 'Calibri';
 }
+.labelDiv{
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
 #downloadButton, .button{
 	text-align: center;
 	width: 100%;
@@ -266,14 +285,23 @@ select:hover, input:hover, button:hover{
 	border: 1px solid grey;
 	cursor: pointer;
 	text-decoration: none;
+	/*background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);*/
+	background: #D3CCE3;  /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #E9E4F0, #D3CCE3);  /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #E9E4F0, #D3CCE3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+#downloadButton p{
+	margin-top: 12px;
 }
 
-#downloadButton:not(.disabled):hover{
+.button:not(.disabled):hover{
 	box-shadow: 2px 2px 10px 1px grey;
+	width: 100%;
 }
-#downloadButton.disabled{
+.button.disabled, #downloadButton.disabled{
 	cursor: not-allowed;
 	color: grey;
+	background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
 }
 
 #reset{
@@ -286,10 +314,7 @@ select:hover, input:hover, button:hover{
 	margin: 0;
 	height: 90%;
 }
-#reset:hover{
-	box-shadow: 2px 2px 10px 1px grey;
-	width: 100%;
-}
+
 #layerSelector>div.disabled>input{
 	cursor: not-allowed;
 }

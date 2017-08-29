@@ -52,9 +52,9 @@ export default {
 		},
 
 		param(){
-
 			/* if selection box has a value, save this.constituentLayer as an esri.featureLayer */
-			if(this.param.value){
+			if(this.param.hasOwnProperty('value')){
+	
 				this.constituentLayer = this.importParamGeometry(this.param.value);
 				this.pointGroup.clearLayers(); //clear the existing layer
 
@@ -155,6 +155,9 @@ export default {
 
 		loadOverlays(){
 			this.baseLayers = {
+				"Gray": L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', 
+					{ attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ' }
+				),
 				"Topography": L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', 
 					{ attribution:  'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
 					}
@@ -168,7 +171,7 @@ export default {
 			};
 
 			// set landscape layer as default
-			this.baseLayers['Topography'].addTo(this.map);
+			this.baseLayers['Gray'].addTo(this.map);
 
 			L.control.layers(this.baseLayers, {}, {collapsed: false}).setPosition('topleft').addTo(this.map);
 

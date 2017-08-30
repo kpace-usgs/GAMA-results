@@ -97,9 +97,19 @@ export default {
 	methods: {
 
 		importTypeJson(){
+			/* get well sites by type of well: public supply, domestic, or both */
+
+			// domestic-supply trends and public-supply trends will be the same layer
+			var layerIndex = this.type == 4 ? 1 : this.type;
+			// domestic-supply trends will not have a check-makr in PS_Aquifer column
+			var queryString = this.type == 4 ? "PS_Aquifer = 'X'" : "PS_Aquifer = ''"
+
 			this.constituentLayer = esri.dynamicMapLayer({
 				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/',
-				layers: [this.type]
+				layers: [layerIndex],
+				layerDefs: {
+					1: queryString
+				}
 			}).bindPopup( (err, featureCollection) => {
 				if(err || featureCollection.features.length === 0) {
 					return false;
@@ -117,14 +127,15 @@ export default {
 				layers: [val],
 				minZoom: 4,
 				position: val == 4 ? 'back' : 'front',
-			}).bindPopup( (err, featureCollection) => {
-				if(err || featureCollection.features.length === 0) {
-					return false;
-				} else {
-					return featureCollection.features[0].properties[getLayerPopup(val)]
-				}
+			})
+			// .bindPopup( (err, featureCollection) => {
+			// 	if(err || featureCollection.features.length === 0) {
+			// 		return false;
+			// 	} else {
+			// 		return featureCollection.features[0].properties[getLayerPopup(val)]
+			// 	}
 				
-			});
+			// });
 
 			this.polygonGroup.addLayer(layer); // add to map			
 		},

@@ -20,8 +20,9 @@
 	                <option value=""> </option>
 	                <option value="0">All Sites</option>
 	                <option value="2">Domestic-supply Aquifer Sites</option>
+	                <option value="1">Domestic-supply Trends Sites</option>
 	                <option value="3">Public-supply Aquifer Sites</option>
-	                <option value="1">Trends Sites</option>
+	                <option value='4'>Public-supply Trends Sites</option>
 	            </select>
 	        </div>
 
@@ -62,11 +63,11 @@
 		        </label>
 
 		        <!-- only show checkbox options depending on which groundwater study type is selected -->
-				<!-- show all options when "all" or "trends" are checked -->
+				<!-- show all options when "all" or "" are checked -->
 				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
 		        <div v-for='(layer, index) in layers'
 
-		        	v-if='type != 2 && type != 3 ? true: type == layer.type ? true : layer.type == "all" ? true : false' 
+		        	v-if='type == 0 || type == "" ? true: type == layer.type ? true : layer.type == "all" ? true : false' 
 		        	:class='{ disabled: zoom < layer.zoom }'
 		        >
 
@@ -104,7 +105,7 @@
             	<p>Download Data from Constituent Class</p>	
             </a>
 
-		    <p>*The GAMA - PBP is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>US Geological Survey</a>.</p>
+		    <p>*The GAMA - PBP is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>U.S. Geological Survey</a>.</p>
 		    
 
 		    <a @click='reset' id='reset' class='button' >

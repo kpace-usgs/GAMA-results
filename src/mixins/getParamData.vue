@@ -23,13 +23,16 @@ export default {
 					return 'STATUS'
 					break;
 				case '1':
-					return 'TRENDS'
+					return 'Domestic-supply'
 					break;
 				case '2': 
 					return 'Domestic-supply' 
 					//have to change value because geojson property is recorded as 'domestic-supply' instead of 'shallow'
 					break;
 				case '3':
+					return 'Public-supply'
+					break;
+				case '4':
 					return 'Public-supply'
 					break;
 				default:
@@ -64,14 +67,18 @@ export default {
 
 		decideHowToFilter(layer){
 			/* if either public or domestic type selected, filter by type */
-			if(this.type != 0 && this.type != 1){
+			if(this.type == 2 || this.type == 3){
 				// this.studyType is computed in getParamData.vue
 				return layer.setWhere("StudyType = '" + this.studyType + "'");
 			} 
 
-			/* if either all sites or trends sites selected, filter by status */
+			// if either trends type has been selected, filter both by study type (Domestic-supply or Public-supply) and by purpose (TRENDS)
+			else if(this.type == 1 || this.type == 4){
+				return layer.setWhere("StudyType = '"+ this.studyType + "'")
+			}
+			/* if either all sites selected, filter by purpose (STATUS)*/
 			else {
-				console.log('filter by status');
+				console.log('filter by purpose');
 				return layer.setWhere("Purpose = '" + this.studyType + "'");
 			}
 

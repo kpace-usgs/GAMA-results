@@ -67,7 +67,7 @@
 				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
 		        <div v-for='(layer, index) in layers'
 
-		        	v-if='type == 0 || type == "" ? true: type == layer.type ? true : layer.type == "all" ? true : false' 
+		        	v-if='type == 0 || type == "" ? true: domesticOrPublic == layer.prefix ? true : layer.value == 4 ? true : false' 
 		        	:class='{ disabled: zoom < layer.zoom }'
 		        >
 
@@ -82,7 +82,7 @@
 					:title='zoom < layer.zoom ? "zoom in to view" : "" '>
 
 						<!-- show prefix ("domestic-supply", "public-supply") if no type selection, if all types, or if trend types -->
-						<span v-if='type == "" || type == 1 || type == 0'>{{layer.prefix}}</span> {{layer.string}}
+						<span v-if='type == "" || type == 0'>{{layer.prefix}}</span> {{layer.string}}
 					</label>
 		        </div>
      		</div>
@@ -148,7 +148,6 @@ export default {
 				"prefix": "Domestic-supply",
 				// "string": 'Domestic-supply Aquifer Grid Cells',
 				"pane": 'shallowGridCells',
-				"type": 2,
 				"zoom": 8,
 				"value": 0
 			}, 
@@ -158,7 +157,6 @@ export default {
 				"prefix": "Public-supply",
 				// "string": 'Public-supply Aquifer Grid Cells', 
 				"pane": 'deepGridCells',
-				"type": 3,
 				"zoom": 8,
 				"value": 1
 			}, {
@@ -166,19 +164,16 @@ export default {
 				"prefix": "Domestic-supply",
 				// "string": 'Domestic-supply Aquifer Study Units', 
 				"pane": 'shallowStudyUnits',
-				"type": 2,
 				"value": 2
 			}, {
 				"string": "Study Units",
 				"prefix": "Public-supply",
 				// "string": 'Public-supply Aquifer Study Units',
 				"pane": 'deepStudyUnits',
-				"type": 3,
 				"value": 3
 			}, {
 				"string": 'Hydrogeologic Provinces',
 				"pane": 'provinces',
-				"type": 'all',
 				"value": 4
 			}],
 			layerName: [],
@@ -247,6 +242,13 @@ export default {
 		}
 	},
 	computed: {
+		domesticOrPublic(){
+			if(this.type == 1 || this.type == 2){
+				return 'Domestic-supply'
+			} else if(this.type == 3 || this.type == 4){
+				return 'Public-supply'
+			}
+		},
 		fileName(){
 			return this.parameterGroup.groupName + '.zip';
 			//return this.parameterGroup.groupName + '.csv'

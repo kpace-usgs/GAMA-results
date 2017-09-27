@@ -1,43 +1,11 @@
-[{
-	"groupName": "Volatile Organic Compounds",
-	"key": 0,
-	"parameters": [{
-		"name": "Herbicide or Herbicide Degradate",
-		"value": 18,
-		"type": "Organic",
-		"units": "Number of Detections"
-	},{
-		"name": "Gasoline Hydrocarbons, Oxygenates, and Degradates",
-		"value": 16,
-		"type": "Organic",
-		"units": "Number of Detections"
-	},{
-		"name": "Organic Synthesis",
-		"value": 29,
-		"type": "Organic",
-		"units": "Number of Detections"
-	},{
-		"name": "Refrigerant",
-		"value": 35,
-		"type": "Organic",
-		"units": "Number of Detections"
-	},{
-		"name": "Solvent",
-		"value": 38,
-		"type": "Organic",
-		"units": "Number of Detections"
-	},{
-		"name": "Trihalomethanes",
-		"value": 44,
-		"type": "Organic",
-		"units": "Number of Detections"
-	}]
-},{
+
+[
+	{
 	"groupName": "Trace Elements",
 	"key": 1,
 	"parameters": [{
 		"name": "Aluminum",
-		"value": 1,
+		"value": 0,
 		"type": "Inorganic",
 		"pcode": "01106",
 		"units": "µg/L",
@@ -49,7 +17,7 @@
 		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
 	},{
 		"name": "Antimony",
-		"value": 2,
+		"value": 1,
 		"type": "Inorganic",
 		"pcode": "01095",
 		"units": "µg/L",
@@ -61,7 +29,7 @@
 		"acr": "Action level established by the U.S. Environmental Protection Agency"
 	},{
 		"name": "Arsenic",
-		"value": 3,
+		"value": 2,
 		"type": "Inorganic",
 		"pcode": "01000",
 		"units": "µg/L",
@@ -73,7 +41,7 @@
 		"acr": "Action level established by the U.S. Environmental Protection Agency"
 	},{
 		"name": "Barium",
-		"value": 4,
+		"value": 3,
 		"type": "Inorganic",
 		"pcode": "01005",
 		"units": "µg/L",
@@ -84,6 +52,19 @@
 		"thresh_src": "MCL-CA",
 		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
 	},{
+		"name": "Benzene",
+		"value": 4,
+		"type": "Organic",
+		"units": "µg/L",
+		"pcode": "34030",
+		"tresh_val": "1.00",
+		"low": "<0.1",
+		"mod": "0.1 - 1",
+		"high": "> 1",
+		"thresh_src": "MCL-CA",
+		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
+	},
+	{
 		"name": "Beryllium",
 		"value": 5,
 		"type": "Inorganic",
@@ -94,10 +75,10 @@
 		"high": "> 4",
 		"thresh_val": "4",
 		"thresh_src": "MCL-US",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency"
 	},{
 		"name": "Boron",
-		"value": 7,
+		"value": 6,
 		"type": "Inorganic",
 		"pcode": "01020",
 		"units": "µg/L",
@@ -109,7 +90,7 @@
 		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Cadmium" ,
-		"value": 8,
+		"value": 7,
 		"type": "Inorganic",
 		"pcode": "01025",
 		"units": "µg/L",
@@ -119,9 +100,23 @@
 		"thresh_val": "5",
 		"thresh_src": "MCL-US",
 		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
-	},{
+	},
+	{
+		"name": "Chloroform",
+		"value": 8,
+		"type": "Inorganic",
+		"pcode": "01030",
+		"units": "µg/L",
+		"low": "< 25",
+		"mod": "25 - 50",
+		"high": "> 50",
+		"thresh_val": "50",
+		"thresh_src": "MCL-CA",
+		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
+	},
+	{
 		"name": "Chromium",
-		"value": 11,
+		"value": 9,
 		"type": "Inorganic",
 		"pcode": "01030",
 		"units": "µg/L",
@@ -133,7 +128,7 @@
 		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
 	},{
 		"name": "Chromium (VI)",
-		"value": 12,
+		"value": 10,
 		"type": "Inorganic",
 		"pcode": "01032",
 		"units": "µg/L",
@@ -145,7 +140,7 @@
 		"acr": ""
 	},{
 		"name": "Copper",
-		"value": 13,
+		"value": 11,
 		"type": "Inorganic",
 		"pcode": "01040",
 		"units": "µg/L",
@@ -156,20 +151,8 @@
 		"thresh_src": "AL-US",
 		"acr": "Action level established by the U.S. Environmental Protection Agency."
 	},{
-		"name": "Iron",
-		"value": 20,
-		"type": "Inorganic",
-		"pcode": "01046",
-		"units": "µg/L",
-		"low": "< 150",
-		"mod": "150 - 300",
-		"high": "> 300",
-		"thresh_val": "300",
-		"thresh_src": "SMCL-CA",
-		"acr": "Secondary Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
-	},{
 		"name": "Lead",
-		"value": 21,
+		"value": 13,
 		"type": "Inorganic",
 		"pcode": "01049",
 		"units": "µg/L",
@@ -181,7 +164,7 @@
 		"acr": "Action level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Manganese",
-		"value": 22,
+		"value": 14,
 		"type": "Inorganic",
 		"pcode": "01056",
 		"units": "µg/L",
@@ -193,7 +176,7 @@
 		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Mercury",
-		"value": 23,
+		"value": 15,
 		"type": "Inorganic",
 		"pcode": 71890,
 		"units": "mg/L",
@@ -205,7 +188,7 @@
 		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Molybdenum",
-		"value": 25,
+		"value": 16,
 		"type": "Inorganic",
 		"pcode": "01060",
 		"units": "µg/L",
@@ -217,7 +200,7 @@
 		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Nickel",
-		"value": 26,
+		"value": 17,
 		"type": "Inorganic",
 		"pcode": "01065",
 		"units": "µg/L",
@@ -229,7 +212,7 @@
 		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
 	},{
 		"name": "Selenium",
-		"value": 36,
+		"value": 22,
 		"type": "Inorganic",
 		"pcode": "01145",
 		"units": "µg/L",
@@ -241,7 +224,7 @@
 		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Silver",
-		"value": 37,
+		"value": 23,
 		"type": "Inorganic",
 		"pcode": "01075",
 		"units": "µg/L",
@@ -253,7 +236,7 @@
 		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Strontium",
-		"value": 40,
+		"value": 24,
 		"type": "Inorganic",
 		"pcode": "01080",
 		"units": "µg/L",
@@ -265,7 +248,7 @@
 		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	},{
 		"name": "Thallium",
-		"value": 42,
+		"value": 26,
 		"type": "Inorganic",
 		"pcode": "01057",
 		"units": "µg/L",
@@ -277,7 +260,7 @@
 		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	},{
 		"name": "Uranium",
-		"value": 46,
+		"value": 27,
 		"type": "Inorganic",
 		"pcode": 22703,
 		"units": "µg/L",
@@ -287,21 +270,11 @@
 		"thresh_val": "30",
 		"thresh_src": "MCL-US",
 		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
-	},{
-		"name": "Vanadium",
-		"value": 47,
-		"type": "Inorganic",
-		"pcode": "01085",
-		"units": "µg/L",
-		"low": "< 25",
-		"mod": "25 - 50",
-		"high": "> 50",
-		"thresh_val": "50",
-		"thresh_src": "NL-CA",
-		"acr": "Notification Level established by the California State Water Resources Control Board Department of Drinking Water."
-	},{
+	},
+	
+	{
 		"name": "Zinc",
-		"value": 48,
+		"value": 28,
 		"type": "Inorganic",
 		"pcode": "01090",
 		"units": "µg/L",
@@ -312,104 +285,15 @@
 		"thresh_src": "HBSL",
 		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
 	}]
-},{
-	"groupName": "Radioactivity",
-	"key": 2,
-	"parameters": [{
-		"name": "Gross Alpha 72hr",
-		"value": 0,
-		"type": "Inorganic",
-		"pcode": 62636,
-		"units": "pCi/L",
-		"low": "< 7.5",
-		"mod": "7.5 - 15",
-		"high": "> 15",
-		"thresh_val": "15",
-		"thresh_src": "MCL-US",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
-	},{
-		"name": "Gross Beta 72hr",
-		"value":  6,
-		"type": "Inorganic",
-		"pcode": 62642,
-		"units": "pCi/L",
-		"low": "< 25",
-		"mod": "25 - 50",
-		"high": "> 50",
-		"thresh_val": "50",
-		"thresh_src": "MCL-CA",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
-	},{
-		"name": "Radium-226",
-		"value": 33,
-		"type": "Inorganic",
-		"pcode": "09511",
-		"units": "pCi/L",
-		"low": "< 2.5",
-		"mod": "2.5 - 5",
-		"high": "> 5",
-		"thresh_val": "5",
-		"thresh_src": "MCL-US",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
-	},{
-		"name": "Radium-228",
-		"value": 34,
-		"type": "Inorganic",
-		"pcode": 81366,
-		"units": "pCi/L",
-		"low": "< 2.5",
-		"mod": "2.5 - 5",
-		"high": "> 5",
-		"thresh_val": "5",
-		"thresh_src": "MCL-US",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
-	}]
-},{
-	"groupName": "Pharmaceuticals",
-	"key": 3,
-	"parameters": [{
-		"name": "All Pharmaceuticals",
-		"value": 32,
-		"type": "Organic",
-		"units": "Number of Detections"
-	}]
-},{
-	"groupName": "Pesticides and Degradates",
-	"key": 4,
-	"parameters": [{
-		"name": "Herbicides and Herbicide Degradates",
-		"value": 17,
-		"type": "Organic",
-		"units": "Number of Detections"
-	},{
-		"name": "Insecticides and Insecticide Degradates",
-		"value": 19,
-		"type": "Organic",
-		"units": "Number of Detections"
-	},{
-		"name": "Fungicides",
-		"value": 15,
-		"type": "Organic",
-		"units": "Number of Detections"
-	}]
-},{
+},
+
+
+{
 	"groupName": "Nutrients",
 	"key": 5,
 	"parameters": [{
-		"name": "Nitrite",
-		"value": 27,
-		"type": "Inorganic",
-		"pcode": "00613",
-		"units": "mg/L",
-		"low": "< .5",
-		"mod": ".5 - 1",
-		"high": "> 1",
-		"thresh_val": "1",
-		"thresh_src": "MCL-US",
-		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
-	},{
-		"name": "Nitrite plus Nitrate",
-		"value": 28,
+		"name": "Nitrate",
+		"value": 18,
 		"type": "Inorganic",
 		"pcode": "00631",
 		"units": "mg/L",
@@ -421,32 +305,11 @@
 		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency."
 	}]
 },{
-	"groupName": "Microbiological Parameters",
-	"key": 6,
-	"parameters": [{
-		"name": "All Microbial",
-		"value": 24,
-		"units": "# of Detections",
-		"type": "Organic"
-	}]
-},{
 	"groupName": "Major and Minor Ions",
 	"key": 7,
 	"parameters": [{
-		"name": "Chloride",
-		"value": 10,
-		"type": "Inorganic",
-		"pcode": "00940",
-		"units": "mg/L",
-		"low": "< 250",
-		"mod": "250 - 500",
-		"high": "> 500",
-		"thresh_val": "500",
-		"thresh_src": "SMCL-CA",
-		"acr": "Health-Based Screening Level developed by the USGS in collaboration with the U.S. Environmental Protection Agency."
-	},{
 		"name": "Fluoride",
-		"value": 14,
+		"value": 12,
 		"type": "Inorganic",
 		"pcode": "00950",
 		"units": "mg/L",
@@ -456,65 +319,13 @@
 		"thresh_val": "2",
 		"thresh_src": "MCL-CA",
 		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
-	},{
-		"name": "Total Dissolved Solids",
-		"value": 43,
-		"type": "Inorganic",
-		"pcode": 70300,
-		"units": "mg/L",
-		"low": "< 500",
-		"mod": "500 - 1,000",
-		"high": "> 1,000",
-		"thresh_val": "1000",
-		"thresh_src": "SMCL-CA",
-		"acr": "Secondary Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
-	},{
-		"name": "Sulfate",
-		"value": 41,
-		"type": "Inorganic",
-		"pcode": "00945",
-		"units": "mg/L",
-		"low": "< 250",
-		"mod": "250 - 500",
-		"high": "> 500",
-		"thresh_val": "500",
-		"thresh_src": "SMCL-CA",
-		"acr": "Secondary Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
-	}]
-},{
-	"groupName": "Geochemical and Age-Dating Tracers",
-	"value": 8,
-	"parameters": [{
-		"name": "Tritium",
-		"value": 45,
-		"type": "Inorganic",
-		"pcode": "07000",
-		"units": "percent",
-		"low": "< 0.3",
-		"mod": "0.3 - 2",
-		"high": "> 2",
-		"thresh_val": "",
-		"thresh_src": "",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
-	},{
-		"name": "Carbon-14",
-		"value": 9,
-		"type": "Inorganic",
-		"pcode": 49933,
-		"units": "percent",
-		"low": "< 30",
-		"mod": "30 - 95",
-		"high": "> 95",
-		"thresh_val": "",
-		"thresh_src": "",
-		"acr": ""
 	}]
 },{
 	"groupName": "Field Water Quality Indicators",
 	"value": 9,
 	"parameters": [{
 		"name": "Specific Conductance",
-		"value": 39,
+		"value": 21,
 		"type": "Inorganic",
 		"pcode": "00095",
 		"units": "µS/cm",
@@ -526,7 +337,7 @@
 		"acr": "Secondary Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
 	},{
 		"name": "pH",
-		"value": 31,
+		"value": 20,
 		"type": "Inorganic",
 		"pcode": "00400",
 		"units": "unitless",
@@ -541,16 +352,28 @@
 	"groupName": "Parameters of Special Interest",
 	"value": 10,
 	"parameters": [{
-		"name": "Perchlorate",
-		"value": 30,
-		"type": "Inorganic",
-		"pcode": "63790 61209",
+		"name": "Tetrachloroethene",
+		"value": 19,
+		"type": "Organic",
+		"pcode": "34475",
 		"units": "µg/L",
-		"low": "< 3",
-		"mod": "3 - 6",
-		"high": "> 6",
-		"thresh_val": "6",
-		"thresh_src": "MCL-CA",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water."
+		"low": "< 0.5",
+		"mod": "0.5 - 5",
+		"high": "> 5",
+		"thresh_val": "5",
+		"thresh_src": "MCL-US",
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency"
+	}, {
+		"name": "Trichloroethene",
+		"value": 25,
+		"type": "Organic",
+		"pcode": "39180",
+		"units": "µg/L",
+		"low": "< 0.5",
+		"mod": "0.5 - 5",
+		"high": "> 5",
+		"thresh_val": "5",
+		"thresh_src": "MCL-US",
+		"acr": "Maximum Contaminant Level established by the U.S. Environmental Protection Agency"
 	}]
 }]

@@ -60,10 +60,9 @@ export default {
 
 
 				/* if the groundwater study type is also selected, run a query() on the param layer */
-				if(this.type != ''){
-					this.decideHowToFilter(this.constituentLayer);
-				} 
-				
+			
+				this.decideHowToFilter(this.constituentLayer);
+			
 				this.addConstituentLayer(); // add to this.pointGroup if not there already
 			}
 
@@ -123,7 +122,7 @@ export default {
 			console.log('layer to import as dynamicMapLayer: ' + val);
 
 			var layer = esri.dynamicMapLayer({
-				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/base_layers/MapServer/',
+				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/baselayers_fix/MapServer/',
 				layers: [val],
 				minZoom: 4,
 				position: val == 4 ? 'back' : 'front',
@@ -195,7 +194,7 @@ export default {
 
 		var that = this;
 		this.map.on('zoom', () => {
-			console.log(that.map.getZoom());
+			//console.log(that.map.getZoom());
 			that.$emit('sendZoom', that.map.getZoom());
 		});
 

@@ -13,73 +13,53 @@ export default {
 	computed: {
 		// compute the url from the param number
 		url(){
-			return 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/TestLayers/MapServer/' + this.value;
-		},
-
-		studyType(){
-			// used to filter wells returned from parameter value
-			switch(this.type){
-				case '0':
-					return 'STATUS'
-					break;
-				case '1':
-					return 'Domestic-supply'
-					break;
-				case '2': 
-					return 'Domestic-supply' 
-					//have to change value because geojson property is recorded as 'domestic-supply' instead of 'shallow'
-					break;
-				case '3':
-					return 'Public-supply'
-					break;
-				case '4':
-					return 'Public-supply'
-					break;
-				default:
-					return this.type;
-			}
+			return 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/layers/MapServer/' + this.value;
 		}
 	},
 
 	methods: {
-
 		// get well markers as featureLayer
 		importParamGeometry(value){
 			console.log(value);
 			this.value = value;
-
-			let layerDetails = getParamString(value);
+			var content = getParamString(value);
 
 			return esri.featureLayer({
 				url: this.url,
-				onEachFeature: function(feature, layer){
-
+				onEachFeature: function(feature, layer){ 
 					return layer.bindPopup(() => {
-						
-						return L.Util.template(`<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {${layerDetails.category}}<br/>${layerDetails.lookFor}: {${layerDetails.value}}</p>`, feature.properties);
-						//return L.Util.template(getParamString(value), feature.properties);
+						return L.Util.template(content.string(feature.properties), feature.properties);
+						//return L.Util.template(getParamString(value, feature.properties), feature.properties);
 					})
 				},
-				where: `${layerDetails.value} IS NOT NULL` ,
+				where: `${content.column} IS NOT NULL` ,
 				renderer: L.canvas()  //  can do either L.canvas() or L.svg() (default)
 			});
 		},
 
 		decideHowToFilter(layer){
-			/* if either public or domestic type selected, filter by type */
+			/* filter by whether STATUS or TRENDS, and determine public or domestic by the first two characters of GAMA_ID*/
 			if(this.type == 2 || this.type == 3){
-				// this.studyType is computed in getParamData.vue
-				return layer.setWhere("StudyType = '" + this.studyType + "'");
+				if(this.type == 2){
+					return layer.setWhere("Purpose = 'STATUS' AND GAMA_ID LIKE 'S-%'")
+				} else {
+					return layer.setWhere("Purpose = 'STATUS' AND NOT GAMA_ID LIKE 'S-%'")
+				}
 			} 
 
-			// if either trends type has been selected, filter both by study type (Domestic-supply or Public-supply) and by purpose (TRENDS)
 			else if(this.type == 1 || this.type == 4){
-				return layer.setWhere("StudyType = '"+ this.studyType + "'")
+				if(this.type == 1) {
+					return layer.setWhere("Purpose = 'TRENDS' AND GAMA_ID LIKE 'S-%'");
+				} else {
+					return layer.setWhere("Purpose = 'TRENDS' AND NOT GAMA_ID LIKE 'S-%'")
+				}
+				
 			}
-			/* if either all sites selected, filter by purpose (STATUS)*/
+
+			/* if all sites selected, don't filter*/
 			else {
-				console.log('filter by purpose');
-				return layer.setWhere("Purpose = '" + this.studyType + "'");
+				 return;
+				// return layer.setWhere("Purpose = '" + this.studyType + "'");
 			}
 
 			layer.redraw();

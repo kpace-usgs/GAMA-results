@@ -1,117 +1,121 @@
-export default function(param){
+import moment from 'moment';
+
+export default function(param, properties){
+
+	var layerDetails;
+	// define the name of the category column if it exists, and what value (concentrations, number of detections, or pH) is being categorized. Column is the name of the column in which those values live on arcServer
 
 	switch(param){
 		case 15: 
-			return {
+			layerDetails = {
 				category: 'FungicideCatg',
 				lookFor: '# Detections',
-				value: 'FungicideCt'
+				column: 'FungicideCt'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {FungicideCatg}<br/># Detections: {FungicideCt}</p>';
 			break;
-		case 16: 
-			return {
+		case 16:
+			layerDetails = {
 				category: 'GasolineCatg',
 				lookFor: '# Detections',
-				value: 'GasolineCt'
+				column: 'GasolineCt'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {GasolineCatg}<br/># Detections: {GasolineCt}</p>';
 			break;
-		case 17:
-			return {
+		case 17: 
+			layerDetails = {
 				category: 'HerbicideCatg',
 				lookFor: '# Detections',
-				value: 'HerbicideCt'
+				column: 'HerbicideCt'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {HerbicideCatg}<br/># Detections: {HerbicideCt}</p>';
 			break;
-		case 18:
-			return {
+		case 18: 
+			layerDetails = {
 				category: 'HerbicideCatg',
 				lookFor: '# Detections',
-				value: 'HerbicideCt'
+				column: 'HerbicideCt'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {HerbicideCatg}<br/># Detections: {HerbicideCt}</p>';
 			break;
-		case 19:
-			return {
+		case 19: 
+			layerDetails = {
 				category: 'InsecticideCatg',
 				lookFor: '# Detections',
-				value: 'InsecticideCt'
+				column: 'InsecticideCt'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {InsecticideCatg}<br/># Detections: {InsecticideCt}</p>';
+		break;
+		case 20:
+			layerDetails = {
+				category: 'Category',
+				lookFor: 'pH',
+				column: 'Concentration'
+			}
 			break;
-		case 24:
-			return {
-				category: 'n/a',
+		case 24: 
+			layerDetails = {
+				category: '',
 				lookFor: '# Detections',
-				value: 'DetectCounts'
+				column: 'DetectCounts'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/># Detections: {DetectCounts}</p>';
-			break;
+		break;
 		case 29:
-			return {
+			layerDetails = {
 				category: 'OrgSynthCatg',
 				lookFor: '# Detections',
-				value: 'OrganicSynthesisCt'
+				column: 'OrganicSynthesisCt'
 			}
-			//return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {OrgSynthCatg}<br/># Detections: {OrganicSynthesisCt}</p>';
-			break;
-		case 30:
-			return {
-				category: 'Category',
-				lookFor: '# Detections',
-				value: 'Concentrat'
-			}
-			//return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {Category}<br/># Detections: {Concentrat}</p>';
-			break;
-		case 31:
-			return {
-				category: 'n/a',
-				lookFor: 'pH',
-				value: 'Concentration'
-			}
-			//return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>pH: {Concentration}</p>';
-			break;
+		break;
 		case 32: 
-			return {
-				category: 'n/a',
-				lookFor: '# Detections',
-				value: 'DetectCounts'
+			layerDetails = {
+				category: '',
+				lookFor: '# of Detections',
+				column: 'DetectCounts'
 			}
-			//return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/># Detections: {DetectCounts}</p>';
 			break;
 		case 35:
-			return {
+			layerDetails = {
 				category: 'RefrigerantCatg',
 				lookFor: '# Detections',
-				value: 'RefrigerantCt'
+				column: 'RefrigerantCt'
 			}
-			//return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {RefrigerantCatg}<br/># Detections: {RefrigerantCt}</p>';
 			break;
-		case 40:
-			return {
+		case 38:
+			layerDetails = {
 				category: 'SolventCatg',
 				lookFor: '# Detections',
-				value: 'SolventCt'
+				column: 'SolventCt'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {SolventCatg}<br/># Detections: {SolventCt}</p>';
 			break;
 		case 44:
-			return {
+			layerDetails = {
 				category: 'TrihalomethaneCatg',
 				lookFor: '# Detections',
-				value: 'TrihalomethaneCt'
+				column: 'TrihalomethaneCt'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {TrihalomethaneCatg}<br/># Detections: {TrihalomethaneCt}</p>';
 			break;
 		default:
-			return {
+			layerDetails = {
 				category: 'Category',
 				lookFor: 'Concentration',
-				value: 'Concentration'
+				column: 'Concentration'
 			}
-			// return '<p>Study Unit: {StudyUnit}<br/>GAMA ID: {GAMA_ID}<br/>Category: {Category}<br/>Concentration: {Concentration}</p>';
-			break;
-		}
-}
+	};
+
+
+	var category = layerDetails.category == '' ? 'N/A': `{${layerDetails.category}}` 
+
+
+	var stringToReturn = function(properties){
+		var date = moment(properties.Dates).format('MM-DD-YYYY');
+
+		return `<p>Study Unit: {StudyUnit}<br/>\
+		GAMA ID: {GAMA_ID}<br/>\
+		${layerDetails.lookFor}: {${layerDetails.column}}<br/>\
+		Category: ${category}<br/>\
+		Sample Date: ${date}
+		</p>`
+	};
+	
+
+	return {
+		string: stringToReturn,
+		column: layerDetails.column
+	}
+};

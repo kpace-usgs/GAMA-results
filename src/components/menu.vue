@@ -99,6 +99,7 @@
             <a id="downloadButton" 
             	:href='zipHref'
             	:download = 'fileName'
+            	class='button'
             	:class='{ disabled : parameterGroup.groupName === ""}'
             	:title='parameterGroup.groupName === "" ? "Please select a constituent class" : ""'
             >

@@ -56,11 +56,13 @@ export default {
 
 			if(this.type == 2 || this.type == 3){
 				if(this.type == 2){
-					obj[layerNumber] = "Purpose = 'STATUS' AND StudyUnit LIKE 'S_\_%'";
+					// domestic-supply aquifer sites
+					obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'";
 					return layer.setLayerDefs(obj);
 					//return layer.setWhere("Purpose = 'STATUS' AND GAMA_ID LIKE 'S-%'")
 				} else {
-					obj[layerNumber] = "Purpose = 'STATUS' AND NOT StudyUnit LIKE 'S_\_%'";
+					// public-supply aquifer sites
+					obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Public-supply'";
 					return layer.setLayerDefs(obj);
 					//return layer.setWhere("Purpose = 'STATUS' AND NOT GAMA_ID LIKE 'S-%'")
 				}
@@ -68,11 +70,13 @@ export default {
 
 			else if(this.type == 1 || this.type == 4){
 				if(this.type == 1) {
-					obj[layerNumber] = "Purpose = 'TRENDS' AND StudyUnit LIKE 'S_\_%'";
+					// domestic-supply trends sites
+					obj[layerNumber] = "Purpose = 'TRENDS' AND StudyType = 'Domestic-supply'";
 					return layer.setLayerDefs(obj);
 					//return layer.setWhere("Purpose = 'TRENDS' AND GAMA_ID LIKE 'S-%'");
 				} else {
-					obj[layerNumber] = "Purpose = 'TRENDS' AND NOT StudyUnit LIKE 'S_\_%'";
+					// public-supply trends sites
+					obj[layerNumber] = "Purpose = 'TRENDS' AND StudyType = 'Public-supply'";
 					return layer.setLayerDefs(obj);
 					//return layer.setWhere("Purpose = 'TRENDS' AND NOT GAMA_ID LIKE 'S-%'")
 				}

@@ -29,33 +29,43 @@ export default {
 				pane: 'markerPane'
 			}),
 			typeLayer: '',
-			constituentLayer: ''
+			constituentLayer: '',
+			typeURL: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/',
+			polygonURL: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/'
 		}
 	},
 	mixins: [ParamData],
 	props: ['param', 'type', 'layerArr', 'reset'],
 	watch: {
 		type(){	
+		
 			if(this.type.length > 0){
-				// if a constituent has already been selected, this.constituentLayer will already be populated
+				// if a constituent has already been selected, this.constituentLayer will already be populated. it might not be on the map though
 				if(typeof(this.param.value) == 'number') {
+					console.log('filter by type')
 					this.decideHowToFilter(this.constituentLayer);
 
 				} else {
 					// load the wells by type and add to the map
 					this.pointGroup.clearLayers();
 					this.importTypeJson();
-					this.addConstituentLayer();
 				}
+				this.addConstituentLayer();
 			}
-
+			// otherwise the type is being reset
+			else {
+				 // clear map
+				 console.log('type has been reset, clear map')
+				 this.pointGroup.clearLayers();
+			}
 		},
 
 		param(){
+			console.log(this.param)
 			/* if selection box has a value, save this.constituentLayer as an esri.featureLayer */
-			if(this.param.hasOwnProperty('value')){
-	
-				this.constituentLayer = this.importParamGeometry(this.param.value);
+			if(this.param.value != ""){
+				console.log(this.param.value)
+				this.constituentLayer = this.importParamGeometry(this.param.value, this.param.units);
 				this.pointGroup.clearLayers(); //clear the existing layer
 
 
@@ -104,7 +114,7 @@ export default {
 			var queryString = this.type == 4 ? "PS_Aquifer = 'X'" : "PS_Aquifer = ''"
 
 			this.constituentLayer = esri.dynamicMapLayer({
-				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/',
+				url: this.typeURL,
 				layers: [layerIndex],
 				layerDefs: {
 					1: queryString
@@ -122,7 +132,7 @@ export default {
 			console.log('layer to import as dynamicMapLayer: ' + val);
 
 			var layer = esri.dynamicMapLayer({
-				url: 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/baselayers_fix/MapServer/',
+				url: this.polygonURL,
 				layers: [val],
 				minZoom: 4,
 				position: val == 4 ? 'back' : 'front',
@@ -153,6 +163,7 @@ export default {
 					this.$emit('toggleLoading', false);
 				});
 			}
+
 		},
 
 		checkReset(){
@@ -165,13 +176,14 @@ export default {
 
 		loadOverlays(){
 			this.baseLayers = {
-				"Gray": L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', 
-					{ attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ' }
-				),
 				"Topography": L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', 
 					{ attribution:  'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
 					}
 				),
+				"Grayscale": L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', 
+					{ attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ' }
+				),
+				
 				"Terrain" : L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}.{ext}', 
 					{attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 					subdomain: 'abcd', 
@@ -181,7 +193,7 @@ export default {
 			};
 
 			// set landscape layer as default
-			this.baseLayers['Gray'].addTo(this.map);
+			this.baseLayers['Topography'].addTo(this.map);
 
 			L.control.layers(this.baseLayers, {}, {collapsed: false}).setPosition('topleft').addTo(this.map);
 
@@ -206,6 +218,8 @@ export default {
 
 		this.polygonGroup.addTo(this.map);
 		this.pointGroup.addTo(this.map);
+
+	
 
 	}
 }

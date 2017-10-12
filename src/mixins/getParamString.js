@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export default function(param, properties){
+export default function(param, units){
 
 	var layerDetails;
 	// define the name of the category column if it exists, and what value (concentrations, number of detections, or pH) is being categorized. Column is the name of the column in which those values live on arcServer
@@ -62,6 +62,12 @@ export default function(param, properties){
 				column: 'OrganicSynthesisCt'
 			}
 		break;
+		case 30: 
+			layerDetails = {
+				category: 'Category',
+				lookFor: 'Concentration',
+				column: 'Concentrat'
+			}
 		case 32: 
 			layerDetails = {
 				category: '',
@@ -98,18 +104,19 @@ export default function(param, properties){
 			}
 	};
 
-
-	var category = layerDetails.category == '' ? 'N/A': `{${layerDetails.category}}` 
+		// if no value for a category key has been provided, do not look for that value from the server. return a string 'N/A'
+	var category = layerDetails.category == '' ? 'N/A': `{${layerDetails.category}}`;
 
 
 	var stringToReturn = function(properties){
-		var date = moment(properties.Dates).format('MM-DD-YYYY');
+	
+		var date = moment(properties.SampleDate).format('MM/DD/YYYY');
 
 		return `<p>Study Unit: {StudyUnit}<br/>\
 		GAMA ID: {GAMA_ID}<br/>\
-		${layerDetails.lookFor}: {${layerDetails.column}}<br/>\
-		Category: ${category}<br/>\
-		Sample Date: ${date}
+		Sample Date: ${date}<br/>\
+		${layerDetails.lookFor}: {${layerDetails.column}} (${units})<br/>\
+		Category: ${category}
 		</p>`
 	};
 	

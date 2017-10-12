@@ -1,7 +1,7 @@
 <template>
 	<div class='toggleBar' @click='toggle'>
 		<div v-if='show'>
-			<slot name='title'><h2>Legend</h2></slot>
+			<slot name='title'><h2>Explanation</h2></slot>
 			<icon name='times' scale='1.5'></icon>
 		</div>
 		<div v-else>
@@ -37,6 +37,6 @@ export default{
 	}
 	.toggleBar h1, .toggleBar h2{
 		margin: 0;
-		font-size: 18px;
+		font-weight: 400;
 	}
 </style>

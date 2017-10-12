@@ -80,22 +80,21 @@ body {
     line-height: 1.428;
 }
 
-h1, h2, h3, h4, h5, h6  {
-font-weight: 700;
+h2, h3, h4, h5, h6  {
+font-weight: 400;
 line-height: 1.1;
 }
 
 h1 {
-font-size: 18px;
+font-size: 16px;
+font-weight: 700;
+line-height: 1.1;
 }
 
-h2 {
+h2, h3 {
 font-size: 16px;
 }
 
-h3 {
-font-size: 14px;
-}
 
 /* Container CSS */
 .container{
@@ -130,5 +129,8 @@ font-size: 14px;
 .leaflet-control-container{
 	font-family: 'Calibri', 'Hevetica Neue', sans-serif;
 	font-size: 16px;
+}
+.leaflet-popup-content-wrapper>.leaflet-popup-content{
+	margin: 5px;
 }
 </style>

@@ -10,14 +10,11 @@
 	        <!-- Groundwater Study Type Selector -->
 	        <div>
 		        <label class='labelDiv'>Groundwater Study Type: 
-					<!-- <img src='../assets/images/moreInfo.png' 
-					alt='Define study type' 
-					:title='defineType' /> -->
 					<Guidance :text='defineType'></Guidance>
 		        </label>
 
-	            <select id="base" style="width:300px;" v-model='type'>
-	                <option value=""> </option>
+	            <select id="base"  v-model='type' :class='{highlighted: type=="", shaded: type != ""}'>
+	                <option default value="">Select One</option>
 	                <option value="0">All Sites</option>
 	                <option value="2">Domestic-supply Aquifer Sites</option>
 	                <option value="1">Domestic-supply Trends Sites</option>
@@ -27,16 +24,15 @@
 	        </div>
 
 			<div>
-		        <!-- Parameter Group Selector -->
+		        <!-- Constituent Class Selector -->
 		        <label class='labelDiv'>Select Constituent Class:
 		        	<Guidance :text='defineClass'></Guidance>
-					<!-- <img src='../assets/images/moreInfo.png' alt='Define constituent class' 
-					:title='defineClass' /> -->
 		        </label>
 
 		       
-	            <select style="width:300px;" v-model='parameterGroup'>
-	                <option default :value='{"groupName": ""}'>Select One</option>
+	            <select  v-model='parameterGroup' :class='{ highlighted: parameterGroup.groupName == "", shaded: parameterGroup.groupName != ""}'>
+	                <option :value='defaultParamGroup'>Select One</option>
+
 	            	<option v-for='paramGroup in listOfParameters' :value='paramGroup'>{{paramGroup.groupName}}</option>
 	            </select>
 	        </div>
@@ -45,12 +41,10 @@
 		        <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
 		        <label class='labelDiv'>Select Constituent: 
 		        	<Guidance :text='defineConst'></Guidance>
-		        	<!-- <img src='../assets/images/moreInfo.png' alt='Define constituent' 
-		        	:title='defineConst' /> -->
 		        </label>
 
-	            <select style="width:300px;" v-model='param'>
-	            	<option default value=''></option>
+	            <select :class='{ highlighted: param.value == "" && parameterGroup.groupName != "", shaded: param.value != "" || parameterGroup.groupName == ""}' v-model='param'>
+	         		<option :value='defaultParamGroup.parameters[0]' default></option>
 	            	<option v-for='parameter in parameterGroup.parameters' :value='parameter'>{{parameter.name}}</option>
 	            </select>
 	        </div>
@@ -63,26 +57,20 @@
 		        </label>
 
 		        <!-- only show checkbox options depending on which groundwater study type is selected -->
-				<!-- show all options when "all" or "" are checked -->
+				<!-- show only study units and provinces on initial render, show all options when "all sites" is checked -->
 				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
 		        <div v-for='(layer, index) in layers'
-
-		        	v-if='type == 0 || type == "" ? true: domesticOrPublic == layer.prefix ? true : layer.value == 4 ? true : false' 
-		        	:class='{ disabled: zoom < layer.zoom }'
+		        	v-if='parseInt(type) === 0 || type == "" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: type === "" && (layer.value == 2 || layer.value == 3 || layer.value == 4) ? true : false' 
 		        >
 
-		        	<!-- disable checkbox according to zoom -->
 					<input type='checkbox' 
-					:disabled='zoom < layer.zoom ? true : false'
 					:id='layer' :value='layer.value' 
 					v-model='layerName'  :key='index'
-					:title='zoom < layer.zoom ? "zoom in to view" : ""' >
+					 >
 
 					<label for='layer' 
-					:title='zoom < layer.zoom ? "zoom in to view" : "" '>
-
-						<!-- show prefix ("domestic-supply", "public-supply") if no type selection, if all types, or if trend types -->
-						<span v-if='type == "" || type == 0'>{{layer.prefix}}</span> {{layer.string}}
+					>
+						{{layer.string}}
 					</label>
 		        </div>
      		</div>
@@ -106,7 +94,7 @@
             	<p>Download Data from Constituent Class</p>	
             </a>
 
-		    <p>*The GAMA - PBP is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>U.S. Geological Survey</a>.</p>
+		    <p class='small'>*The GAMA - PBP is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>U.S. Geological Survey</a>.</p>
 		    
 
 		    <a @click='reset' id='reset' class='button' >
@@ -136,40 +124,41 @@ export default {
 		return {
 			type: '',
 			listOfParameters: listOfParameters,
-			parameterGroup: {
+			parameterGroup: '',
+			defaultParamGroup: {
 				"parameters": [{
-					"name": "Select parameter group first",
+					"name": "Select constituent class first",
 					"value": ""
 				}],
-				"groupName": ''
+				"groupName": ""
 			},
 			param: '',
 			layers: [{
-				"string": "Grid Cells",
+				//"string": "Grid Cells",
 				"prefix": "Domestic-supply",
-				// "string": 'Domestic-supply Aquifer Grid Cells',
+				 "string": 'Domestic-supply Aquifer Grid Cells',
 				"pane": 'shallowGridCells',
-				"zoom": 8,
+				//"zoom": 8,
 				"value": 0
 			}, 
 		
 			{
-				"string": "Grid Cells",
+				//"string": "Grid Cells",
 				"prefix": "Public-supply",
-				// "string": 'Public-supply Aquifer Grid Cells', 
+				"string": 'Public-supply Aquifer Grid Cells', 
 				"pane": 'deepGridCells',
-				"zoom": 8,
+				//"zoom": 8,
 				"value": 1
 			}, {
-				"string": "Study Units",
+				//"string": "Study Units",
 				"prefix": "Domestic-supply",
-				// "string": 'Domestic-supply Aquifer Study Units', 
+				"string": 'Domestic-supply Aquifer Study Units', 
 				"pane": 'shallowStudyUnits',
 				"value": 2
 			}, {
-				"string": "Study Units",
+				//"string": "Study Units",
 				"prefix": "Public-supply",
-				// "string": 'Public-supply Aquifer Study Units',
+				"string": 'Public-supply Aquifer Study Units',
 				"pane": 'deepStudyUnits',
 				"value": 3
 			}, {
@@ -185,12 +174,28 @@ export default {
 			defineConst: 'Some classes allow for individual constituents to be displayed (Trace Elements and Nutrients for example) while others (VOCs and Pesticides) use primary use categories to simplify the data for display'
 		}
 	},
+	mounted(){
+		this.parameterGroup = this.defaultParamGroup;
+		this.param = this.defaultParamGroup.parameters[0];
+	},
 	watch: {
-	
+		parameterGroup(){
+			console.log('parameterGroup: ')
+			console.log(this.parameterGroup);
+			console.log('param: ');
+			console.log(this.param)
+			// reset the param value if the groupname is being reset or if it's being changed while the param doesn't have a value
+			if(this.parameterGroup.groupName == "" || this.param.value != ""){
+				console.log('clear parameter values on map');
+				this.param = this.defaultParamGroup.parameters[0];
+			} 
+		},
 		layerName(){
 			return this.$emit('changeLayer', this.layerName);
 		},
 		param(){
+			console.log('menu sees param changed');
+			console.log(this.param)
 			return this.$emit('changeParam', this.param);
 		},
 		type(){
@@ -198,6 +203,10 @@ export default {
 			// clear selected layer if any layer other than hydrogeologic provinces
 			this.layerName = this.layerName.indexOf(4) === -1 ? [] : [4];
 
+			// if the type is changing and a constituent class has been selected but no constituent has been selected, reset the constituent class input
+			if(this.param.value == ""){
+				this.parameterGroup = this.defaultParamGroup;
+			}
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
 		}
@@ -230,15 +239,9 @@ export default {
 		reset() {
 			// reset values on map and menu when reset button clicked
 			this.layerName = [],
-			this.param = '';
+			this.param = this.defaultParamGroup.parameters[0];
 			this.type = '';
-			this.parameterGroup = {
-				"parameters": [{
-					"name": "Select parameter group first",
-					"value": ""
-				}],
-				"groupName": ''
-			};
+			this.parameterGroup = this.defaultParamGroup;
 			this.$emit('resetClicked');
 		}
 	},
@@ -273,6 +276,9 @@ export default {
     top: 50px;
     right: 10px;
     font-size: 16px;
+    overflow: auto;
+    max-height: 100%;
+    padding-right: 20px;
 }
 h2{
 	font-size: 14px;
@@ -284,10 +290,21 @@ h2{
 	margin-bottom: 10px;
 }
 select{
-	margin: 5px 0px;
-	height: 20px;
-	font-size: 14px;
+	margin: 2px 0px;
+	font-size: 16px;
 	font-family: 'Calibri';
+	width: 300px;
+	background-color: #ebedee;
+	border-radius: 3px;
+}
+select.highlighted{
+	border: 2px solid #896FC3;
+}
+select.shaded{
+
+}
+option{
+
 }
 select:hover, input:hover, button:hover{
 	box-shadow: 1px 1px 10px grey;
@@ -300,11 +317,11 @@ select:hover, input:hover, button:hover{
 	align-items: flex-start;
 }
 
-#downloadButton, .button{
+.button{
 	text-align: center;
 	width: 100%;
 	display: block;
-	height: 50px;
+	height: 40px;
 	border-radius: 5px;
 	border: 1px solid grey;
 	cursor: pointer;
@@ -313,31 +330,28 @@ select:hover, input:hover, button:hover{
 	background: #D3CCE3;  /* fallback for old browsers */
 	background: -webkit-linear-gradient(to right, #E9E4F0, #D3CCE3);  /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #E9E4F0, #D3CCE3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	margin: 0;
 }
-#downloadButton p{
-	margin-top: 12px;
+.button p{
+	margin-top: 7px;
 }
-
 .button:not(.disabled):hover{
 	box-shadow: 2px 2px 10px 1px grey;
 	width: 100%;
+	height: 40px;
 }
 .button.disabled, #downloadButton.disabled{
+	width: 100%;
+	height: 40px;
 	cursor: not-allowed;
 	color: grey;
 	background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
 }
 
 #reset{
-	margin-bottom: 0px;
-	padding: 0 0 5px;
-	height: 20px;
 	border-bottom: 1px solid grey;
 }
-#reset p{
-	margin: 0;
-	height: 90%;
-}
+
 
 #layerSelector>div.disabled>input{
 	cursor: not-allowed;
@@ -345,5 +359,13 @@ select:hover, input:hover, button:hover{
 #layerSelector>div.disabled>label{
 	text-decoration: line-through;
 	color: grey;
+}
+.small{
+	font-size: 12px;
+}
+.small a{
+	border-bottom: 1px solid #4278DA;
+	height: 10px;
+	line-height: 100%;
 }
 </style>

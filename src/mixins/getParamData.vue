@@ -13,53 +13,77 @@ export default {
 	computed: {
 		// compute the url from the param number
 		url(){
-			return 'https://arcgis.wr.usgs.gov:6443/arcgis/rest/services/layers/MapServer/' + this.value;
+			return 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_symbolsordered/MapServer/' 
 		}
 	},
 
 	methods: {
 		// get well markers as featureLayer
-		importParamGeometry(value){
+		importParamGeometry(value, unit){
 			console.log(value);
 			this.value = value;
-			var content = getParamString(value);
+			var content = getParamString(value, unit);
 
-			return esri.featureLayer({
+			return esri.dynamicMapLayer({
 				url: this.url,
-				onEachFeature: function(feature, layer){ 
-					return layer.bindPopup(() => {
-						return L.Util.template(content.string(feature.properties), feature.properties);
-						//return L.Util.template(getParamString(value, feature.properties), feature.properties);
-					})
-				},
-				where: `${content.column} IS NOT NULL` ,
-				renderer: L.canvas()  //  can do either L.canvas() or L.svg() (default)
+				layers: [this.value]
+			}).bindPopup( (err, fc) => {
+				for(var i = 0; i < fc.features.length; i++){
+					var properties = fc.features[i].properties;
+					return L.Util.template(content.string(properties), properties)
+				}
 			});
+
+			// return esri.featureLayer({
+			// 	url: this.url,
+			// 	onEachFeature: function(feature, layer){ 
+			// 		return layer.bindPopup(() => {
+			// 			return L.Util.template(content.string(feature.properties), feature.properties);
+			// 			//return L.Util.template(getParamString(value, feature.properties), feature.properties);
+			// 		})
+			// 	},
+			// 	where: `${content.column} IS NOT NULL` ,
+			// 	renderer: L.canvas()  //  can do either L.canvas() or L.svg() (default)
+			// });
 		},
 
 		decideHowToFilter(layer){
 			/* filter by whether STATUS or TRENDS, and determine public or domestic by the first two characters of GAMA_ID*/
+
+			// prepare an object that will have a key equal to the parameter value
+			var layerNumber = this.value;
+			var obj = {};
+
 			if(this.type == 2 || this.type == 3){
 				if(this.type == 2){
-					return layer.setWhere("Purpose = 'STATUS' AND GAMA_ID LIKE 'S-%'")
+					obj[layerNumber] = "Purpose = 'STATUS' AND StudyUnit LIKE 'S_\_%'";
+					return layer.setLayerDefs(obj);
+					//return layer.setWhere("Purpose = 'STATUS' AND GAMA_ID LIKE 'S-%'")
 				} else {
-					return layer.setWhere("Purpose = 'STATUS' AND NOT GAMA_ID LIKE 'S-%'")
+					obj[layerNumber] = "Purpose = 'STATUS' AND NOT StudyUnit LIKE 'S_\_%'";
+					return layer.setLayerDefs(obj);
+					//return layer.setWhere("Purpose = 'STATUS' AND NOT GAMA_ID LIKE 'S-%'")
 				}
 			} 
 
 			else if(this.type == 1 || this.type == 4){
 				if(this.type == 1) {
-					return layer.setWhere("Purpose = 'TRENDS' AND GAMA_ID LIKE 'S-%'");
+					obj[layerNumber] = "Purpose = 'TRENDS' AND StudyUnit LIKE 'S_\_%'";
+					return layer.setLayerDefs(obj);
+					//return layer.setWhere("Purpose = 'TRENDS' AND GAMA_ID LIKE 'S-%'");
 				} else {
-					return layer.setWhere("Purpose = 'TRENDS' AND NOT GAMA_ID LIKE 'S-%'")
+					obj[layerNumber] = "Purpose = 'TRENDS' AND NOT StudyUnit LIKE 'S_\_%'";
+					return layer.setLayerDefs(obj);
+					//return layer.setWhere("Purpose = 'TRENDS' AND NOT GAMA_ID LIKE 'S-%'")
 				}
 				
 			}
 
-			/* if all sites selected, don't filter*/
+			/* if all sites selected, remove all filters*/
 			else {
-				 return;
-				// return layer.setWhere("Purpose = '" + this.studyType + "'");
+				obj[layerNumber] = "";
+				return layer.setLayerDefs(obj);
+				//return layer.setWhere("Purpose LIKE '%'");
 			}
 
 			layer.redraw();

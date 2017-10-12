@@ -23,7 +23,7 @@
 
 		    <!-- Parameter Legend -->
 		    <!-- ph -->
-		    <div class="paramLayerLegend hasInfo" v-if='param.value == 20'>
+		    <div class="paramLayerLegend hasInfo" v-if='param.value == 31'>
 		    	<h3>{{param.name}} ({{param.units}})</h3>
 		    	<div><p>Benchmark</p><p>Symbology</p></div>
 		    	<div><p>Basic</p><div><img src='../assets/images/ph.png'/><p>{{param.high}}</p></div></div>
@@ -43,7 +43,7 @@
 		    </div>
 
 		    <!-- main -->
-		    <div class="paramLayerLegend hasInfo" v-if='param.value != 20 && param.hasOwnProperty("value")'>
+		    <div class="paramLayerLegend hasInfo" v-if='param.value != 31 && param.hasOwnProperty("value")'>
 		    	<h3>{{param.name}} ({{param.units}})</h3>
 		    	<div><p>Benchmark</p><p>Symbology</p></div>
 		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
@@ -347,13 +347,18 @@ export default {
 #map_legend{
 	bottom: 50px;
 	left: 10px;
+	width: 100%;
+	max-width: 200px;
 }
 
 .paramLayerLegend>div{
 	display: flex;
-	width: 90%;
+	width: 100%;
 	justify-content: space-between;
 	padding: 0;
+}
+.paramLayerLegend h3{
+	font-weight: 700;
 }
 .paramLayerLegend>div:nth-child(2){
 	border-bottom: 1px solid grey;
@@ -362,15 +367,16 @@ export default {
 	margin-left: auto;
 }
 .paramLayerLegend>div>p{
-	width: 50%;
+	width: 100%;
 	margin: 0;
 	text-align: left;
 	font-size: 16px;
+	word-break: keep-all;
 }
 .paramLayerLegend.hasInfo>div>p:first-child{
-	text-align: right;
+	text-align: left;
 	padding-right: 20px;
-	width: 40%;
+	width: 100%;
 }
 .paramLayerLegend.detects>div{
 	width: 90%;
@@ -385,7 +391,8 @@ export default {
 	padding: 0;
 	align-items: center;
 	justify-content: flex-start;
-	width: 50%;
+	width: 100%;
+	word-break: keep-all;
 }
 .paramLayerLegend>div>div>p{
 	margin: 0 0 0 3px;

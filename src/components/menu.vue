@@ -1,8 +1,10 @@
 <template>
 	<div id='menu' class='leaflet-bar container'>
 		<ToggleBar @click='toggle' :show='showControls'>
-			<h1 slot='title'>GAMA - Priority Basin Project<br />Water-Quality Results*</h1>
-			<h2 slot='elseTitle'>Show Menu +</h2>
+			<h1 slot='title'>
+				<span title='Groundwater Ambient Monitoring and Assessment Priority Basin Project' style='border-bottom: 1px dashed grey; cursor: help'>GAMA - PBP</span> Water-Quality Results*
+			</h1>
+			<h2 slot='elseTitle'>Show Menu</h2>
 		</ToggleBar>
 
 	    <!-- Begin Controller Form -->
@@ -15,10 +17,10 @@
 
 	            <select id="base"  v-model='type' :class='{highlighted: type=="", shaded: type != ""}'>
 	                <option default value="">Select One</option>
-	                <option value="3">All Sites</option>
-	                <option vale='0'>All Trend Sites</option>
-	                <option value="1">GAMA Domestic-supply Aquifer Sites</option>
-	                <option value="2">GAMA Public-supply Aquifer Sites</option>
+	                <option value='3'>All Sites</option>
+	                <option value='0'>All Trend Sites</option>
+	                <option value='1'>GAMA Domestic-supply Aquifer Sites</option>
+	                <option value='2'>GAMA Public-supply Aquifer Sites</option>
 	            </select>
 	        </div>
 
@@ -93,7 +95,7 @@
             	<p>Download Data from Constituent Class</p>	
             </a>
 
-		    <p class='small'>*The GAMA - PBP is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>U.S. Geological Survey</a>.</p>
+		    <p class='small'>*The Groundwater Ambient Monitoring and Assessment - Priority Basin Project (GAMA - PBP) is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>U.S. Geological Survey</a>.</p>
 		    
 
 		    <a @click='reset' id='reset' class='button' >
@@ -282,7 +284,7 @@ h2{
 }
 
 .form>div{
-	margin-bottom: 10px;
+	margin: 10px 0px;
 }
 select{
 	margin: 2px 0px;

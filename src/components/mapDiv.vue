@@ -7,7 +7,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
 
 import ParamData from '../mixins/getParamData.vue'
-import getType from '../mixins/getType.js'
+import TypeData from '../mixins/getTypeData.vue'
 import getLayerPopup from '../mixins/getLayerPopup.js'
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
@@ -30,11 +30,10 @@ export default {
 			}),
 			typeLayer: '',
 			constituentLayer: '',
-			typeURL: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sites2/MapServer/',
 			polygonURL: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/'
 		}
 	},
-	mixins: [ParamData],
+	mixins: [ParamData, TypeData],
 	props: ['param', 'type', 'layerArr', 'reset'],
 	watch: {
 		type(){	
@@ -58,13 +57,10 @@ export default {
 						this.pointGroup.addLayer(this.importTypeJson(this.type));
 					}
 					else {
-						// order is important
-						
+						// load all 3 type layers. order is important
 						this.pointGroup.addLayer(this.importTypeJson(2)).bringToBack();
-						
 						this.pointGroup.addLayer(this.importTypeJson(1));
 						this.pointGroup.addLayer(this.importTypeJson(0)).bringToFront();
-						
 					}
 					
 				}
@@ -78,7 +74,7 @@ export default {
 				console.log(this.param.value);
 				this.pointGroup.clearLayers(); //clear the existing layer
 
-				this.constituentLayer = this.importParamGeometry(this.param.value, this.param.units);
+				this.constituentLayer = this.importParamGeometry(this.param);
 				
 				//query the constituent layer according to which groundwater study type has been selected
 				this.decideHowToFilter(this.constituentLayer, this.type, this.param.value);
@@ -115,25 +111,6 @@ export default {
 	
 	methods: {
 
-		importTypeJson(layer){
-			/* get well sites by type of well: public supply, domestic, trends, or all both */
-			var layer = esri.dynamicMapLayer({
-				url: this.typeURL,
-				layers: [layer]
-			}).bindPopup( (err, featureCollection) => {
-				if(err || featureCollection.features.length === 0) {
-					return false;
-				} else {
-					return 'Well type: ' + getType(featureCollection.features[0]);
-				}
-			});
-
-			this.addEventListeners(layer);
-
-			return layer;
-	
-		},
-
 		importPaneJson(val){
 			console.log('layer to import as dynamicMapLayer: ' + val);
 
@@ -142,15 +119,7 @@ export default {
 				layers: [val],
 				minZoom: 4,
 				position: val == 4 ? 'back' : 'front',
-			})
-			// .bindPopup( (err, featureCollection) => {
-			// 	if(err || featureCollection.features.length === 0) {
-			// 		return false;
-			// 	} else {
-			// 		return featureCollection.features[0].properties[getLayerPopup(val)]
-			// 	}
-				
-			// });
+			});
 
 			this.polygonGroup.addLayer(layer); // add to map			
 		},
@@ -214,8 +183,6 @@ export default {
 
 		this.polygonGroup.addTo(this.map);
 		this.pointGroup.addTo(this.map);
-
-	
 
 	}
 }

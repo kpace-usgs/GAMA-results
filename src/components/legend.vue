@@ -1,21 +1,24 @@
 <template>
 	<div id='map_legend' class='leaflet-bar container' :class='{"min" : !showControls}'>
 
-		<ToggleBar :show='showControls' @click='toggle'></ToggleBar>
+		<ToggleBar :show='showControls' @click='toggle'>
+			<h2 slot='title' v-if='type == "" && param.value == "" && layers.length == 0'>Legend</h2>
+		</ToggleBar>
 
-		<div v-if='showControls'>
+		<div v-if='showControls' class='legendContent'>
 		    <!-- Groundwater Study Type Legend -->
-		    <div v-if='type.length > 0 && param == ""' id="mainLayerLegend" class='subLegend'>
-		    	<h3 v-if='type.includes("0")'>All GAMA Sites</h3>
-		        <div v-if='type.includes("1") || type.includes("0") || type == 4'>
+		    <!-- show if there's a value for the study type but no value for the param -->
+		    <div v-if='type != "" && param.value == ""' id="mainLayerLegend" class='subLegend'>
+		    	<h3 style='font-weight: bold;'>Groundwater Study Type</h3>
+		        <div v-if='type == 0 || type == 3'>
 					<img src="../assets/images/trends.png"/>
 					<p>GAMA Trends Sites</p>
 				</div>
-				<div v-if='type.includes("2") || type.includes("0")'>
+				<div v-if='type == 1 || type == 3'>
 		        	<img src="../assets/images/shallow.png"/>
 		        	<p>GAMA Domestic-supply Aquifer Sites</p>
 		        </div>
-		        <div v-if='type.includes("3") || type.includes("0")'>
+		        <div v-if='type == 2 || type == 3'>
 		        	<img src="../assets/images/deep.png"/>
 		        	<p>GAMA Public-supply Aquifer Sites</p>
 		        </div>
@@ -25,7 +28,7 @@
 		    <!-- ph -->
 		    <div class="paramLayerLegend hasInfo" v-if='param.value == 20'>
 		    	<h3>{{param.name}} ({{param.units}})</h3>
-		    	<div><p>Benchmark</p><p>Symbology</p></div>
+		    	<div><p>Category</p><p>Symbology</p></div>
 		    	<div><p>Basic</p><div><img src='../assets/images/ph.png'/><p>{{param.high}}</p></div></div>
 		    	<div><p></p><div><img src='../assets/images/low.png'/><p>{{param.mod}}</p></div></div>
 		    	<div><p>Acidic</p><div><img src='../assets/images/hi.png'/><p>{{param.low}}</p></div></div>
@@ -35,17 +38,37 @@
 		    <!-- detects -->
 		    <div class="paramLayerLegend detects" v-if='[15, 16, 17, 18, 19, 24, 29, 32, 35, 38, 44].includes(param.value)'>
 		    	<h3>{{param.name}}</h3>
-		    	<div><p># Detects</p></div>
-		    	<div><p>>3</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
-		    	<div><p>2-3</p><div><img src='../assets/images/mod.png'/><p>{{param.mod}}</p></div></div>
-		    	<div><p>1</p><div><img src='../assets/images/low.png'/><p>{{param.low}}</p></div></div>
-		    	<div><p>0 or null</p><div><img src='../assets/images/zero.png'/></div></div>
+		    	<div><p>Number of Detects</p><p>Symbology</p></div>
+		    	<div>
+		    		<p>>3</p>
+		    		<div>
+		    			<img src='../assets/images/hi.png'/>
+		    		</div>
+		    	</div>
+		    	<div>
+		    		<p>2-3</p>
+		    		<div>
+		    			<img src='../assets/images/mod.png'/>
+		    		</div>
+		    	</div>
+		    	<div>
+		    		<p>1</p>
+		    		<div>
+		    			<img src='../assets/images/low.png'/>
+		    		</div>
+		    	</div>
+		    	<div>
+		    		<p>None</p>
+		    		<div>
+		    			<img src='../assets/images/zero.png'/>
+		    		</div>
+		    	</div>
 		    </div>
 
 		    <!-- main -->
 		    <div class="paramLayerLegend hasInfo" v-if='![15, 16, 17, 18, 19, 20, 24, 29, 32, 35, 38, 44].includes(param.value) && param.value !== "" '>
 		    	<h3>{{param.name}} ({{param.units}})</h3>
-		    	<div><p>Benchmark</p><p>Symbology</p></div>
+		    	<div><p>Category</p><p>Symbology</p></div>
 		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
 		    	<div><p>Moderate</p><div><img src='../assets/images/mod.png'/><p>{{param.mod}}</p></div></div>
 		    	<div>
@@ -326,10 +349,12 @@ export default {
 
 
 <style scoped>
-
+.legendContent h3{
+	margin-top: 0px;
+}
 .subLegend>div{
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	align-content: flex-end;
 }
 .subLegend>div>img{
@@ -381,14 +406,7 @@ export default {
 	padding-right: 20px;
 	width: 100%;
 }
-.paramLayerLegend.detects>div{
-	width: 90%;
-	text-align: center;
-}
-.paramLayerLegend.detects>div>p{
-	width: 100%;
-	text-align: center;
-}
+
 .paramLayerLegend>div>div{
 	display: flex;
 	padding: 0;

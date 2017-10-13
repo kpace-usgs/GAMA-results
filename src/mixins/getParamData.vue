@@ -1,28 +1,24 @@
 <script>
 import getParamString from './getParamString.js'
+import listeners from './addEventListeners.vue'
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
 
 export default {
 	data() {
 		return {
-			value: '' // the param number passed to the REST functions
+			url: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_2short/MapServer/' 
 		}
 	},
-
-	computed: {
-		// compute the url from the param number
-		url(){
-			return 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_2short/MapServer/' 
-		}
-	},
+	mixins: [listeners],
 
 	methods: {
 		// get well markers as featureLayer
-		importParamGeometry(value, unit){
-			console.log(value);
-	
-			var content = getParamString(value, unit);
+		importParamGeometry(param){
+			var value = param.value;
+			var unit = param.units;
+
+			var content = getParamString(param);
 
 			var layer = esri.dynamicMapLayer({
 				url: this.url,
@@ -48,35 +44,30 @@ export default {
 
 			if(type == 1){
 				// domestic-supply aquifer sites
-				obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'";
+				//obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'";
+				layer.setLayerDefs(`{${value}: "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'"}`)
 			}
 
 			else if(type == 2){
 				// public-supply aquifer sites
-				obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Public-supply'";
+				//obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Public-supply'";
+				layer.setLayerDefs(`{${value}: "Purpose = 'STATUS' AND StudyType = 'Public-supply'"}`)
 			}
 
 			else if(type == 0){
-				obj[layerNumber] = "Purpose = 'TRENDS'"
+				//obj[layerNumber] = "Purpose = 'TRENDS'"
+				layer.setLayerDefs(`{${value}: "Purpose = 'TRENDS'"}`)
 			}
 
 			// otherwise don't filter
 			else {
-				obj[layerNumber] = "";
+				//obj[layerNumber] = "";
+				layer.setLayerDefs(`{${value}: ""}`)
 			}
 
-			layer.setLayerDefs(obj);
+			//layer.setLayerDefs(obj);
+			console.log(layer.getLayerDefs());
 			layer.redraw();
-		},
-
-		addEventListeners(layer){
-			layer.on('loading', e => {
-				this.$emit('toggleLoading', true);
-			});
-
-			layer.on('load', e => {
-				this.$emit('toggleLoading', false)
-			});
 		}
 	}
 }

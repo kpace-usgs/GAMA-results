@@ -39,19 +39,18 @@ export default {
 		type(){	
 			this.pointGroup.clearLayers();
 
-			if(this.type.length > 0){
+			if(this.type != ""){
 				// if the type layer is being changed on the constituent layer, filter the constituent layer
 				if(typeof(this.param.value) == 'number') {
-					console.log('filter by type')
-					this.decideHowToFilter(this.constituentLayer, this.type, this.param.value);
+					console.log('filter by type');
+					this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value));
 					this.addConstituentLayer();
 				} 
 
 				// otherwise the map is showing the wells by type, with no constituent data
 				else {
 					// load the wells by type and add to the map
-					
-					console.log(this.type)
+					console.log('load wells by type')
 					// if trend sites, domestic supply, or public supply is chosen, just get that layer
 					if(this.type != 3){
 						this.pointGroup.addLayer(this.importTypeJson(this.type));
@@ -70,16 +69,12 @@ export default {
 		param(){
 			console.log(this.param)
 			/* if selection box has a value, save this.constituentLayer */
-			if(this.param.value != ""){
+			if(this.param.value !== ""){
 				console.log(this.param.value);
 				this.pointGroup.clearLayers(); //clear the existing layer
 
-				this.constituentLayer = this.importParamGeometry(this.param);
-				
-				//query the constituent layer according to which groundwater study type has been selected
-				this.decideHowToFilter(this.constituentLayer, this.type, this.param.value);
-
-				this.pointGroup.addLayer(this.constituentLayer);
+				this.constituentLayer = this.importParamGeometry(this.param, this.type);
+				this.addConstituentLayer();
 			}
 
 			/* if selection box was changed to no value, clear the layers */
@@ -128,6 +123,8 @@ export default {
 			// if constituent layer of markers not already added to map, add it now
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){
 				this.pointGroup.addLayer(this.constituentLayer).bringToFront();
+			} else {
+				this.constituentLayer.redraw();
 			}
 		},
 
@@ -182,8 +179,7 @@ export default {
 		this.loadOverlays();
 
 		this.polygonGroup.addTo(this.map);
-		this.pointGroup.addTo(this.map);
-
+		this.pointGroup.addTo(this.map).setZIndex(100);
 	}
 }
 </script>

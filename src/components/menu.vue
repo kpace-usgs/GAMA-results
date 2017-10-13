@@ -24,6 +24,26 @@
 	            </select>
 	        </div>
 
+			<!-- add slider bar to change trend series -->
+			<div v-if='type === "0" && param.value != ""' style='z-index: 99;'>
+				<VueSlider
+				v-model='trend'
+				:piecewiseLabel='true'
+				height= '15'
+				width='100%'
+				dotSize='20'
+				:piecewise='true'
+				:min='0'
+				:max='2'
+				:interval='1'
+				:lazy='true'
+				tooltip = 'hover'
+				tooltip-dir='top'
+				:bgStyle = '{"border": "1px solid black", "height": "16px", "background-color": "#ebedee"}'
+				>	
+				</VueSlider>
+			</div>
+
 			<div>
 		        <!-- Constituent Class Selector -->
 		        <label class='labelDiv'>Select Constituent Class:
@@ -34,7 +54,7 @@
 	            <select  v-model='parameterGroup' :class='{ highlighted: parameterGroup.groupName == "", shaded: parameterGroup.groupName != ""}'>
 	                <option :value='defaultParamGroup'>Select One</option>
 
-	            	<option v-for='paramGroup in listOfParameters' :value='paramGroup'>{{paramGroup.groupName}}</option>
+	            	<option v-for='paramGroup in sortedParameterGroups' :value='paramGroup'>{{paramGroup.groupName}}</option>
 	            </select>
 	        </div>
 
@@ -46,7 +66,7 @@
 
 	            <select :class='{ highlighted: param.value == "" && parameterGroup.groupName != "", shaded: param.value != "" || parameterGroup.groupName == ""}' v-model='param'>
 	         		<option :value='defaultParamGroup.parameters[0]' default></option>
-	            	<option v-for='parameter in parameterGroup.parameters' :value='parameter'>{{parameter.name}}</option>
+	            	<option v-for='parameter in sortedParameters' :value='parameter'>{{parameter.name}}</option>
 	            </select>
 	        </div>
 
@@ -110,6 +130,7 @@
 import listOfParameters from '../assets/listOfParameters.json';
 import toggle from '../mixins/toggle.vue'
 import ToggleBar from './toggleBar.vue';
+import VueSlider from 'vue-slider-component/src/vue2-slider.vue'
 import Guidance from './Guidance.vue';
 import ParamData from '../mixins/getParamData.vue'
 import BuildCSV from '../mixins/buildCSV.vue'
@@ -119,11 +140,13 @@ export default {
 	mixins: [toggle, ParamData, BuildCSV],
 	props: ['zoom'],
 	components: {
-		ToggleBar, Guidance
+		ToggleBar, Guidance, VueSlider
 	},
+
 	data() {
 		return {
 			type: '',
+			trend: '',
 			listOfParameters: listOfParameters,
 			parameterGroup: '',
 			defaultParamGroup: {
@@ -262,6 +285,36 @@ export default {
 				var stringName = this.parameterGroup.groupName.replace(/\s/g, '');
 				return 'downloads/groups/'+ stringName + '.zip'
 			}
+		},
+
+		sortedParameterGroups(){
+			return this.listOfParameters.sort( (a, b) => {
+				var nameA = a.groupName.toLowerCase();
+				var nameB = b.groupName.toLowerCase();
+				if (nameA < nameB) {
+				    return -1;
+				  }
+				  if (nameA > nameB) {
+				    return 1;
+				  }
+				  // names must be equal
+				  return 0;
+			})
+		},
+
+		sortedParameters(){
+			return this.parameterGroup.parameters.sort( (a, b) => {
+				var nameA = a.name;
+				var nameB = b.name;
+				if (nameA < nameB) {
+				    return -1;
+				  }
+				  if (nameA > nameB) {
+				    return 1;
+				  }
+				  // names must be equal
+				  return 0;
+			})
 		}
 	}
 }

@@ -62,7 +62,8 @@
 			"column": "TrihalomethaneCt"
 		}
 	}]
-},{
+},
+{
 	"groupName": "Trace Elements",
 	"key": 1,
 	"parameters": [{

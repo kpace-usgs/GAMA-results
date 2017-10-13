@@ -106,7 +106,6 @@ font-size: 16px;
     font-size: 14px;
 }
 
-
 #query{
     display:show;
 }
@@ -122,14 +121,7 @@ font-size: 16px;
   margin-bottom:-20px !important;
 }
 
-.leaflet-bar{
-    background-color:white;
-}
 
-.leaflet-control-container{
-	font-family: 'Calibri', 'Hevetica Neue', sans-serif;
-	font-size: 16px;
-}
 .leaflet-popup-content-wrapper>.leaflet-popup-content{
 	margin: 5px;
 }

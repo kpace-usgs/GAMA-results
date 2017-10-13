@@ -1,5 +1,5 @@
 <template>
-	<div id='map_legend' class='leaflet-bar container'>
+	<div id='map_legend' class='leaflet-bar container' :class='{"min" : !showControls}'>
 
 		<ToggleBar :show='showControls' @click='toggle'></ToggleBar>
 
@@ -23,7 +23,7 @@
 
 		    <!-- Parameter Legend -->
 		    <!-- ph -->
-		    <div class="paramLayerLegend hasInfo" v-if='param.value == 31'>
+		    <div class="paramLayerLegend hasInfo" v-if='param.value == 20'>
 		    	<h3>{{param.name}} ({{param.units}})</h3>
 		    	<div><p>Benchmark</p><p>Symbology</p></div>
 		    	<div><p>Basic</p><div><img src='../assets/images/ph.png'/><p>{{param.high}}</p></div></div>
@@ -33,7 +33,7 @@
 		    </div>
 
 		    <!-- detects -->
-		    <div class="paramLayerLegend detects" v-if='[100].includes(param.value)'>
+		    <div class="paramLayerLegend detects" v-if='[15, 16, 17, 18, 19, 24, 29, 32, 35, 38, 44].includes(param.value)'>
 		    	<h3>{{param.name}}</h3>
 		    	<div><p># Detects</p></div>
 		    	<div><p>>3</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
@@ -43,7 +43,7 @@
 		    </div>
 
 		    <!-- main -->
-		    <div class="paramLayerLegend hasInfo" v-if='param.value != 31 && param.hasOwnProperty("value")'>
+		    <div class="paramLayerLegend hasInfo" v-if='![15, 16, 17, 18, 19, 20, 24, 29, 32, 35, 38, 44].includes(param.value) && param.value !== "" '>
 		    	<h3>{{param.name}} ({{param.units}})</h3>
 		    	<div><p>Benchmark</p><p>Symbology</p></div>
 		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
@@ -350,7 +350,10 @@ export default {
 	width: 100%;
 	max-width: 200px;
 }
-
+#map_legend.min{
+	width: 60%;
+	max-width: 110px;
+}
 .paramLayerLegend>div{
 	display: flex;
 	width: 100%;
@@ -396,6 +399,14 @@ export default {
 }
 .paramLayerLegend>div>div>p{
 	margin: 0 0 0 3px;
+}
+.leaflet-bar{
+    background-color:white;
+}
+
+.leaflet-control-container{
+	font-family: 'Calibri', 'Hevetica Neue', sans-serif;
+	font-size: 16px;
 }
 
 </style>

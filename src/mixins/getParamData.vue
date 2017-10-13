@@ -13,7 +13,7 @@ export default {
 	computed: {
 		// compute the url from the param number
 		url(){
-			return 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_symbolsordered/MapServer/' 
+			return 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_2short/MapServer/' 
 		}
 	},
 
@@ -21,12 +21,12 @@ export default {
 		// get well markers as featureLayer
 		importParamGeometry(value, unit){
 			console.log(value);
-			this.value = value;
+	
 			var content = getParamString(value, unit);
 
-			return esri.dynamicMapLayer({
+			var layer = esri.dynamicMapLayer({
 				url: this.url,
-				layers: [this.value]
+				layers: [value]
 			}).bindPopup( (err, fc) => {
 				for(var i = 0; i < fc.features.length; i++){
 					var properties = fc.features[i].properties;
@@ -34,63 +34,49 @@ export default {
 				}
 			});
 
-			// return esri.featureLayer({
-			// 	url: this.url,
-			// 	onEachFeature: function(feature, layer){ 
-			// 		return layer.bindPopup(() => {
-			// 			return L.Util.template(content.string(feature.properties), feature.properties);
-			// 			//return L.Util.template(getParamString(value, feature.properties), feature.properties);
-			// 		})
-			// 	},
-			// 	where: `${content.column} IS NOT NULL` ,
-			// 	renderer: L.canvas()  //  can do either L.canvas() or L.svg() (default)
-			// });
+			this.addEventListeners(layer);
+
+			return layer;
 		},
 
-		decideHowToFilter(layer){
+		decideHowToFilter(layer, type, value){
 			/* filter by whether STATUS or TRENDS, and determine public or domestic by the first two characters of GAMA_ID*/
 
 			// prepare an object that will have a key equal to the parameter value
-			var layerNumber = this.value;
+			var layerNumber = value;
 			var obj = {};
 
-			if(this.type == 2 || this.type == 3){
-				if(this.type == 2){
-					// domestic-supply aquifer sites
-					obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'";
-					return layer.setLayerDefs(obj);
-					//return layer.setWhere("Purpose = 'STATUS' AND GAMA_ID LIKE 'S-%'")
-				} else {
-					// public-supply aquifer sites
-					obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Public-supply'";
-					return layer.setLayerDefs(obj);
-					//return layer.setWhere("Purpose = 'STATUS' AND NOT GAMA_ID LIKE 'S-%'")
-				}
-			} 
-
-			else if(this.type == 1 || this.type == 4){
-				if(this.type == 1) {
-					// domestic-supply trends sites
-					obj[layerNumber] = "Purpose = 'TRENDS' AND StudyType = 'Domestic-supply'";
-					return layer.setLayerDefs(obj);
-					//return layer.setWhere("Purpose = 'TRENDS' AND GAMA_ID LIKE 'S-%'");
-				} else {
-					// public-supply trends sites
-					obj[layerNumber] = "Purpose = 'TRENDS' AND StudyType = 'Public-supply'";
-					return layer.setLayerDefs(obj);
-					//return layer.setWhere("Purpose = 'TRENDS' AND NOT GAMA_ID LIKE 'S-%'")
-				}
-				
+			if(type == 1){
+				// domestic-supply aquifer sites
+				obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'";
 			}
 
-			/* if all sites selected, remove all filters*/
+			else if(type == 2){
+				// public-supply aquifer sites
+				obj[layerNumber] = "Purpose = 'STATUS' AND StudyType = 'Public-supply'";
+			}
+
+			else if(type == 0){
+				obj[layerNumber] = "Purpose = 'TRENDS'"
+			}
+
+			// otherwise don't filter
 			else {
 				obj[layerNumber] = "";
-				return layer.setLayerDefs(obj);
-				//return layer.setWhere("Purpose LIKE '%'");
 			}
 
+			layer.setLayerDefs(obj);
 			layer.redraw();
+		},
+
+		addEventListeners(layer){
+			layer.on('loading', e => {
+				this.$emit('toggleLoading', true);
+			});
+
+			layer.on('load', e => {
+				this.$emit('toggleLoading', false)
+			});
 		}
 	}
 }

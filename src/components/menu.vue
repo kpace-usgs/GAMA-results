@@ -15,11 +15,10 @@
 
 	            <select id="base"  v-model='type' :class='{highlighted: type=="", shaded: type != ""}'>
 	                <option default value="">Select One</option>
-	                <option value="0">All Sites</option>
-	                <option value="2">Domestic-supply Aquifer Sites</option>
-	                <option value="1">Domestic-supply Trends Sites</option>
-	                <option value="3">Public-supply Aquifer Sites</option>
-	                <option value='4'>Public-supply Trends Sites</option>
+	                <option value="3">All Sites</option>
+	                <option vale='0'>All Trend Sites</option>
+	                <option value="1">GAMA Domestic-supply Aquifer Sites</option>
+	                <option value="2">GAMA Public-supply Aquifer Sites</option>
 	            </select>
 	        </div>
 
@@ -60,7 +59,7 @@
 				<!-- show only study units and provinces on initial render, show all options when "all sites" is checked -->
 				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
 		        <div v-for='(layer, index) in layers'
-		        	v-if='parseInt(type) === 0 || type == "" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: type === "" && (layer.value == 2 || layer.value == 3 || layer.value == 4) ? true : false' 
+		        	v-if='parseInt(type) === 0 || type == "" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: false' 
 		        >
 
 					<input type='checkbox' 
@@ -247,11 +246,7 @@ export default {
 	},
 	computed: {
 		domesticOrPublic(){
-			if(this.type == 1 || this.type == 2){
-				return 'Domestic-supply'
-			} else if(this.type == 3 || this.type == 4){
-				return 'Public-supply'
-			}
+			return this.type == 1 ? 'Domestic-supply' : this.type == 2 ? 'Public-supply' : 'Trends';
 		},
 		fileName(){
 			return this.parameterGroup.groupName + '.zip';

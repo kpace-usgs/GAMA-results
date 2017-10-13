@@ -30,7 +30,7 @@ export default {
 			}),
 			typeLayer: '',
 			constituentLayer: '',
-			typeURL: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sites/MapServer/',
+			typeURL: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sites2/MapServer/',
 			polygonURL: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/'
 		}
 	},
@@ -38,42 +38,52 @@ export default {
 	props: ['param', 'type', 'layerArr', 'reset'],
 	watch: {
 		type(){	
-		
+			this.pointGroup.clearLayers();
+
 			if(this.type.length > 0){
-				// if a constituent has already been selected, this.constituentLayer will already be populated. it might not be on the map though
+				// if the type layer is being changed on the constituent layer, filter the constituent layer
 				if(typeof(this.param.value) == 'number') {
 					console.log('filter by type')
-					this.decideHowToFilter(this.constituentLayer);
+					this.decideHowToFilter(this.constituentLayer, this.type, this.param.value);
+					this.addConstituentLayer();
+				} 
 
-				} else {
+				// otherwise the map is showing the wells by type, with no constituent data
+				else {
 					// load the wells by type and add to the map
-					this.pointGroup.clearLayers();
-					this.importTypeJson();
+					
+					console.log(this.type)
+					// if trend sites, domestic supply, or public supply is chosen, just get that layer
+					if(this.type != 3){
+						this.pointGroup.addLayer(this.importTypeJson(this.type));
+					}
+					else {
+						// order is important
+						
+						this.pointGroup.addLayer(this.importTypeJson(2)).bringToBack();
+						
+						this.pointGroup.addLayer(this.importTypeJson(1));
+						this.pointGroup.addLayer(this.importTypeJson(0)).bringToFront();
+						
+					}
+					
 				}
-				this.addConstituentLayer();
-			}
-			// otherwise the type is being reset
-			else {
-				 // clear map
-				 console.log('type has been reset, clear map')
-				 this.pointGroup.clearLayers();
 			}
 		},
 
 		param(){
 			console.log(this.param)
-			/* if selection box has a value, save this.constituentLayer as an esri.featureLayer */
+			/* if selection box has a value, save this.constituentLayer */
 			if(this.param.value != ""){
-				console.log(this.param.value)
-				this.constituentLayer = this.importParamGeometry(this.param.value, this.param.units);
+				console.log(this.param.value);
 				this.pointGroup.clearLayers(); //clear the existing layer
 
+				this.constituentLayer = this.importParamGeometry(this.param.value, this.param.units);
+				
+				//query the constituent layer according to which groundwater study type has been selected
+				this.decideHowToFilter(this.constituentLayer, this.type, this.param.value);
 
-				/* if the groundwater study type is also selected, run a query() on the param layer */
-			
-				this.decideHowToFilter(this.constituentLayer);
-			
-				this.addConstituentLayer(); // add to this.pointGroup if not there already
+				this.pointGroup.addLayer(this.constituentLayer);
 			}
 
 			/* if selection box was changed to no value, clear the layers */
@@ -105,20 +115,11 @@ export default {
 	
 	methods: {
 
-		importTypeJson(){
-			/* get well sites by type of well: public supply, domestic, or both */
-
-			// domestic-supply trends and public-supply trends will be the same layer
-			var layerIndex = this.type == 4 ? 1 : this.type;
-			// domestic-supply trends will not have a check-makr in PS_Aquifer column
-			var queryString = this.type == 4 ? "PS_Aquifer = 'X'" : "PS_Aquifer = ''"
-
-			this.constituentLayer = esri.dynamicMapLayer({
+		importTypeJson(layer){
+			/* get well sites by type of well: public supply, domestic, trends, or all both */
+			var layer = esri.dynamicMapLayer({
 				url: this.typeURL,
-				layers: [layerIndex],
-				layerDefs: {
-					1: queryString
-				}
+				layers: [layer]
 			}).bindPopup( (err, featureCollection) => {
 				if(err || featureCollection.features.length === 0) {
 					return false;
@@ -126,6 +127,11 @@ export default {
 					return 'Well type: ' + getType(featureCollection.features[0]);
 				}
 			});
+
+			this.addEventListeners(layer);
+
+			return layer;
+	
 		},
 
 		importPaneJson(val){
@@ -153,17 +159,7 @@ export default {
 			// if constituent layer of markers not already added to map, add it now
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){
 				this.pointGroup.addLayer(this.constituentLayer).bringToFront();
-
-				// toggle loading when beginning to load
-				this.constituentLayer.on('loading', e => {
-					this.$emit('toggleLoading', true);
-				})
-				// also set condition to toggle loader when done loading
-				this.constituentLayer.on('load', e => {
-					this.$emit('toggleLoading', false);
-				});
 			}
-
 		},
 
 		checkReset(){

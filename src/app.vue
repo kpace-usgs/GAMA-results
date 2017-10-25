@@ -3,6 +3,7 @@
 		<MapDiv
 			:param = 'param'
 			:type = 'type'
+			:trend='trend'
 			:layerArr = 'layers'
 			:reset = 'reset'
 			@sendZoom = 'handleZoom'
@@ -20,6 +21,7 @@
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
 			@changeType='handleType'
+			@changeTrend = 'handleTrend'
 			@resetClicked = 'toggleReset'
 			:zoom = 'zoom'
 		></MenuDiv>
@@ -40,6 +42,7 @@ export default {
 			layers: [],
 			param: '',
 			type: '',
+			trend: '',
 			zoom: '',
 			reset: false
 		}
@@ -61,8 +64,18 @@ export default {
 		handleZoom(level){
 			this.zoom = level;
 		},
+		handleTrend(num){
+			this.trend = num;
+		},
 		toggleReset(){
 			this.reset = !this.reset;
+		}
+	},
+	mounted(){
+		// Internet Explorer 6-11
+		var isIE = /*@cc_on!@*/false || !!document.documentMode;
+		if(isIE){
+			alert('It looks like you might be using Internet Explorer. Please make sure you are using a version currently supported by Microsoft (IE 10, 11, or Edge)')
 		}
 	}
 }
@@ -124,5 +137,8 @@ font-size: 16px;
 
 .leaflet-popup-content-wrapper>.leaflet-popup-content{
 	margin: 5px;
+}
+.lealet-popup-content p{
+	margin: 0;
 }
 </style>

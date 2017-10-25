@@ -4,7 +4,7 @@
 	"parameters": [{
 		"name": "Fumigants",
 		"value": 6,
-		"trends": [0, 1],
+		"trends": [35, 34, 33, 32],
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
@@ -13,8 +13,8 @@
 		}
 	},{
 		"name": "Gasoline Hydrocarbons, Oxygenates, and Degradates",
-		"value": 0,
-		"trends": [0, 1],
+		"value": 1,
+		"trends": [39, 38, 37, 36],
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
@@ -23,8 +23,8 @@
 		}
 	},{
 		"name": "Organic Synthesis",
-		"value": 0,
-		"trends": [0, 1],
+		"value": 1,
+		"trends": [31, 30, 29, 28],
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
@@ -34,7 +34,7 @@
 	},{
 		"name": "Refrigerant",
 		"value": 4,
-		"trends": [0, 1],
+		"trends": [27, 26, 25, 24],
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
@@ -44,7 +44,7 @@
 	},{
 		"name": "Solvent",
 		"value": 3,
-		"trends": [0, 1],
+		"trends": [23, 22, 21, 20],
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
@@ -54,7 +54,7 @@
 	},{
 		"name": "Trihalomethanes",
 		"value": 2,
-		"trends": [0, 1],
+		"trends": [19, 18, 17, 16],
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
@@ -457,6 +457,7 @@
 	},{
 		"name": "Nitrite plus Nitrate",
 		"value": 28,
+		"trends": [8, 9, 10, 11],
 		"type": "Inorganic",
 		"pcode": "00631",
 		"units": "mg/L",
@@ -538,6 +539,7 @@
 	"parameters": [{
 		"name": "Tritium",
 		"value": 8,
+		"trends": [0, 1, 2, 3],
 		"type": "Inorganic",
 		"pcode": "07000",
 		"units": "",
@@ -554,6 +556,7 @@
 	},{
 		"name": "Carbon-14",
 		"value": 9,
+		"trends": [4, 5, 6, 7],
 		"type": "Inorganic",
 		"pcode": 49933,
 		"units": "",

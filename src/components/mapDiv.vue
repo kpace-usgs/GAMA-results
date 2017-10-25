@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 
 import ParamData from '../mixins/getParamData.vue'
 import TypeData from '../mixins/getTypeData.vue'
+
 import getLayerPopup from '../mixins/getLayerPopup.js'
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
@@ -17,6 +18,7 @@ export default {
 	name: 'MapDiv',
 	data() {
 		return {
+			urlForPolygonData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/',
 			map: '',
 			baseLayers: '',
 			view: [37.7, -120.57],
@@ -29,58 +31,58 @@ export default {
 				pane: 'markerPane'
 			}),
 			typeLayer: '',
-			constituentLayer: '',
-			polygonURL: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/'
+			constituentLayer: ''
 		}
 	},
 	mixins: [ParamData, TypeData],
-	props: ['param', 'type', 'layerArr', 'reset'],
-	watch: {
+	props: ['param', 'type', 'trend', 'layerArr', 'reset'],
+
+	// watch for changes made on the menu component
+	watch: { 
 		type(){	
+			this.map.closePopup(); // close any popups
+			// don't necessarily clear layers from pointgroup. if the constituent layer is just being filtered, just redraw it.
+
+			// if the type layer is being changed on the constituent layer, filter the constituent layer that already exists
+			if(typeof(this.param.value) == 'number') {
+				console.log('filter by type');
+				this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value)); //if this.type == "" then the layer def will be set to return all results
+
+				this.addConstituentLayer();
+			} 
+
+			// otherwise the map is showing the wells by type, with no constituent data
+			else {
+				this.wellsByType();
+			}
+		},
+
+		trend(){
 			this.pointGroup.clearLayers();
-
-			if(this.type != ""){
-				// if the type layer is being changed on the constituent layer, filter the constituent layer
-				if(typeof(this.param.value) == 'number') {
-					console.log('filter by type');
-					this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value));
-					this.addConstituentLayer();
-				} 
-
-				// otherwise the map is showing the wells by type, with no constituent data
-				else {
-					// load the wells by type and add to the map
-					console.log('load wells by type')
-					// if trend sites, domestic supply, or public supply is chosen, just get that layer
-					if(this.type != 3){
-						this.pointGroup.addLayer(this.importTypeJson(this.type));
-					}
-					else {
-						// load all 3 type layers. order is important
-						this.pointGroup.addLayer(this.importTypeJson(2)).bringToBack();
-						this.pointGroup.addLayer(this.importTypeJson(1));
-						this.pointGroup.addLayer(this.importTypeJson(0)).bringToFront();
-					}
-					
-				}
+			if(this.trend !== ""){
+				this.constituentLayer = this.importTrend();
+				this.addConstituentLayer();
 			}
 		},
 
 		param(){
-			console.log(this.param)
+			console.log(this.param);
+			this.map.closePopup();
+			this.pointGroup.clearLayers();
 			/* if selection box has a value, save this.constituentLayer */
 			if(this.param.value !== ""){
 				console.log(this.param.value);
-				this.pointGroup.clearLayers(); //clear the existing layer
 
-				this.constituentLayer = this.importParamGeometry(this.param, this.type);
+				this.constituentLayer = this.importParam();
 				this.addConstituentLayer();
 			}
 
-			/* if selection box was changed to no value, clear the layers */
+			/* if param value is being cleared, revert back to showing wells by type */
 			else {
-				this.pointGroup.clearLayers();
+				this.wellsByType();
 			}
+			// else if this.param.value is an empty string, the pointGroup will already be cleared
+
 		},
 
 		layerArr(){
@@ -106,11 +108,31 @@ export default {
 	
 	methods: {
 
+		wellsByType(){
+			
+
+			/* if there's a value in the study type menu, load those wells */
+			if(this.type !== ""){
+				// load the wells by type and add to the map
+				console.log('load wells by type')
+				// if trend sites, domestic supply, public supply is chosen, just get that layer
+				if(this.type != 3){
+					this.pointGroup.addLayer(this.importTypeJson(this.type));
+				}
+				else {
+					// load all 3 type layers. order is important
+					this.pointGroup.addLayer(this.importTypeJson(2)).bringToBack();
+					this.pointGroup.addLayer(this.importTypeJson(1));
+					this.pointGroup.addLayer(this.importTypeJson(0)).bringToFront();
+				}
+			}
+		},
+
 		importPaneJson(val){
 			console.log('layer to import as dynamicMapLayer: ' + val);
 
 			var layer = esri.dynamicMapLayer({
-				url: this.polygonURL,
+				url: this.urlForPolygonData,
 				layers: [val],
 				minZoom: 4,
 				position: val == 4 ? 'back' : 'front',
@@ -121,8 +143,10 @@ export default {
 
 		addConstituentLayer(){
 			// if constituent layer of markers not already added to map, add it now
+			
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){
-				this.pointGroup.addLayer(this.constituentLayer).bringToFront();
+				console.log('add layer')
+				this.pointGroup.addLayer(this.constituentLayer);
 			} else {
 				this.constituentLayer.redraw();
 			}

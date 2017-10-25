@@ -26,15 +26,16 @@
 
 			<!-- add slider bar to change trend series -->
 			<div v-if='type === "0" && param.value != ""' style='z-index: 99;'>
+				<p>See trends by interval</p>
 				<VueSlider
-				v-model='trend'
+				v-model='trendIndex'
 				:piecewiseLabel='true'
 				height= '15'
 				width='100%'
-				dotSize='20'
+				value='null'
 				:piecewise='true'
 				:min='0'
-				:max='2'
+				:max='3'
 				:interval='1'
 				:lazy='true'
 				tooltip = 'hover'
@@ -146,13 +147,14 @@ export default {
 	data() {
 		return {
 			type: '',
-			trend: '',
+			trendIndex: '',
 			listOfParameters: listOfParameters,
 			parameterGroup: '',
 			defaultParamGroup: {
 				"parameters": [{
 					"name": "Select constituent class first",
-					"value": ""
+					"value": "",
+					"trends": []
 				}],
 				"groupName": ""
 			},
@@ -233,6 +235,11 @@ export default {
 			}
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
+		},
+		trend(){
+			console.log('trend changed to : ' + this.trend);
+
+			this.$emit('changeTrend', this.trend)
 		}
 	},
 	methods: {
@@ -315,6 +322,12 @@ export default {
 				  // names must be equal
 				  return 0;
 			})
+		},
+
+		trend(){
+			if(this.param.trends && this.trendIndex !== ""){
+				return this.param.trends[this.trendIndex]
+			}
 		}
 	}
 }

@@ -350,7 +350,8 @@ export default {
 
 <style scoped>
 .legendContent h3{
-	margin-top: 0px;
+	margin-top: -20px;
+	width: 80%;
 }
 .subLegend>div{
 	display: flex;

@@ -45,11 +45,11 @@ export default{
 	.toggleBar.min{
 		width: 100%;
 	}
-	.toggleBar.min h2{
+	.toggleBar.min h2, .toggleBar.min h3{
 		padding-left: 3px;
 	}
 
-	.toggleBar h1, .toggleBar h2{
+	.toggleBar h1, .toggleBar h2, .toggleBar h3{
 		margin-top: 3px;
 		font-weight: 400;
 	}

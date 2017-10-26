@@ -24,23 +24,23 @@
 	            </select>
 	        </div>
 
-			<!-- add slider bar to change trend series -->
-			<div v-if='type === "0" && param.value != ""' style='z-index: 99;'>
+			<!-- add slider bar to change trend series. initially the param layer is just filtered for type == TRENDS. once the slider bar is clicked then the map queries a different layer from the trends layers. therefore the slider style is transparent until the slider is set -->
+			<div v-if='type === "0" && param.value != ""' style='z-index: 99;' @click='setSliderStyle'>
 				<p>See trends by interval</p>
 				<VueSlider
+				ref='slider'
 				v-model='trendIndex'
 				:piecewiseLabel='true'
 				height= '15'
 				width='100%'
-				value='null'
 				:piecewise='true'
-				:min='0'
-				:max='3'
-				:interval='1'
+				:data='[0, 1, 2, 3]'
 				:lazy='true'
 				tooltip = 'hover'
 				tooltip-dir='top'
 				:bgStyle = '{"border": "1px solid black", "height": "16px", "background-color": "#ebedee"}'
+				:piecewise-style='{"background-color": "none"}'
+				:slider-style='sliderStyle'
 				>	
 				</VueSlider>
 			</div>
@@ -194,6 +194,7 @@ export default {
 			}],
 			layerName: [],
 			thresholds: '',
+			sliderStyle: {"opacity": 0},
 			readme: '',
 			defineType: 'Groundwater study type refers to the three types of assessment conducted by the GAMA-PBP: Public-Supply Aquifer Assessments, Shallow Aquifer Assessment, and Trend Assessments. Users can display sites from all three assessment types by selecting "All Sites" or they can limit the display by Assessment Type',
 			defineClass: 'Mappable constituents are grouped by class. Constituent classes are groupings of constituents based on similar physical or chemical properties. Not all constituents analyzed by the GAMA-PBP are available to be mapped. The mapper is primarily focused on providing the ability to display constituents with health-based and non-health based benchmarks and other select constituents such as tracers of groundwater age',
@@ -214,6 +215,8 @@ export default {
 			if(this.parameterGroup.groupName == "" || this.param.value != ""){
 				console.log('clear parameter values on map');
 				this.param = this.defaultParamGroup.parameters[0];
+				this.sliderStyle.opacity = 0;
+				this.trendIndex = ""
 			} 
 		},
 		layerName(){
@@ -233,6 +236,10 @@ export default {
 			if(this.param.value == ""){
 				this.parameterGroup = this.defaultParamGroup;
 			}
+
+			/* reset slider to be transparent */
+			this.sliderStyle.opacity = 0;
+			this.trendIndex = ""
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
 		},
@@ -274,6 +281,11 @@ export default {
 			this.type = '';
 			this.parameterGroup = this.defaultParamGroup;
 			this.$emit('resetClicked');
+		},
+
+		setSliderStyle(){
+			console.log('set slider opacity up to 1')
+			this.sliderStyle.opacity = 1;
 		}
 	},
 	computed: {

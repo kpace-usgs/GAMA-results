@@ -7,9 +7,6 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
 
 import ParamData from '../mixins/getParamData.vue'
-import TypeData from '../mixins/getTypeData.vue'
-
-import getLayerPopup from '../mixins/getLayerPopup.js'
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
 
@@ -18,7 +15,6 @@ export default {
 	name: 'MapDiv',
 	data() {
 		return {
-			urlForPolygonData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/',
 			map: '',
 			baseLayers: '',
 			view: [37.7, -120.57],
@@ -34,7 +30,7 @@ export default {
 			constituentLayer: ''
 		}
 	},
-	mixins: [ParamData, TypeData],
+	mixins: [ParamData],
 	props: ['param', 'type', 'trend', 'layerArr', 'reset'],
 
 	// watch for changes made on the menu component
@@ -94,7 +90,8 @@ export default {
 				var layerName = this.layerArr[i];
 				// if not already saved in this.polygons, import
 				if(!this.polygons.hasOwnProperty(layerName)){
-					this.importPaneJson(layerName);
+					var layer = this.importPaneJson(layerName);
+					this.polygonGroup.addLayer(layer);
 				} else {
 					this.polygonGroup.addLayer(this.polygons[layerName]);
 				}
@@ -109,8 +106,7 @@ export default {
 	methods: {
 
 		wellsByType(){
-			
-
+			this.pointGroup.clearLayers();
 			/* if there's a value in the study type menu, load those wells */
 			if(this.type !== ""){
 				// load the wells by type and add to the map
@@ -126,19 +122,6 @@ export default {
 					this.pointGroup.addLayer(this.importTypeJson(0)).bringToFront();
 				}
 			}
-		},
-
-		importPaneJson(val){
-			console.log('layer to import as dynamicMapLayer: ' + val);
-
-			var layer = esri.dynamicMapLayer({
-				url: this.urlForPolygonData,
-				layers: [val],
-				minZoom: 4,
-				position: val == 4 ? 'back' : 'front',
-			});
-
-			this.polygonGroup.addLayer(layer); // add to map			
 		},
 
 		addConstituentLayer(){
@@ -189,15 +172,6 @@ export default {
 
 	mounted() {
 		this.map = L.map('mapDiv').setView(this.view, this.zoom).setMaxZoom(this.maxZoom).setMinZoom(this.minZoom);
-
-		var that = this;
-		this.map.on('zoom', () => {
-			//console.log(that.map.getZoom());
-			that.$emit('sendZoom', that.map.getZoom());
-		});
-
-		// initially emit the zoom level
-		this.$emit('sendZoom', this.map.getZoom());
 
 		L.control.scale({position: 'bottomright'}).addTo(this.map); 
 		this.loadOverlays();

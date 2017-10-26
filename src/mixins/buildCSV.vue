@@ -99,6 +99,35 @@ export default {
 			console.log(stringToReturn.slice(0, 400));
 
 			return stringToReturn;
+		},
+
+		downloadContent(){
+			var that = this;
+			/* query data from arcServer for each parameter in the selected parameter group*/
+
+			// define callback function
+			var callback = function(){
+				that.createAndOpenLink(encodeURI(that.csvBody), that.fileName)
+				that.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
+				that.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
+			};
+
+			// invoke promise defined in buildCSV.vue
+			this.importArrayOfValues(this.parameterGroup.parameters, callback);
+		},
+
+		createAndOpenLink(href, filename){
+			var link = window.document.createElement('a');
+			link.href = href;
+			link.download = filename;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+	},
+	computed: {
+		fileName(){
+			return this.parameterGroup.groupName + '.zip';
 		}
 	}
 }

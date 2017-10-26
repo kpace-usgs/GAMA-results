@@ -339,10 +339,14 @@ import ToggleBar from './toggleBar.vue';
 
 export default {
 	name: 'LegendDiv',
-	props: ['layers', 'type', 'param'],
-	mixins: [toggle],
+	props: ['layers', 'type', 'param', 'showControls'],
 	components: {
 		ToggleBar
+	},
+	methods: {
+		toggle(){
+			this.$emit('toggle')
+		}
 	}
 }
 </script>

@@ -27,20 +27,23 @@
 			<!-- add slider bar to change trend series. initially the param layer is just filtered for type == TRENDS. once the slider bar is clicked then the map queries a different layer from the trends layers. therefore the slider style is transparent until the slider is set -->
 			<div v-if='type === "0" && param.value != ""' style='z-index: 99;' @click='setSliderStyle'>
 				<p>See trends by interval</p>
+
+				<!-- allow users to see t1, t2, and t3 trends. t0 layer is actually all STATUS wells (both domestic and public) -->
 				<VueSlider
 				ref='slider'
 				v-model='trendIndex'
+				:data='[1, 2, 3]'
 				:piecewiseLabel='true'
 				height= '15'
 				width='100%'
 				:piecewise='true'
-				:data='[0, 1, 2, 3]'
 				:lazy='true'
 				tooltip = 'hover'
 				tooltip-dir='top'
 				:bgStyle = '{"border": "1px solid black", "height": "16px", "background-color": "#ebedee"}'
 				:piecewise-style='{"background-color": "none"}'
 				:slider-style='sliderStyle'
+				:process-style='{"background-color": "#896FC3"}'
 				>	
 				</VueSlider>
 			</div>
@@ -98,6 +101,7 @@
      		</div>
 	      
 			<!-- Download Button -->
+			<!-- this first commented-out option will use the functions defined in mixins/buildCSV.vue to get data from server as featureLayer and convert to a csv. Really this should be done in a node.js script and we could also bundle the files together with metadata into a .zip -->
          <!--    <a id='downloadButton' c
             	:class='{ disabled : parameterGroup.groupName === ""}'
             	:title='parameterGroup.groupName === "" ? "Please select a constituent class" : ""'
@@ -106,6 +110,8 @@
             	<p>Download Data from Constituent Class</p>
             </a> -->
 
+
+			<!-- this option is using zip files made sometime in 2016 (?) until we can work out the server script -->
             <a id="downloadButton" 
             	:href='zipHref'
             	:download = 'fileName'
@@ -129,7 +135,6 @@
 
 <script>
 import listOfParameters from '../assets/listOfParameters.json';
-import toggle from '../mixins/toggle.vue'
 import ToggleBar from './toggleBar.vue';
 import VueSlider from 'vue-slider-component/src/vue2-slider.vue'
 import Guidance from './Guidance.vue';
@@ -138,8 +143,8 @@ import BuildCSV from '../mixins/buildCSV.vue'
 
 export default {
 	name: 'MenuDiv',
-	mixins: [toggle, ParamData, BuildCSV],
-	props: ['zoom'],
+	mixins: [ ParamData, BuildCSV],
+	props: ['showControls'],
 	components: {
 		ToggleBar, Guidance, VueSlider
 	},
@@ -160,29 +165,21 @@ export default {
 			},
 			param: '',
 			layers: [{
-				//"string": "Grid Cells",
 				"prefix": "Domestic-supply",
 				 "string": 'Domestic-supply Aquifer Grid Cells',
 				"pane": 'shallowGridCells',
-				//"zoom": 8,
 				"value": 0
-			}, 
-		
-			{
-				//"string": "Grid Cells",
+			}, {
 				"prefix": "Public-supply",
 				"string": 'Public-supply Aquifer Grid Cells', 
 				"pane": 'deepGridCells',
-				//"zoom": 8,
 				"value": 1
 			}, {
-				//"string": "Study Units",
 				"prefix": "Domestic-supply",
 				"string": 'Domestic-supply Aquifer Study Units', 
 				"pane": 'shallowStudyUnits',
 				"value": 2
 			}, {
-				//"string": "Study Units",
 				"prefix": "Public-supply",
 				"string": 'Public-supply Aquifer Study Units',
 				"pane": 'deepStudyUnits',
@@ -194,7 +191,7 @@ export default {
 			}],
 			layerName: [],
 			thresholds: '',
-			sliderStyle: {"opacity": 0},
+			sliderStyle: {"opacity": 0, "background-color": "#896FC3"},
 			readme: '',
 			defineType: 'Groundwater study type refers to the three types of assessment conducted by the GAMA-PBP: Public-Supply Aquifer Assessments, Shallow Aquifer Assessment, and Trend Assessments. Users can display sites from all three assessment types by selecting "All Sites" or they can limit the display by Assessment Type',
 			defineClass: 'Mappable constituents are grouped by class. Constituent classes are groupings of constituents based on similar physical or chemical properties. Not all constituents analyzed by the GAMA-PBP are available to be mapped. The mapper is primarily focused on providing the ability to display constituents with health-based and non-health based benchmarks and other select constituents such as tracers of groundwater age',
@@ -207,13 +204,9 @@ export default {
 	},
 	watch: {
 		parameterGroup(){
-			console.log('parameterGroup: ')
 			console.log(this.parameterGroup);
-			console.log('param: ');
-			console.log(this.param)
 			// reset the param value if the groupname is being reset or if it's being changed while the param doesn't have a value
 			if(this.parameterGroup.groupName == "" || this.param.value != ""){
-				console.log('clear parameter values on map');
 				this.param = this.defaultParamGroup.parameters[0];
 				this.sliderStyle.opacity = 0;
 				this.trendIndex = ""
@@ -250,35 +243,13 @@ export default {
 		}
 	},
 	methods: {
-		downloadContent(){
-			var that = this;
-			// /* query data from arcServer for each parameter in the selected parameter group*/
-
-			// // define callback function
-			// var callback = function(){
-			// 	that.createAndOpenLink(encodeURI(that.csvBody), that.fileName)
-			// 	that.createAndOpenLink('downloads/thresholds.csv', 'thresholds.csv');
-			// 	that.createAndOpenLink('downloads/resultCodes.csv', 'readme.csv');
-			// };
-
-			// // invoke promise defined in buildCSV.vue
-			// this.importArrayOfValues(this.parameterGroup.parameters, callback);
-		},
-
-		createAndOpenLink(href, filename){
-			var link = window.document.createElement('a');
-			link.href = href;
-			link.download = filename;
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-		},
+		
 
 		reset() {
 			// reset values on map and menu when reset button clicked
 			this.layerName = [],
-			this.param = this.defaultParamGroup.parameters[0];
-			this.type = '';
+			this.param = this.defaultParamGroup.parameters[0]; 
+			this.type = ''; 
 			this.parameterGroup = this.defaultParamGroup;
 			this.$emit('resetClicked');
 		},
@@ -286,21 +257,20 @@ export default {
 		setSliderStyle(){
 			console.log('set slider opacity up to 1')
 			this.sliderStyle.opacity = 1;
+		},
+
+		toggle(){
+			this.$emit('toggle')
 		}
 	},
 	computed: {
 		domesticOrPublic(){
 			return this.type == 1 ? 'Domestic-supply' : this.type == 2 ? 'Public-supply' : 'Trends';
 		},
-		fileName(){
-			return this.parameterGroup.groupName + '.zip';
-			//return this.parameterGroup.groupName + '.csv'
-		},
+		
 
 		zipHref(){
-			console.log(this.parameterGroup.groupName);
 			if(this.parameterGroup.groupName !== ""){
-				
 				var stringName = this.parameterGroup.groupName.replace(/\s/g, '');
 				return 'downloads/groups/'+ stringName + '.zip'
 			}

@@ -6,7 +6,6 @@
 			:trend='trend'
 			:layerArr = 'layers'
 			:reset = 'reset'
-			@sendZoom = 'handleZoom'
 			@toggleLoading = 'toggleLoading'
 		></MapDiv>
 
@@ -14,7 +13,9 @@
 
 		<LegendDiv :layers = 'layers' 
 			:type='type' 
-			:param='param'>
+			:param='param'
+			:showControls='showControls'
+			@toggle='toggle'>
 		</LegendDiv>
 
 		<MenuDiv 
@@ -23,7 +24,8 @@
 			@changeType='handleType'
 			@changeTrend = 'handleTrend'
 			@resetClicked = 'toggleReset'
-			:zoom = 'zoom'
+			@toggle='toggle'
+			:showControls = 'showControls'
 		></MenuDiv>
 	</div>
 </template>
@@ -34,6 +36,9 @@ import LegendDiv from './components/legend';
 import MenuDiv from './components/menu';
 import Loader from './mixins/loader.vue';
 
+/* the width of the window is compared to a bound set in toggle.vue so that if the screen is below that size, this.showControls returns false*/
+import toggle from './mixins/toggle.vue'
+
 
 export default {
 	name: 'App',
@@ -43,14 +48,13 @@ export default {
 			param: '',
 			type: '',
 			trend: '',
-			zoom: '',
 			reset: false
 		}
 	},
 	components: {
 		MapDiv, MenuDiv, LegendDiv
 	},
-	mixins: [ Loader ],
+	mixins: [ Loader, toggle],
 	methods: {
 		handleLayer(arr){
 			this.layers = arr;
@@ -60,9 +64,6 @@ export default {
 		},
 		handleType(string){
 			return this.type = string;
-		},
-		handleZoom(level){
-			this.zoom = level;
 		},
 		handleTrend(num){
 			this.trend = num;

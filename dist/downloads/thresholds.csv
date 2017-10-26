@@ -1,0 +1,256 @@
+PCODE,SHORT_NAME,LONG_NAME,Units,Threshold_Val_txt,Threshold_Type
+95,Specific cond at 25C,"Specific conductance, water, unfiltered, microsiemens per centimeter at 25 degrees Celsius",µS/cm,900 (1600),SMCL-CA
+400,pH,"pH, water, unfiltered, field, standard units",standard units,6.5 - 8.5,SMCL-US
+613,"Nitrite, wf","Nitrite, water, filtered, milligrams per liter as nitrogen",mg/L,1,MCL-US
+631,"NO2+NO3, wf","Nitrite plus nitrate, water, filtered, milligrams per liter as nitrogen",mg/L,10,MCL-US
+940,"Chloride, wf","Chloride, water, filtered, milligrams per liter",mg/L,250 (500),SMCL-CA
+945,"Sulfate, wf","Sulfate, water, filtered, milligrams per liter",mg/L,250 (500),SMCL-CA
+950,"Fluoride, wf","Fluoride, water, filtered, milligrams per liter",mg/L,2,MCL-CA
+1000,"Arsenic, wf","Arsenic, water, filtered, micrograms per liter",µg/L,10,MCL-US
+1005,"Barium, wf","Barium, water, filtered, micrograms per liter",µg/L,1000,MCL-CA
+1010,"Beryllium, w,f","Beryllium, water, filtered, micrograms per liter",µg/L,4,MCL-US
+1020,"Boron, wf","Boron, water, filtered, micrograms per liter",µg/L,6000,HBSL
+1025,"Cadmium, wf","Cadmium, water, filtered, micrograms per liter",µg/L,5,MCL-US
+1030,"Chromium, wf","Chromium, water, filtered, micrograms per liter",µg/L,50,MCL-CA
+1032,"Chromium(VI), wf","Chromium(VI), water, filtered, micrograms per liter",µg/L,10,MCL-CA
+1040,"Copper, wf","Copper, water, filtered, micrograms per liter",µg/L,1300,AL-US
+1046,"Iron, wf","Iron, water, filtered, micrograms per liter",µg/L,300,SMCL-CA
+1049,"Lead, wf","Lead, water, filtered, micrograms per liter",µg/L,15,AL-US
+1056,"Manganese, wf","Manganese, water, filtered, micrograms per liter",µg/L,300,HBSL
+1057,"Thallium, wf","Thallium, water, filtered, micrograms per liter",µg/L,2,MCL-US
+1060,"Molybdenum, wf","Molybdenum, water, filtered, micrograms per liter",µg/L,40,HBSL
+1065,"Nickel, wf","Nickel, water, filtered, micrograms per liter",µg/L,100,MCL-CA
+1075,"Silver, wf","Silver, water, filtered, micrograms per liter",µg/L,100,HBSL
+1080,"Strontium, wf","Strontium, water, filtered, micrograms per liter",µg/L,4000,HBSL
+1085,"Vanadium, wf","Vanadium, water, filtered, micrograms per liter",µg/L,50,NL-CA
+1090,"Zinc, wf","Zinc, water, filtered, micrograms per liter",µg/L,2000,HBSL
+1095,"Antimony, wf","Antimony, water, filtered, micrograms per liter",µg/L,6,MCL-US
+1106,"Aluminum, wf","Aluminum, water, filtered, micrograms per liter",µg/L,1000,MCL-CA
+1145,"Selenium, wf","Selenium, water, filtered, micrograms per liter",µg/L,50,MCL-US
+4022,"Terbuthylazine, wf","Terbuthylazine, water, filtered, recoverable, micrograms per liter",µg/L,2,HBSL
+4025,"Hexazinone, wf","Hexazinone, water, filtered, recoverable, micrograms per liter",µg/L,400,HBSL
+4029,"Bromacil, wf","Bromacil, water, filtered, recoverable, micrograms per liter",µg/L,70,HAL-US
+4031,"Cycloate, wf","Cycloate, water, filtered, recoverable, micrograms per liter",µg/L,40,HBSL
+4032,"Terbacil, wf","Terbacil, water, filtered, recoverable, micrograms per liter",µg/L,100,HBSL
+4033,"Diphenamid, wf","Diphenamid, water, filtered, recoverable, micrograms per liter",µg/L,200,HBSL
+4035,"Simazine, wf","Simazine, water, filtered, recoverable, micrograms per liter",µg/L,4,MCL-US
+4036,"Prometryn, wf","Prometryn, water, filtered, recoverable, micrograms per liter",µg/L,300,HBSL
+4037,"Prometon, wf","Prometon, water, filtered, recoverable, micrograms per liter",µg/L,400,HBSL
+4039,"CAAT, wf","Chlorodiamino-s-triazine, water, filtered, recoverable, micrograms per liter",µg/L,100,HBSL
+4041,"Cyanazine, wf","Cyanazine, water, filtered, recoverable, micrograms per liter",µg/L,1,HBSL
+4095,"Fonofos, wf","Fonofos, water, filtered, recoverable, micrograms per liter",µg/L,10,HBSL
+7000,"Tritium, wu","Tritium, water, unfiltered, picocuries per liter",pCi/L,20000,MCL-CA
+9511,"Ra-226, wf,RadonMeth","Radium-226, water, filtered, radon method, picocuries per liter",pCi/L,5,MCL-US
+22703,"Uranium, wf","Uranium (natural), water, filtered, micrograms per liter",µg/L,30,MCL-US
+24Dto,"2,4-D total","2,4-D (sum of 2,4-D and 2,4-D methyl ester), water, filtered, recoverable, micrograms per liter",µg/L,70,
+31719,"Enterococci, fluorogenic","Enterococci, fluorogenic substrate presence or absence method, water, presence or absence in 100 milliliters",PrsAbs0.1L,,
+32101,"CHBrCl2, wu","Bromodichloromethane, water, unfiltered, recoverable, micrograms per liter",µg/L,80,MCL-US
+32102,"Tetrachloromethane,u","Tetrachloromethane, water, unfiltered, recoverable, micrograms per liter",µg/L,0.5,MCL-CA
+32103,"1,2Dichloroethane,wu","1,2-Dichloroethane, water, unfiltered, recoverable, micrograms per liter",µg/L,0.5,MCL-CA
+32104,"Tribromomethane, wu","Tribromomethane, water, unfiltered, recoverable, micrograms per liter",µg/L,80,MCL-US
+32105,Dibromochloromethane,"Dibromochloromethane, water, unfiltered, recoverable, micrograms per liter",µg/L,80,MCL-US
+32106,"Trichloromethane, wu","Trichloromethane, water, unfiltered, recoverable, micrograms per liter",µg/L,80,MCL-US
+34010,"Toluene, wu","Toluene, water, unfiltered, recoverable, micrograms per liter",µg/L,150,MCL-CA
+34030,"Benzene, wu","Benzene, water, unfiltered, recoverable, micrograms per liter",µg/L,1,MCL-CA
+34215,"Acrylonitrile, wu","Acrylonitrile, water, unfiltered, recoverable, micrograms per liter",µg/L,0.6,HBSL
+34301,"Chlorobenzene, wu","Chlorobenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,70,MCL-CA
+34362,"alpha-Endosulfan, wf","alpha-Endosulfan, water, filtered, recoverable, micrograms per liter",µg/L,40,HBSL
+34371,"Ethylbenzene, wu","Ethylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,300,MCL-CA
+34396,"Hexachloroethane, wu","Hexachloroethane, water, unfiltered, recoverable, micrograms per liter",µg/L,0.7,HBSL
+34408,"Isophorone, wu","Isophorone, water, unfiltered, recoverable, micrograms per liter",µg/L,100,HAL-US
+34413,"Bromomethane, wu","Bromomethane, water, unfiltered, recoverable, micrograms per liter",µg/L,100,HBSL
+34423,"Dichloromethane, wu","Dichloromethane, water, unfiltered, recoverable, micrograms per liter",µg/L,5,MCL-US
+34475,"Tetrachloroethene,wu","Tetrachloroethene, water, unfiltered, recoverable, micrograms per liter",µg/L,5,MCL-US
+34488,"CFC-11, wu","Trichlorofluoromethane, water, unfiltered, recoverable, micrograms per liter",µg/L,150,MCL-CA
+34496,"1,1-DiClEthane, wu","1,1-Dichloroethane, water, unfiltered, recoverable, micrograms per liter",µg/L,5,MCL-CA
+34501,"11Dichloroethene, wu","1,1-Dichloroethene, water, unfiltered, recoverable, micrograms per liter",µg/L,6,MCL-CA
+34506,"1,1,1-TriClEthane,wu","1,1,1-Trichloroethane, water, unfiltered, recoverable, micrograms per liter",µg/L,200,MCL-US
+34511,"1,1,2-TriClEthane,wu","1,1,2-Trichloroethane, water, unfiltered, recoverable, micrograms per liter",µg/L,5,MCL-US
+34516,"1122TetraClEthane,wu","1,1,2,2-Tetrachloroethane, water, unfiltered, recoverable, micrograms per liter",µg/L,1,MCL-CA
+34536,"12Dichlorobenzene,wu","1,2-Dichlorobenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,600,MCL-US
+34541,"1,2-DiClPropane, wu","1,2-Dichloropropane, water, unfiltered, recoverable, micrograms per liter",µg/L,5,MCL-US
+34546,"tr-1,2-DiClEthene,wu","trans-1,2-Dichloroethene, water, unfiltered, recoverable, micrograms per liter",µg/L,10,MCL-CA
+34551,124-Trichlorobenzene,"1,2,4-Trichlorobenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,5,MCL-CA
+34566,"13Dichlorobenzene,wu","1,3-Dichlorobenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,600,HBSL
+34571,"14Dichlorobenzene,wu","1,4-Dichlorobenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,5,MCL-CA
+34668,"CFC-12, wu","Dichlorodifluoromethane, water, unfiltered, recoverable, micrograms per liter",µg/L,1000,HBSL
+34696,"Naphthalene, wu","Naphthalene, water, unfiltered, recoverable, micrograms per liter",µg/L,100,HBSL
+34699,"tr-1,3DiClPropene,wu","trans-1,3-Dichloropropene, water, unfiltered, recoverable, micrograms per liter",µg/L,0.5,MCL-CA
+34704,"cis1,3DiClPropene,wu","cis-1,3-Dichloropropene, water, unfiltered, recoverable, micrograms per liter",µg/L,0.5,MCL-CA
+38442,"Dicamba, w,gf<.7u","Dicamba, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,3000,HBSL
+38454,"Dicrotophos, wf","Dicrotophos, water, filtered, recoverable, micrograms per liter",µg/L,0.05,HBSL
+38478,"Linuron, w,gf<.7u","Linuron, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,5,HBSL
+38482,"MCPA, w,gf<.7u","MCPA, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,30,HBSL
+38487,"MCPB, w,gf<.7u","MCPB, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,30,HBSL
+38501,"Mthiocrb, w,gf<.7u","Methiocarb, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,40,HBSL
+38538,"Propoxur, w,gf<.7u","Propoxur, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,3,HAL-US
+38548,"Siduron, wf","Siduron, water, filtered, recoverable, micrograms per liter",µg/L,1000,HBSL
+38711,"Bentazon, w,gf<.7u","Bentazon, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,18,MCL-CA
+38746,"2,4-DB, w,gf<.7u","2,4-DB, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,200,HBSL
+38811,"Fluometuron,w,gf<.7u","Fluometuron, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,40,HBSL
+38866,"Oxamyl, w,gf<.7u","Oxamyl, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,50,MCL-CA
+38933,"Chlorpyrifos, wf","Chlorpyrifos, water, filtered, recoverable, micrograms per liter",µg/L,2,HBSL
+39175,"Vinyl chloride, wu","Vinyl chloride, water, unfiltered, recoverable, micrograms per liter",µg/L,0.5,MCL-CA
+39180,"Trichloroethene, wu","Trichloroethene, water, unfiltered, recoverable, micrograms per liter",µg/L,5,MCL-US
+39381,"Dieldrin, wf","Dieldrin, water, filtered, recoverable, micrograms per liter",µg/L,0.02,HBSL
+39415,"Metolachlor, wf","Metolachlor, water, filtered, recoverable, micrograms per liter",µg/L,700,HBSL
+39532,"Malathion, wf","Malathion, water, filtered, recoverable, micrograms per liter",µg/L,500,HBSL
+39572,"Diazinon, wf","Diazinon, water, filtered, recoverable, micrograms per liter",µg/L,1,HBSL
+39632,"Atrazine, wf","Atrazine, water, filtered, recoverable, micrograms per liter",µg/L,1,MCL-CA
+39702,Hexachlorobutadiene,"Hexachlorobutadiene, water, unfiltered, recoverable, micrograms per liter",µg/L,90,HBSL
+39732,"2,4-D, wf","2,4-D, water, filtered, recoverable, micrograms per liter",µg/L,70,MCL-US
+46342,"Alachlor, wf","Alachlor, water, filtered, recoverable, micrograms per liter",µg/L,2,MCL-US
+49235,"Triclopyr, w,gf<.7u","Triclopyr, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,400,HBSL
+49236,"Propham, w,gf<.7u","Propham, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,100,HBSL
+49260,"Acetochlor, wf","Acetochlor, water, filtered, recoverable, micrograms per liter",µg/L,10,HBSL
+49291,"Picloram, w,gf<.7u","Picloram, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,500,MCL-US
+49292,"Oryzalin, w,gf<.7u","Oryzalin, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,400,HBSL
+49293,"Norflurazon,w,gf<.7u","Norflurazon, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,10,HBSL
+49296,"Methomyl, w,gf<.7u","Methomyl, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,200,HBSL
+49300,"Diuron, w,gf<.7u","Diuron, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,20,HBSL
+49301,"Dinoseb, w,gf<.7u","Dinoseb, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,7,MCL-US
+49302,"Dichlorprop,w,gf<.7u","Dichlorprop, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,300,HBSL
+49305,"Clopyralid, w,gf<.7u","Clopyralid, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,1000,HBSL
+49306,"Chlorothalonil,gf<.7","Chlorothalonil, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,15,RSD5
+49309,"Carbofuran, w,gf<.7u","Carbofuran, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,18,MCL-CA
+49310,"Carbaryl, w,gf<.7u","Carbaryl, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,400,HBSL
+49311,"Bromoxynil, w,gf<.7u","Bromoxynil, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,10,HBSL
+49312,"Aldicarb, w,gf<.7u","Aldicarb, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,7,HBSL
+49313,"AldicarbSulfon,gf<.7","Aldicarb sulfone, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,7,HBSL
+49314,"AldicarbSlfoxid,gf.7","Aldicarb sulfoxide, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,7,HBSL
+49315,"Acifluorfen,w,gf<.7u","Acifluorfen, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,90,HBSL
+49933,"C-14, wf","Carbon-14, water, filtered, percent modern",percent modern,,
+50004,t-Butyl ethyl ether,"tert-Butyl ethyl ether, water, unfiltered, recoverable, micrograms per liter",µg/L,3,DLR
+50005,Methyl pentyl ether,"Methyl tert-pentyl ether, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+50299,"Bendiocarb, wf","Bendiocarb, water, filtered, recoverable, micrograms per liter",µg/L,9,HBSL
+50300,"Benomyl, wf","Benomyl, water, filtered, recoverable, micrograms per liter",µg/L,40,HBSL
+50305,"Caffeine, wf","Caffeine, water, filtered, recoverable, micrograms per liter",µg/L,,
+50306,"Chlorimuron, wf","Chlorimuron, water, filtered, recoverable, micrograms per liter",µg/L,600,HBSL
+50337,"Sulfometuron, wf","Sulfometuron, water, filtered, recoverable, micrograms per liter",µg/L,2000,HBSL
+50355,"OIET, wf","2-Hydroxy-4-isopropylamino-6-ethylamino-s-triazine, water, filtered, recoverable, micrograms per liter",µg/L,70,HBSL
+50356,"Imazaquin, wf","Imazaquin, water, filtered, recoverable, micrograms per liter",µg/L,2000,HBSL
+50364,"Nicosulfuron, wf","Nicosulfuron, water, filtered, recoverable, micrograms per liter",µg/L,9000,HBSL
+50407,"Imazethapyr, wf","Imazethapyr, water, filtered, recoverable, micrograms per liter",µg/L,20000,HBSL
+50471,"Propiconazole, wf","Propiconazole, water, filtered, recoverable, micrograms per liter",µg/L,70,HBSL
+61159,"Tribenuron, wf","Tribenuron, water, filtered, recoverable, micrograms per liter",µg/L,6,HBSL
+61209,"Perchlorate, wu","Perchlorate, water, unfiltered, micrograms per liter",µg/L,6,MCL-CA
+61585,"Cyfluthrin, wf","Cyfluthrin, water, filtered, recoverable, micrograms per liter",µg/L,200,HBSL
+61586,"Cypermethrin, wf","Cypermethrin, water, filtered, recoverable, micrograms per liter",µg/L,40,HBSL
+61591,"Fenamiphos, wf","Fenamiphos, water, filtered, recoverable, micrograms per liter",µg/L,0.7,HBSL
+61593,"Iprodione, wf","Iprodione, water, filtered, recoverable, micrograms per liter",µg/L,80,HBSL
+61594,"Isofenphos, wf","Isofenphos, water, filtered, recoverable, micrograms per liter",µg/L,6,HBSL
+61595,lambda-Cyhalothrin,"lambda-Cyhalothrin, water, filtered, recoverable, micrograms per liter",µg/L,7,HBSL
+61596,"Metalaxyl, wf","Metalaxyl, water, filtered, recoverable, micrograms per liter",µg/L,500,HBSL
+61598,"Methidathion, wf","Methidathion, water, filtered, recoverable, micrograms per liter",µg/L,1,HBSL
+61599,"Myclobutanil, wf","Myclobutanil, water, filtered, recoverable, micrograms per liter",µg/L,200,HBSL
+61600,"Oxyfluorfen, wf","Oxyfluorfen, water, filtered, recoverable, micrograms per liter",µg/L,20,HBSL
+61601,"Phosmet, wf","Phosmet, water, filtered, recoverable, micrograms per liter",µg/L,4,HBSL
+61606,"Tefluthrin, wf","Tefluthrin, water, filtered, recoverable, micrograms per liter",µg/L,40,HBSL
+61610,"Tribuphos, wf","Tribuphos, water, filtered, recoverable, micrograms per liter",µg/L,7,HBSL
+61636,"Chlorpyrifos oxon,wf","Chlorpyrifos oxygen analog, water, filtered, recoverable, micrograms per liter",µg/L,0.8,HBSL
+61693,"Bensulfuron-methyl,f","Bensulfuron-methyl, water, filtered, recoverable, micrograms per liter",µg/L,1000,HBSL
+61694,"Flumetsulam, wf","Flumetsulam, water, filtered, recoverable, micrograms per liter",µg/L,7000,HBSL
+61695,"Imidacloprid, wf","Imidacloprid, water, filtered, recoverable, micrograms per liter",µg/L,400,HBSL
+61697,"Metsulfuron, wf","Metsulfuron, water, filtered, recoverable, micrograms per liter",µg/L,2000,HBSL
+62000,"Acetaminophen, wf","Acetaminophen, water, filtered, recoverable, micrograms per liter",µg/L,,
+62003,"Codeine, wf","Codeine, water, filtered, recoverable, micrograms per liter",µg/L,,
+62004,"Dehydronifedipine,wf","Dehydronifedipine, water, filtered, recoverable, micrograms per liter",µg/L,,
+62005,"Cotinine, wf","Cotinine, water, filtered, recoverable, micrograms per liter",µg/L,,
+62008,"Diltiazem, wf","Diltiazem, water, filtered, recoverable, micrograms per liter",µg/L,,
+62011,"Fluoxetine, wf","Fluoxetine, water, filtered, recoverable, micrograms per liter",µg/L,,
+62019,"Ranitidine, wf","Ranitidine, water, filtered, recoverable, micrograms per liter",µg/L,,
+62020,"Salbutamol, wf","Salbutamol, water, filtered, recoverable, micrograms per liter",µg/L,,
+62021,"Sulfamethoxazole,wf","Sulfamethoxazole, water, filtered, recoverable, micrograms per liter",µg/L,,
+62023,"Trimethoprim, wf","Trimethoprim, water, filtered, recoverable, micrograms per liter",µg/L,,
+62024,"Warfarin, wf","Warfarin, water, filtered, recoverable, micrograms per liter",µg/L,,
+62030,"p-Xanthine, wf","p-Xanthine, water, filtered, recoverable, micrograms per liter",µg/L,,
+62166,"Fipronil, wf","Fipronil, water, filtered, recoverable, micrograms per liter",µg/L,0.1,HBSL
+62636,"Alpha,72hr, wf,Th230","Alpha radioactivity, 72-hour count, water, filtered, Th-230 curve, picocuries per liter",pCi/L,15,MCL-US
+62642,"Beta, 72hr/Cs137, wf","Beta radioactivity, 72-hour count, water, filtered, Cs-137 curve, picocuries per liter",pCi/L,50,MCL-CA
+62793,"Carbamazepine, wf","Carbamazepine, water, filtered, recoverable, micrograms per liter",µg/L,,
+62796,"Diphenhydramine, wf","Diphenhydramine, water, filtered, recoverable, micrograms per liter",µg/L,,
+62801,"Thiabendazole, wf","Thiabendazole, water, filtered, recoverable, micrograms per liter",µg/L,,
+63790,"Perchlorate, wf","Perchlorate, water, filtered, micrograms per liter",µg/L,6,MCL-CA
+70300,"Residue, ROE@180C,wf","Residue on evaporation, dried at 180 degrees Celsius, water, filtered, milligrams per lite",mg/L,1000,SMCL-CA
+71890,"Mercury, wf","Mercury, water, filtered, micrograms per liter",mg/L,2,MCL-US
+73547,tr-14Dichloro2butene,"trans-1,4-Dichloro-2-butene, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+73570,"Ethyl methacrylate,u","Ethyl methacrylate, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77035,"t-Butyl alcohol, wu","tert-Butyl alcohol, water, unfiltered, recoverable, micrograms per liter",µg/L,12,NL-CA
+77041,"Carbon disulfide, wu","Carbon disulfide, water, unfiltered, micrograms per liter",µg/L,700,HBSL
+77093,cis12Dichloroethene,"cis-1,2-Dichloroethene, water, unfiltered, recoverable, micrograms per liter",µg/L,6,MCL-CA
+77103,"Butylmethylketone,wu","n-Butyl methyl ketone, water, unfiltered, recoverable, micrograms per liter",µg/L,40,HBSL
+77128,"Styrene, wu","Styrene, water, unfiltered, recoverable, micrograms per liter",µg/L,100,MCL-US
+77135,"o-Xylene, wu","o-Xylene, water, unfiltered, recoverable, micrograms per liter",µg/L,1750,MCL-CA
+77168,"11Dichloropropene,wu","1,1-Dichloropropene, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77170,"22Dichloropropane,wu","2,2-Dichloropropane, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77173,"13Dichloropropane,wu","1,3-Dichloropropane, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77220,"2-Ethyltoluene, wu","2-Ethyltoluene, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77221,123-Trimethylbenzene,"1,2,3-Trimethylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77222,124-Trimethylbenzene,"1,2,4-Trimethylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,330,NL-CA
+77223,"Isopropylbenzene, wu","Isopropylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,700,HBSL
+77224,"n-Propylbenzene, wu","n-Propylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,260,NL-CA
+77226,135-Trimethylbenzene,"1,3,5-Trimethylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,330,NL-CA
+77275,"2-Chlorotoluene, wu","2-Chlorotoluene, water, unfiltered, recoverable, micrograms per liter",µg/L,100,HBSL
+77277,"4-Chlorotoluene, wu","4-Chlorotoluene, water, unfiltered, recoverable, micrograms per liter",µg/L,100,HBSL
+77297,"Bromochloromethane,u","Bromochloromethane, water, unfiltered, recoverable, micrograms per liter",µg/L,90,HBSL
+77342,"n-Butylbenzene, wu","n-Butylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,260,NL-CA
+77350,"sec-Butylbenzene, wu","sec-Butylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,260,NL-CA
+77353,"t-Butylbenzene, wu","tert-Butylbenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,260,NL-CA
+77356,"4Isopropyltoluene,wu","4-Isopropyltoluene, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77424,"Iodomethane, wu","Iodomethane, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77443,123-Trichloropropane,"1,2,3-Trichloropropane, water, unfiltered, recoverable, micrograms per liter",µg/L,0.6,MCL-HI
+77562,1112Tetrachloroethan,"1,1,1,2-Tetrachloroethane, water, unfiltered, recoverable, micrograms per liter",µg/L,70,HBSL
+77613,123-Trichlorobenzene,"1,2,3-Trichlorobenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+77651,"1,2-Dibromoethane,wu","1,2-Dibromoethane, water, unfiltered, recoverable, micrograms per liter",µg/L,0.05,MCL-US
+77652,"CFC-113, wu","1,1,2-Trichloro-1,2,2-trifluoroethane, water, unfiltered, recoverable, micrograms per liter",µg/L,1200,MCL-CA
+78032,"MTBE, wu","Methyl tert-butyl ether, water, unfiltered, recoverable, micrograms per liter",µg/L,13,MCL-CA
+78109,"3-Chloropropene, wu","3-Chloropropene, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+78133,Isobutylmethylketone,"Isobutyl methyl ketone, water, unfiltered, recoverable, micrograms per liter",µg/L,120,NL-CA
+79846,"cis-Propiconazole,wf","cis-Propiconazole, water, filtered, recoverable, micrograms per liter",µg/L,70,HBSL
+79847,"tr-Propiconazole, wf","trans-Propiconazole, water, filtered, recoverable, micrograms per liter",µg/L,70,HBSL
+81366,"Ra-228, wf","Radium-228, water, filtered, picocuries per liter",pCi/L,5,MCL-US
+81552,"Acetone, wu","Acetone, water, unfiltered, recoverable, micrograms per liter",µg/L,6000,HBSL
+81555,"Bromobenzene, wu","Bromobenzene, water, unfiltered, recoverable, micrograms per liter",µg/L,60,HBSL
+81576,"Diethyl ether, wu","Diethyl ether, water, unfiltered, recoverable, micrograms per liter",µg/L,1000,HBSL
+81577,"Diisopropyl ether,wu","Diisopropyl ether, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+81582,"1,4-Dioxane, wu","1,4-Dioxane, water, unfiltered, recoverable, micrograms per liter",,1,NL-CA
+81593,"Methacrylonitrile,wu","Methyl acrylonitrile, water, unfiltered, recoverable, micrograms per liter",µg/L,0.7,HBSL
+81595,"Ethylmethylketone,wu","Ethyl methyl ketone, water, unfiltered, recoverable, micrograms per liter",µg/L,4000,HBSL
+81597,Methyl methacrylate,"Methyl methacrylate, water, unfiltered, recoverable, micrograms per liter",µg/L,10000,HBSL
+81607,"Tetrahydrofuran, wu","Tetrahydrofuran, water, unfiltered, recoverable, micrograms per liter",µg/L,,
+82346,"Ethion, wf","Ethion, water, filtered, recoverable, micrograms per liter",µg/L,4,HBSL
+82625,Dibromochloropropane,"1,2-Dibromo-3-chloropropane, water, unfiltered, recoverable, micrograms per liter",µg/L,0.2,MCL-US
+82630,"Metribuzin, wf","Metribuzin, water, filtered, recoverable, micrograms per liter",µg/L,90,HBSL
+82661,"Trifluralin,w,gf<.7u","Trifluralin, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,20,HBSL
+82662,"Dimethoate, w,gf<.7u","Dimethoate, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,2,HBSL
+82664,"Phorate, w,gf<.7u","Phorate, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,4,HBSL
+82667,"Methyl parathion, gf","Methyl parathion, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,1,HBSL
+82668,"EPTC, w,gf<.7u","EPTC, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,200,HBSL
+82670,"Tebuthiuron,w,gf<.7u","Tebuthiuron, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,1000,HBSL
+82671,"Molinate, w,gf<.7u","Molinate, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,20,MCL-CA
+82672,"Ethoprop, w,gf<.7u","Ethoprop, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,100,HBSL
+82673,"Benfluralin,w,gf<.7u","Benfluralin, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,4,HBSL
+82674,"Carbofuran, w,gf<.7u","Carbofuran, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,18,MCL-CA
+82675,"Terbufos, w,gf<.7u","Terbufos, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,0.4,HBSL
+82676,"Propyzamide,w,gf<.7u","Propyzamide, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,10,HBSL
+82677,"Disulfoton, w,gf<.7u","Disulfoton, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,0.9,HBSL
+82679,"Propanil, w,gf<.7u","Propanil, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,6,HBSL
+82680,"Carbaryl, w,gf<.7u","Carbaryl, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,400,HBSL
+82681,"Thiobencarb,w,gf<.7u","Thiobencarb, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,70,MCL-CA
+82682,"DCPA, w,gf<.7u","DCPA, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,70,HBSL
+82683,"Pendimethalin, gf.7u","Pendimethalin, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,20,HBSL
+82685,"Propargite, w,gf<.7u","Propargite, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,100,HBSL
+82686,"Azinphos-methyl,gf.7","Azinphos-methyl, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,10,HBSL
+82687,"cis-Permethrin,gf.7u","cis-Permethrin, water, filtered (0.7 micron glass fiber filter), recoverable, micrograms per liter",µg/L,400,HBSL
+84138,"Total coliforms, w","Total coliform, water, presence or absence",,,
+85795,"m- + p-Xylene, wu","m-Xylene plus p-xylene, water, unfiltered, recoverable, micrograms per liter",µg/L,1750,MCL-CA
+90797,"Carbamazepine-d10,sr","Carbamazepine-d10, surrogate, pharmaceutical method, water, filtered, percent recovery",%,,
+90900,"Tot. coliform, MI,w","Total coliform, MI MF method, water, colonies per 100 milliliters",percent,5,MCL-US
+90901,"E. coli, MI,w","Escherichia coli, MI MF method, water, colonies per 100 milliliters",unitless,,
+91132,Spike Volume,"Spike Volume, in ul, Lab Code 80004",,,
+99332,"Cphg,sm,Ec,CN13-h,1L","Coliphage, somatic, E. coli CN13-host, 2-step enrichment, water, presence or absence per l",unitless,,
+99335,"Cphg,F-sp,Ec,FAMP,1L","Coliphage, F-specific, E. coli FAMP-host, 2-step enrichment, water, presence or absence pe",unitless,,
+99571,Ethyl nicotinate-d4,"Ethyl nicotinate-d4, surrogate, water, filtered, percent recovery",,,
+99572,"SampVol, pharm meth","Sample volume, pharmaceutical method, water, filtered, milliliters",,,
+99595,"Tot coli,ColilrtPA,w","Total coliform, Colilert PA method, water, presence or absence per liter",,,
+99596,"E coli,Colilert PA,w","Escherichia coli, Colilert PA method, water, presence or absence per liter",,,

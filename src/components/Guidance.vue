@@ -50,5 +50,6 @@ export default{
 	left: 0;
 	padding: 5px;
 	border: 1px solid grey;
+	z-index: 1000;
 }
 </style>

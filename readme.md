@@ -14,3 +14,10 @@ The following mixins are not being used as rendering is now coming from arcServe
 - wellIcons.js
 
 
+
+User Stories:
+- User selects "Public trends sites", "VOCs", and "Trihalomethanes". Because this.param is the last variable to be changed, this.importParam() is called. The paramLayer will be filtered by StudyType === public-supply (line 63 of getParamData.vue)
+
+- User selects "VOCs", "Trihalomethanes", and "Public trends sites". Because this.type is the last variable to be changed, the paramLayer will be filtered by purpose === status and study-type == public-supply (line 66 of mapDiv.vue)
+
+- User selects "Public trends sites". this.wellsByType() is called. this.importTypeJson(0) gets all trends sites and is filtered by studyType = Public=supply

@@ -18,35 +18,13 @@
 	            <select id="base"  v-model='type' :class='{highlighted: type=="", shaded: type != ""}'>
 	                <option default value="">Select One</option>
 	                <option value='3'>All Sites</option>
-	                <option value='0'>All Trend Sites</option>
-	                <option value='1'>GAMA Domestic-supply Aquifer Sites</option>
-	                <option value='2'>GAMA Public-supply Aquifer Sites</option>
+	                <option value='0'>Public-supply Trends Sites</option>
+	                <option value='4'>Domestic-supply Trends Sites</option>
+	                <option value='2'>Public-supply Aquifer Sites</option>
+	                <option value='1'>Domestic-supply Aquifer Sites</option>
 	            </select>
 	        </div>
 
-			<!-- add slider bar to change trend series. initially the param layer is just filtered for type == TRENDS. once the slider bar is clicked then the map queries a different layer from the trends layers. therefore the slider style is transparent until the slider is set -->
-			<div v-if='type === "0" && param.value != ""' style='z-index: 99;' @click='setSliderStyle'>
-				<p>See trends by interval</p>
-
-				<!-- allow users to see t1, t2, and t3 trends. t0 layer is actually all STATUS wells (both domestic and public) -->
-				<VueSlider
-				ref='slider'
-				v-model='trendIndex'
-				:data='[1, 2, 3]'
-				:piecewiseLabel='true'
-				height= '15'
-				width='100%'
-				:piecewise='true'
-				:lazy='true'
-				tooltip = 'hover'
-				tooltip-dir='top'
-				:bgStyle = '{"border": "1px solid black", "height": "16px", "background-color": "#ebedee"}'
-				:piecewise-style='{"background-color": "none"}'
-				:slider-style='sliderStyle'
-				:process-style='{"background-color": "#896FC3"}'
-				>	
-				</VueSlider>
-			</div>
 
 			<div>
 		        <!-- Constituent Class Selector -->
@@ -73,6 +51,35 @@
 	            	<option v-for='parameter in sortedParameters' :value='parameter'>{{parameter.name}}</option>
 	            </select>
 	        </div>
+
+	        <!-- add slider bar to change trend series. if this.type == 0 or 4 the trends t0 layer is returned instead of the param layer and is queried for Public-supply or Domestic-supply -->
+	        <div v-if='type === "0" && param.value != ""' style='z-index: 99;' >
+
+				<label class='labelDiv'>
+					Select a study unit trend visit
+					<Guidance :text='defineTrend'></Guidance>
+				</label>
+	        	<!-- the data array should be the same length as the parameter's trends array, but instead of the layer value, each index should be an integer between 0 and N -->
+	        	<VueSlider
+	        	ref='slider'
+	        	v-model='trendIndex'
+	        	:data='trendArr'
+	        	:piecewiseLabel='true'
+	        	height= '15'
+	        	width='100%'
+	        	:piecewise='true'
+	        	:lazy='true'
+	        	tooltip = 'hover'
+	        	tooltip-dir='top'
+	        	:bgStyle = '{"border": "1px solid black", "height": "16px", "background-color": "#ebedee"}'
+	        	:piecewise-style='{"background-color": "none"}'
+	        	:slider-style='{ "background-color": "#896FC3"}'
+	        	:process-style='{"background-color": "#896FC3"}'
+	        	>	
+	        	</VueSlider>
+	        </div>
+
+
 
 			<div id='layerSelector'>
 		        <!-- Shapefile Selector -->
@@ -163,7 +170,11 @@ export default {
 				}],
 				"groupName": ""
 			},
-			param: '',
+			param: {
+				"name": "",
+				"value": "",
+				"trends": []
+			},
 			layers: [{
 				"prefix": "Domestic-supply",
 				 "string": 'Domestic-supply Aquifer Grid Cells',
@@ -191,11 +202,11 @@ export default {
 			}],
 			layerName: [],
 			thresholds: '',
-			sliderStyle: {"opacity": 0, "background-color": "#896FC3"},
 			readme: '',
 			defineType: 'Groundwater study type refers to the three types of assessment conducted by the GAMA-PBP: Public-Supply Aquifer Assessments, Shallow Aquifer Assessment, and Trend Assessments. Users can display sites from all three assessment types by selecting "All Sites" or they can limit the display by Assessment Type',
 			defineClass: 'Mappable constituents are grouped by class. Constituent classes are groupings of constituents based on similar physical or chemical properties. Not all constituents analyzed by the GAMA-PBP are available to be mapped. The mapper is primarily focused on providing the ability to display constituents with health-based and non-health based benchmarks and other select constituents such as tracers of groundwater age',
-			defineConst: 'Some classes allow for individual constituents to be displayed (Trace Elements and Nutrients for example) while others (VOCs and Pesticides) use primary use categories to simplify the data for display'
+			defineConst: 'Some classes allow for individual constituents to be displayed (Trace Elements and Nutrients for example) while others (VOCs and Pesticides) use primary use categories to simplify the data for display',
+			defineTrend: ''
 		}
 	},
 	mounted(){
@@ -208,7 +219,6 @@ export default {
 			// reset the param value if the groupname is being reset or if it's being changed while the param doesn't have a value
 			if(this.parameterGroup.groupName == "" || this.param.value != ""){
 				this.param = this.defaultParamGroup.parameters[0];
-				this.sliderStyle.opacity = 0;
 				this.trendIndex = ""
 			} 
 		},
@@ -230,8 +240,6 @@ export default {
 				this.parameterGroup = this.defaultParamGroup;
 			}
 
-			/* reset slider to be transparent */
-			this.sliderStyle.opacity = 0;
 			this.trendIndex = ""
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
@@ -244,7 +252,6 @@ export default {
 	},
 	methods: {
 		
-
 		reset() {
 			// reset values on map and menu when reset button clicked
 			this.layerName = [],
@@ -254,10 +261,6 @@ export default {
 			this.$emit('resetClicked');
 		},
 
-		setSliderStyle(){
-			console.log('set slider opacity up to 1')
-			this.sliderStyle.opacity = 1;
-		},
 
 		toggle(){
 			this.$emit('toggle')
@@ -308,8 +311,19 @@ export default {
 
 		trend(){
 			if(this.param.trends && this.trendIndex !== ""){
+				//this.trendIndex is the index currently selected on the slider bar
 				return this.param.trends[this.trendIndex]
 			}
+		},
+
+		trendArr(){
+			var arrToReturn = [];
+			if(this.param.hasOwnProperty("trends")){
+				for(var i = 0; i < this.param.trends.length; i++){
+					arrToReturn.push(i);
+				}
+			}
+			return arrToReturn;
 		}
 	}
 }

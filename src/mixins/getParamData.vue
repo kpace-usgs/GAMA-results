@@ -50,7 +50,7 @@ export default {
 			this.urlToUse = this.urlForTrendData;
 
 			/* filter with a value of 10 for this.type so that results will not be filtered by public/domestic since all trends wells are public. does not need to be 10, just needs to not be 0, 1, or 2 */
-			var defs = this.decideHowToFilter(10, this.trend);
+			var defs = this.decideHowToFilter(this.type, this.trend);
 			return this.getLayer(defs);
 		},
 		// get well markers as featureLayer
@@ -65,12 +65,7 @@ export default {
 		},
 
 		decideHowToFilter(type, value){
-			/* filter by whether STATUS or TRENDS, and determine public or domestic by the StudyType column*/
-
-			/*TODO: when user selects type == "all trends", instead of getting param layer, just get t1 layer and don't filter */
-
-			/*TODO: when user selects type=='all domestic' or type == 'all public', just get t0 layer and filter only by StudyType*/
-
+			/* if this.type == 1 or 2, the layer is from ParamData and must be filtered by StudyType and Purpose. If this.type === 0 or 4, the layer is from TrendsData. The type value determines studyType but the purpose is determined by the index of the trends array (if we're looking at t0 or t1)*/
 			if(type == 1){
 				return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'"}`
 			}
@@ -80,7 +75,11 @@ export default {
 			}
 
 			else if(type === 0){
-				return `{${value}: "Purpose = 'TRENDS'"}`
+				return `{${value}: "StudyType = 'Public-supply'"}`
+			}
+
+			else if(type === 4){
+				return `{${value}: "StudyType = 'Domestic-supply'"}`
 			}
 
 			// otherwise don't filter; return all entries
@@ -103,10 +102,33 @@ export default {
 		},
 
 		importTypeJson(val) {
-			console.log('import type json')
+			console.log('import type json');
+
+			var filterType;
+	
+			console.log('type is: ' + this.type);
+
+			switch(this.type){
+				case '0':
+					filterType = 0
+					break;
+				case '4': 
+					filterType = 4
+					break;
+				default:	
+					filterType = ""
+			}
+
+			console.log('filter type is: ' + filterType);
+			// because there are only 3 layers in the TypeJson service, both val == 4 and val === 0 are actually getting the layer val === 0
+			var queryVal = val === '4' ? 0: val;
+
+			var defs = this.decideHowToFilter(filterType, queryVal)
+
 			var layer = esri.dynamicMapLayer({
 				url: this.urlForTypeData,
-				layers: [val],
+				layers: [queryVal],
+				layerDefs: defs,
 				position: this.type == 1 ? 'front' : this.type == 2 ? 'back' : 'front'
 			}).bindPopup( (err, featureCollection) => {
 				if(err || featureCollection.features.length === 0) {

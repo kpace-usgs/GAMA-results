@@ -37,12 +37,34 @@ export default {
 	watch: { 
 		type(){	
 			this.map.closePopup(); // close any popups
+
 			// don't necessarily clear layers from pointgroup. if the constituent layer is just being filtered, just redraw it.
 
 			// if the type layer is being changed on the constituent layer, filter the constituent layer that already exists
 			if(typeof(this.param.value) == 'number') {
 				console.log('filter by type');
-				this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value)); //if this.type == "" then the layer def will be set to return all results
+
+				/*because the type variable is tied to both purpose and study type, the way the parameter layer is filtered will be complicated.
+				if this.type == "" then the layer def will be set to return all results. 
+				if this.type === 0 or 4, for trends wells, then we actually want the same defs used by 1 or 2, because we want to show the status assessment values until the trend slider is moved past T0 */
+				var type = "";
+				switch(this.type){
+					case 1:
+						return type = 1;
+						break;
+					case 2: 
+						return type = 2
+						break;
+					case 0:
+						return type = 2
+						break;
+					case 4:
+						return type = 1
+						break;
+					default: type = ""
+				};
+
+				this.constituentLayer.setLayerDefs(this.decideHowToFilter(type, this.param.value)); 
 
 				this.addConstituentLayer();
 			} 

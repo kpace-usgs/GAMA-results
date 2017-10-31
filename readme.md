@@ -4,6 +4,9 @@
 
 This is a [vue](vuejs.org) project that generates a static page from Vue components. There are two environments, defined in the build/ folder and run from the script defined in package.json. run ```npm run dev``` for the dev environment, which is served at localhost:8080 and hot reloads, or ```npm run build``` to build the static files in the dist/ folder.
 
+The most important file is ~src/assets/listOfParameters.json 
+This file determines how the menu works, what will show up in the popup, and the units shown in the legend. If the parameter has trends layers, then the parameter must have a "trends" key with an array of the trend layer values. The "StatusColumns" key tells the map which columns in the data to find the categorization or the number of detects.
+
 The app's structure beings in src/app.vue. Global libraries are defined in src/main.js, including an Es6Promise polyfill to make Promises work with IE. The app.vue file coordinates passing data between the map, the menu, and the legend components. It also registers the mixins/toggle.vue component, which watches the size of the screen and will toggle the menu and legend to smaller sizes should the screen fall below a threshold number of pixels.
 
 The components of the app are all within the components/ folder. The mapDiv.vue component is the most complicated component, clearing the map's layers and calling mixin functions depending on what values have been selected in the menu. 
@@ -23,3 +26,10 @@ User Stories:
 
 
 Anytime a trend layer is available, the T0 layer is retrieved instead of the param layer. The T0 layer is only filtered by domestic or public, not by trend vs status. Monica can just populate each layer with only whichever results that view should show.
+
+
+
+
+
+Outstanding issues:
+- The name of columns differs from layersordered to the trends layers. E.g. param value 17, "fumigants", is either not in the layersordered menu or else is the herbicide one. Fumigants gives "FumDetects" as the column name in which to find its number of detects, but there's no column with that title in the layersordered universe.

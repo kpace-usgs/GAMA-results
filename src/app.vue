@@ -61,6 +61,7 @@ export default {
 		},
 		handleParam(obj){
 			this.param = obj;
+			/* once updated, get data from arcserver and pass threshold values to the legend */
 		},
 		handleType(string){
 			return this.type = string;

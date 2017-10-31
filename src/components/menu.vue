@@ -16,12 +16,13 @@
 		        </label>
 
 	            <select id="base"  v-model='type' :class='{highlighted: type=="", shaded: type != ""}'>
+	            	<!-- do not change the values unless you are going to change the rest of the code -->
 	                <option default value="">Select One</option>
 	                <option value='3'>All Sites</option>
-	                <option value='0'>Public-supply Trends Sites</option>
-	                <option value='4'>Domestic-supply Trends Sites</option>
 	                <option value='2'>Public-supply Aquifer Sites</option>
 	                <option value='1'>Domestic-supply Aquifer Sites</option>
+	                <option value='0'>Public-supply Trends Sites</option>
+	                <option value='4'>Domestic-supply Trends Sites</option>
 	            </select>
 	        </div>
 
@@ -53,7 +54,7 @@
 	        </div>
 
 	        <!-- add slider bar to change trend series. if this.type == 0 or 4 the trends t0 layer is returned instead of the param layer and is queried for Public-supply or Domestic-supply -->
-	        <div v-if='type === "0" && param.value != ""' style='z-index: 99;' >
+	        <div v-if='(type === "0" || type==="4") && param.hasOwnProperty("trends")' style='z-index: 99;' >
 
 				<label class='labelDiv'>
 					Select a study unit trend visit
@@ -92,7 +93,7 @@
 				<!-- show only study units and provinces on initial render, show all options when "all sites" is checked -->
 				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
 		        <div v-for='(layer, index) in layers'
-		        	v-if=' type == "" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: false' 
+		        	v-if=' type == "" || type === "3" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: false' 
 		        >
 
 					<input type='checkbox' 
@@ -165,15 +166,13 @@ export default {
 			defaultParamGroup: {
 				"parameters": [{
 					"name": "Select constituent class first",
-					"value": "",
-					"trends": []
+					"value": ""
 				}],
 				"groupName": ""
 			},
 			param: {
 				"name": "",
-				"value": "",
-				"trends": []
+				"value": ""
 			},
 			layers: [{
 				"prefix": "Domestic-supply",
@@ -374,6 +373,7 @@ select:hover, input:hover, button:hover{
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start;
+	font-weight: bold;
 }
 
 .button{

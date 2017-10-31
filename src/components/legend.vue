@@ -1,4 +1,5 @@
 <template>
+	<!-- get thresholds from thresholds table -->
 	<div id='map_legend' class='leaflet-bar container' :class='{"min" : !showControls}'>
 
 		<ToggleBar :show='showControls' @click='toggle'>
@@ -35,8 +36,8 @@
 		    	<div><p>Benchmark:</p><div><p> {{param.thresh_val}} {{param.thresh_src}}</p><img src='../assets/images/moreInfo.png' :alt='param.acr' :title='param.acr' /></div></div>
 		    </div>
 
-		    <!-- detects -->
-		    <div class="paramLayerLegend detects" v-if='[15, 16, 17, 18, 19, 24, 29, 32, 35, 38, 44].includes(param.value)'>
+		    <!-- detects. the values of all paramaters that are measured by number of detections should be in this array -->
+		    <div class="paramLayerLegend detects" v-if='param.units === "Number of Detections"'>
 		    	<h3>{{param.name}}</h3>
 		    	<div><p>Number of Detects</p><p>Symbology</p></div>
 		    	<div>
@@ -66,8 +67,8 @@
 		    </div>
 
 		    <!-- main -->
-		    <div class="paramLayerLegend hasInfo" v-if='![15, 16, 17, 18, 19, 20, 24, 29, 32, 35, 38, 44].includes(param.value) && param.value !== "" '>
-		    	<h3>{{param.name}} ({{param.units}})</h3>
+		    <div class="paramLayerLegend hasInfo" v-if='param.units !== "Number of Detections" && param.value !== "" '>
+		    	<h3>{{param.name}} <span v-if='param.units'>({{param.units}})</span></h3>
 		    	<div><p>Category</p><p>Symbology</p></div>
 		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
 		    	<div><p>Moderate</p><div><img src='../assets/images/mod.png'/><p>{{param.mod}}</p></div></div>

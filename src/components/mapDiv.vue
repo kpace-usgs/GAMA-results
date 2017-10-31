@@ -134,9 +134,9 @@ export default {
 				}
 				else {
 					// load all 3 type layers. order is important
+					this.pointGroup.addLayer(this.importTypeJson(1)).bringToFront();
+					this.pointGroup.addLayer(this.importTypeJson(0)).bringToBack();
 					this.pointGroup.addLayer(this.importTypeJson(2)).bringToBack();
-					this.pointGroup.addLayer(this.importTypeJson(1));
-					this.pointGroup.addLayer(this.importTypeJson(0)).bringToFront();
 				}
 			}
 		},

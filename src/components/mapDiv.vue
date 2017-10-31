@@ -33,6 +33,13 @@ export default {
 	mixins: [ParamData],
 	props: ['param', 'type', 'trend', 'layerArr', 'reset'],
 
+	computed: {
+		isATrends(){
+			/* if groundwater study type is one of the trends and the selected param has a trends array, return true */
+			return (this.type === "0" || this.type === "4") && this.param.hasOwnProperty('trends') ? true : false;
+		}
+	},
+
 	// watch for changes made on the menu component
 	watch: { 
 		type(){	
@@ -42,31 +49,15 @@ export default {
 
 			// if the type layer is being changed on the constituent layer, filter the constituent layer that already exists
 			if(typeof(this.param.value) == 'number') {
-				console.log('filter by type');
+				if(this.isATrends){
+					// do nothing
+					console.log('dont filter by type')
+				} else{
+					console.log('filter by type');
+					this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value)); 
 
-				/*because the type variable is tied to both purpose and study type, the way the parameter layer is filtered will be complicated.
-				if this.type == "" then the layer def will be set to return all results. 
-				if this.type === 0 or 4, for trends wells, then we actually want the same defs used by 1 or 2, because we want to show the status assessment values until the trend slider is moved past T0 */
-				var type = "";
-				switch(this.type){
-					case 1:
-						return type = 1;
-						break;
-					case 2: 
-						return type = 2
-						break;
-					case 0:
-						return type = 2
-						break;
-					case 4:
-						return type = 1
-						break;
-					default: type = ""
-				};
-
-				this.constituentLayer.setLayerDefs(this.decideHowToFilter(type, this.param.value)); 
-
-				this.addConstituentLayer();
+					this.addConstituentLayer();
+				}
 			} 
 
 			// otherwise the map is showing the wells by type, with no constituent data
@@ -84,15 +75,20 @@ export default {
 		},
 
 		param(){
-			console.log(this.param);
 			this.map.closePopup();
 			this.pointGroup.clearLayers();
 			/* if selection box has a value, save this.constituentLayer */
 			if(this.param.value !== ""){
-				console.log(this.param.value);
 
-				this.constituentLayer = this.importParam();
-				this.addConstituentLayer();
+				/* only import param if the parameter is not trends (either this.type isn't trends, or the parameter value doesn't have a trends array) */
+				if(this.isATrends){
+					console.log('dont import param')
+					// do nothing, wait for the new this.trends value to control things
+				} else {
+					console.log('import param')
+					this.constituentLayer = this.importParam();
+					this.addConstituentLayer();
+				}
 			}
 
 			/* if param value is being cleared, revert back to showing wells by type */
@@ -100,7 +96,6 @@ export default {
 				this.wellsByType();
 			}
 			// else if this.param.value is an empty string, the pointGroup will already be cleared
-
 		},
 
 		layerArr(){

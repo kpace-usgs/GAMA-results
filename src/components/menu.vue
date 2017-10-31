@@ -92,7 +92,7 @@
 				<!-- show only study units and provinces on initial render, show all options when "all sites" is checked -->
 				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
 		        <div v-for='(layer, index) in layers'
-		        	v-if='parseInt(type) === 0 || type == "" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: false' 
+		        	v-if=' type == "" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: false' 
 		        >
 
 					<input type='checkbox' 
@@ -227,7 +227,7 @@ export default {
 		},
 		param(){
 			console.log('menu sees param changed');
-			console.log(this.param)
+
 			return this.$emit('changeParam', this.param);
 		},
 		type(){
@@ -268,7 +268,7 @@ export default {
 	},
 	computed: {
 		domesticOrPublic(){
-			return this.type == 1 ? 'Domestic-supply' : this.type == 2 ? 'Public-supply' : 'Trends';
+			return this.type == 1  || this.type == 4 ? 'Domestic-supply' : this.type == 2  || this.type == 0 ? 'Public-supply' : 'Trends';
 		},
 		
 

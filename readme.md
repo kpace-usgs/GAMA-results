@@ -14,10 +14,12 @@ The following mixins are not being used as rendering is now coming from arcServe
 - wellIcons.js
 
 
-
 User Stories:
-- User selects "Public trends sites", "VOCs", and "Trihalomethanes". Because this.param is the last variable to be changed, this.importParam() is called. The paramLayer will be filtered by StudyType === public-supply (line 63 of getParamData.vue)
+- User selects "Public trends sites", "VOCs", and "Trihalomethanes". Because changing this.param then changes this.trend, this.trend will be the final variable that is changed. The map div must avoid calling this.importParam when this.type === 0 or 4 and this.param.hasOwnProperty('trends') (line 94, mapDiv.vue). The layer is imported on line 81 of mapDiv.vue
 
-- User selects "VOCs", "Trihalomethanes", and "Public trends sites". Because this.type is the last variable to be changed, the paramLayer will be filtered by purpose === status and study-type == public-supply (line 66 of mapDiv.vue)
+- User selects "VOCs", "Trihalomethanes", and "Public trends sites". This.type is the final variable to be changed on the menu, but changing it toggles a change in this.trend. The map div must avoid calling this.setLayerDefs on the constituent layer if this.type === 0 or 4 and this.param.hasOwnProperty('trends')
 
-- User selects "Public trends sites". this.wellsByType() is called. this.importTypeJson(0) gets all trends sites and is filtered by studyType = Public=supply
+- User selects "Public trends sites". this.wellsByType() is called. this.importTypeJson(0) gets all trends sites and is filtered by studyType = Public-supply
+
+
+Anytime a trend layer is available, the T0 layer is retrieved instead of the param layer. The T0 layer is only filtered by domestic or public, not by trend vs status. Monica can just populate each layer with only whichever results that view should show.

@@ -49,7 +49,6 @@ export default {
 			this.layerValue = this.trend;
 			this.urlToUse = this.urlForTrendData;
 
-			/* filter with a value of 10 for this.type so that results will not be filtered by public/domestic since all trends wells are public. does not need to be 10, just needs to not be 0, 1, or 2 */
 			var defs = this.decideHowToFilter(this.type, this.trend);
 			return this.getLayer(defs);
 		},
@@ -105,7 +104,7 @@ export default {
 			console.log('import type json');
 
 			var filterType;
-	
+
 			console.log('type is: ' + this.type);
 
 			switch(this.type){

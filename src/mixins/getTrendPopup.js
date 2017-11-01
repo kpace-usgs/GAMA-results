@@ -21,7 +21,7 @@ export default function(param){
 		${lookFor}: {${column}} ${units}<br/>\
 		Category: ${category}<br/>\
 		Study Unit Trend Number: {VisitNo}
-		</p>`
+		</p><div><canvas id="graph"></canvas>`
 	};
 	
 

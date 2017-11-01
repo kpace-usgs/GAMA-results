@@ -3,11 +3,10 @@ import Chart from 'chart.js';
 
 var dataArr;
 var labelArr;
-//var ctx = document.createElement('canvas');  //create canvas element on which to draw graph
-var ctx;
-
 
 function buildGraph() {
+	var ctx = document.getElementById('graph').getContext('2d')
+
 	// build graph from the array
 	var myChart = new Chart(ctx, {
 		type: 'line',
@@ -40,8 +39,6 @@ function buildGraph() {
 			}
 		}
 	});
-
-	return ctx;
 };
 
 var runFind = function(find, trendsLength, column){
@@ -81,13 +78,11 @@ var runFind = function(find, trendsLength, column){
 
 /* function called as buildTrendGraph() */
 export default function (esriFind, trendsLength, column, param){
-	//ctx.getContext('2d');
-	ctx = document.getElementById('graph').getContext('2d');
 
 	//reset values
 	dataArr = [];
 	labelArr = [];
-	console.log(ctx);
+
 	// get all the trend layers with def set to GAMA_ID = gamaID
 	for(var i = 0; i < trendsLength; i++){
 
@@ -97,5 +92,6 @@ export default function (esriFind, trendsLength, column, param){
 
 		runFind(esriFind, trendsLength, column);
 	}
-	//return String(ctx)
+
+	return ''
 }

@@ -123,8 +123,9 @@
 				<p>Reset Map</p>
 		    </a>
 
-		    <canvas id='graph'></canvas>
 
+		    <!-- <canvas id='graph' style='height: 100%;'></canvas> -->
+		
 	    </div>
 	</div>
 </template>

@@ -33,9 +33,9 @@ export default {
 			layer.bindPopup( (err, fc) => {
 				for(var i = 0; i < fc.features.length; i++){
 					var properties = fc.features[i].properties;
-					this.getTrendsForGraph(properties.GAMA_ID, content.column, url);
+					// this.getTrendsForGraph(properties.GAMA_ID, content.column, url);
 
-					return L.Util.template(content.string(properties), properties)  
+					return L.Util.template(content.string(properties), properties) + this.getTrendsForGraph(properties.GAMA_ID, content.column, url)   
 				}
 			});
 

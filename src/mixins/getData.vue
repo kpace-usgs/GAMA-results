@@ -1,7 +1,8 @@
 <script>
-/* getParamString considers what keys the parameter has been givin in listOfParameters.json and returns the appropriate string for the popup */
-import getParamString from './getParamString.js'
-import getTrendString from './getTrendString.js'
+/* import functions that will be used to construct popups and map layers*/
+import getParamPopup from './getParamPopup.js'
+import getTrendPopup from './getTrendPopup.js'
+import buildTrendGraph from './buildTrendGraph.js'
 import listeners from './addEventListeners.vue'
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
@@ -33,24 +34,39 @@ export default {
 			/* return layer */
 			return layer;
 		},
-		importTrend(){
-			/* use the trend data available in the component that has registered this file as a mixin */
-			var content = getTrendString(this.param);
 
+
+		importTrend(){
+			// save values to be passed to popup
+			var content = getTrendPopup(this.param);
+			var url = this.urlForTrendData;
+
+			// get layer
 			var defs = this.decideHowToFilter(this.type, this.trend);
-			var layer = this.getLayer(defs, this.urlForTrendData, this.trend);
+			var layer = this.getLayer(defs, url, this.trend);
 
 			/* bind a popup that includes the info about that well, plus that well's trend graph */
 			layer.bindPopup( (err, fc) => {
 				for(var i = 0; i < fc.features.length; i++){
 					var properties = fc.features[i].properties;
-					return L.Util.template(content.string(properties), properties) + this.buildTrendGraph(properties.GAMA_ID)
+					return L.Util.template(content.string(properties), properties) + this.getTrendsForGraph(properties.GAMA_ID, content.column, url)
 				}
 			});
 
-			// TODO add trends graph to popup. can you bind multiple L.Util.templates?
-
 			return layer;
+		},
+
+		getTrendsForGraph(gamaID, column, url){
+			var trendsLength = this.param.trends.length;
+			/* use esri-leaflet find function */
+			var esriFind = esri.find({
+				url: url
+			});
+			console.log(gamaID)
+
+			esriFind.text(gamaID).fields("GAMA_ID").returnGeometry(true); //shared settings
+
+			return buildTrendGraph(esriFind, trendsLength, column, this.param); //buildTrendGraph.js
 		},
 		// get well markers as featureLayer
 		importParam(){
@@ -59,7 +75,7 @@ export default {
 			/* filter by state's type and param.value */
 			var defs = this.decideHowToFilter(this.type, this.param.value);
 
-			var content = getParamString(this.param);
+			var content = getParamPopup(this.param);
 
 			var layer = this.getLayer(defs, this.urlForParamData, this.param.value);
 
@@ -71,31 +87,6 @@ export default {
 			});
 
 			return layer;
-		},
-
-		decideHowToFilter(type, value){
-			/* if this.type == 1 or 2, the layer is from ParamData and must be filtered by StudyType and Purpose. If this.type === 0 or 4, the layer is from TrendsData. The type value determines studyType but the purpose is determined by the index of the trends array (if we're looking at t0 or t1)*/
-			console.log('filtering by type: '+ type)
-			if(type == 1){
-				return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'"}`
-			}
-
-			else if(type === 2 || type === "2"){
-				return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Public-supply'"}`
-			}
-
-			else if(type === 0 || type === "0"){
-				return `{${value}: "StudyType = 'Public-supply'"}`
-			}
-
-			else if(type == 4){
-				return `{${value}: "StudyType = 'Domestic-supply'"}`
-			}
-
-			// otherwise don't filter; return all entries
-			else {
-				return `{${value}: ""}`
-			}
 		},
 
 		importPaneJson(val) {
@@ -112,8 +103,6 @@ export default {
 		},
 
 		importTypeJson(val) {
-			console.log('import type json');
-
 			/* for all study types and all status types, don't filter, but for either trends type, do filter*/
 			var filterType;
 			switch(this.type){
@@ -126,17 +115,16 @@ export default {
 				default:	
 					filterType = ""
 			}
-
 			console.log('filter type is: ' + filterType);
+
+
 			// because there are only 3 layers in the TypeJson service, both val == 4 and val === 0 are actually getting the layer val === 0
-			this.layerValue = val === '4' ? 0: val;
+			var layerValue = val === '4' ? 0: val;
 
-			var defs = this.decideHowToFilter(filterType, this.layerValue);
+			var defs = this.decideHowToFilter(filterType, layerValue);
 
-			this.urlToUse = this.urlForTypeData;
-
-			var layer = this.getLayer(defs);
-
+			/* get layer and return */
+			var layer = this.getLayer(defs, this.urlForTypeData, layerValue);
 			layer.bindPopup( (err, featureCollection) => {
 				if(err || featureCollection.features.length === 0) {
 					return false;
@@ -144,15 +132,33 @@ export default {
 					return 'Well type: ' + getType(featureCollection.features[0]);
 				}
 			});
-
 			this.addEventListeners(layer);
-
 			return layer;
 		},
 
-		buildTrendGraph(gamaID){
-			var div = document.createElement('div');
+		decideHowToFilter(type, value){
+			/* if this.type == 1 or 2, the layer is from ParamData and must be filtered by StudyType and Purpose. If this.type === 0 or 4, the layer is from TrendsData. The type value determines studyType but the purpose is determined by the index of the trends array (if we're looking at t0 or t1)*/
+			console.log('filtering by type: '+ type)
+			if(type === 1 || type === "1"){
+				return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'"}`
+			}
 
+			else if(type === 2 || type === "2"){
+				return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Public-supply'"}`
+			}
+
+			else if(type === 0 || type === "0"){
+				return `{${value}: "StudyType = 'Public-supply'"}`
+			}
+
+			else if(type === 4 || type === '4'){
+				return `{${value}: "StudyType = 'Domestic-supply'"}`
+			}
+
+			// otherwise don't filter; return all entries
+			else {
+				return `{${value}: ""}`
+			}
 		}
 	}
 }

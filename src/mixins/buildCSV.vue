@@ -1,5 +1,6 @@
 <script>
 import moment from 'moment'
+import ParamData from './getData.vue'
 import esri from 'esri-leaflet'
 
 export default {
@@ -10,9 +11,7 @@ export default {
 		}
 	},
 
-	watch: {
-
-	},
+	mixins: [ParamData],
 
 	methods: {
 		importArrayOfValues(arr, callback){

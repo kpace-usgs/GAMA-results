@@ -86,39 +86,25 @@
 		        <!-- Shapefile Selector -->
 		        <label class='labelDiv'>Select Layers:
 		        	<Guidance text='Polygons showing how the state is divided into grid cells, study units, and hydrogeologic provinces'></Guidance>
-					<!-- <img src='../assets/images/moreInfo.png' alt='Define layers' title='Define layer' /> -->
 		        </label>
 
 		        <!-- only show checkbox options depending on which groundwater study type is selected -->
 				<!-- show only study units and provinces on initial render, show all options when "all sites" is checked -->
 				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
 		        <div v-for='(layer, index) in layers'
-		        	v-if=' type == "" || type === "3" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: false' 
-		        >
+		        	v-if=' type == "" || type === "3" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: false' >
 
 					<input type='checkbox' 
 					:id='layer' :value='layer.value' 
-					v-model='layerName'  :key='index'
-					 >
+					v-model='layerName'  :key='index'>
 
-					<label for='layer' 
-					>
+					<label for='layer'>
 						{{layer.string}}
 					</label>
 		        </div>
      		</div>
 	      
 			<!-- Download Button -->
-			<!-- this first commented-out option will use the functions defined in mixins/buildCSV.vue to get data from server as featureLayer and convert to a csv. Really this should be done in a node.js script and we could also bundle the files together with metadata into a .zip -->
-         <!--    <a id='downloadButton' c
-            	:class='{ disabled : parameterGroup.groupName === ""}'
-            	:title='parameterGroup.groupName === "" ? "Please select a constituent class" : ""'
-            	@click='downloadContent' 
-            >
-            	<p>Download Data from Constituent Class</p>
-            </a> -->
-
-
 			<!-- this option is using zip files made sometime in 2016 (?) until we can work out the server script -->
             <a id="downloadButton" 
             	:href='zipHref'
@@ -146,12 +132,11 @@ import listOfParameters from '../assets/listOfParameters.json';
 import ToggleBar from './toggleBar.vue';
 import VueSlider from 'vue-slider-component/src/vue2-slider.vue'
 import Guidance from './Guidance.vue';
-import ParamData from '../mixins/getParamData.vue'
 import BuildCSV from '../mixins/buildCSV.vue'
 
 export default {
 	name: 'MenuDiv',
-	mixins: [ ParamData, BuildCSV],
+	mixins: [ BuildCSV],
 	props: ['showControls'],
 	components: {
 		ToggleBar, Guidance, VueSlider

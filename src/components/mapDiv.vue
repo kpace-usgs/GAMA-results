@@ -5,8 +5,7 @@
 <script>
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
-
-import ParamData from '../mixins/getParamData.vue'
+import GetData from '../mixins/getData.vue' //functions that talk to arcserver
 import esri from 'esri-leaflet'
 import 'esri-leaflet-renderers'
 
@@ -30,7 +29,7 @@ export default {
 			constituentLayer: ''
 		}
 	},
-	mixins: [ParamData],
+	mixins: [GetData],
 	props: ['param', 'type', 'trend', 'layerArr', 'reset'],
 
 	computed: {

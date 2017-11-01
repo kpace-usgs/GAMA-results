@@ -4,15 +4,14 @@ import getParamPopup from './getParamPopup.js'
 import getTrendPopup from './getTrendPopup.js'
 import buildTrendGraph from './buildTrendGraph.js'
 import listeners from './addEventListeners.vue'
-import esri from 'esri-leaflet'
-import 'esri-leaflet-renderers'
+import * as esriFunctions from './esriFunctions.js'
 
 export default {
 
 	data(){
 		return {
 			urlForParamData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_symbolsordered/MapServer/',
-			urlForTrendData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/trends_layers/MapServer/',
+			urlForTrendData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/trends_layers_thresholds/MapServer/',
 			urlForPolygonData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/',
 			urlForTypeData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sites2/MapServer/'
 		}
@@ -20,21 +19,6 @@ export default {
 	mixins: [listeners],
 
 	methods: {
-		getLayer(defs, url, value){
-			/* request dynamic map layer from esri according to which url value has been set to this.url. this.type lives in whatever component this is registered as a mixin (for this project, the mapDiv.vue component) */
-			/* import data and bind popup */
-			var layer = esri.dynamicMapLayer({
-				url: url,
-				layers: [value],
-				layerDefs: defs
-			});
-
-			this.addEventListeners(layer);
-
-			/* return layer */
-			return layer;
-		},
-
 
 		importTrend(){
 			// save values to be passed to popup
@@ -43,15 +27,19 @@ export default {
 
 			// get layer
 			var defs = this.decideHowToFilter(this.type, this.trend);
-			var layer = this.getLayer(defs, url, this.trend);
+			var layer = esriFunctions.getLayer(defs, url, this.trend);
 
 			/* bind a popup that includes the info about that well, plus that well's trend graph */
 			layer.bindPopup( (err, fc) => {
 				for(var i = 0; i < fc.features.length; i++){
 					var properties = fc.features[i].properties;
-					return L.Util.template(content.string(properties), properties) + this.getTrendsForGraph(properties.GAMA_ID, content.column, url)
+					this.getTrendsForGraph(properties.GAMA_ID, content.column, url);
+
+					return L.Util.template(content.string(properties), properties)  
 				}
 			});
+
+			this.addEventListeners(layer);
 
 			return layer;
 		},
@@ -59,14 +47,11 @@ export default {
 		getTrendsForGraph(gamaID, column, url){
 			var trendsLength = this.param.trends.length;
 			/* use esri-leaflet find function */
-			var esriFind = esri.find({
-				url: url
-			});
-			console.log(gamaID)
+			var layer = esriFunctions.getData(url);
 
-			esriFind.text(gamaID).fields("GAMA_ID").returnGeometry(true); //shared settings
+			layer.text(gamaID).fields("GAMA_ID").returnGeometry(true); //shared settings
 
-			return buildTrendGraph(esriFind, trendsLength, column, this.param); //buildTrendGraph.js
+			return buildTrendGraph(layer, trendsLength, column, this.param); //buildTrendGraph.js
 		},
 		// get well markers as featureLayer
 		importParam(){
@@ -77,7 +62,7 @@ export default {
 
 			var content = getParamPopup(this.param);
 
-			var layer = this.getLayer(defs, this.urlForParamData, this.param.value);
+			var layer = esriFunctions.getLayer(defs, this.urlForParamData, this.param.value);
 
 			layer.bindPopup( (err, fc) => {
 				for(var i = 0; i < fc.features.length; i++){
@@ -86,16 +71,13 @@ export default {
 				}
 			});
 
+			this.addEventListeners(layer);
+
 			return layer;
 		},
 
 		importPaneJson(val) {
-			var layer = esri.dynamicMapLayer({
-				url: this.urlForPolygonData,
-				layers: [val],
-				minZoom: 4,
-				position: val == 4 ? 'back' : 'front'
-			});
+			var layer = esriFunctions.getPane(this.urlForPolygonData, val)
 
 			this.addEventListeners(layer);
 
@@ -124,7 +106,7 @@ export default {
 			var defs = this.decideHowToFilter(filterType, layerValue);
 
 			/* get layer and return */
-			var layer = this.getLayer(defs, this.urlForTypeData, layerValue);
+			var layer = esriFunctions.getLayer(defs, this.urlForTypeData, layerValue);
 			layer.bindPopup( (err, featureCollection) => {
 				if(err || featureCollection.features.length === 0) {
 					return false;

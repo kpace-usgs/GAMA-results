@@ -123,6 +123,8 @@
 				<p>Reset Map</p>
 		    </a>
 
+		    <canvas id='graph'></canvas>
+
 	    </div>
 	</div>
 </template>
@@ -133,11 +135,12 @@ import ToggleBar from './toggleBar.vue';
 import VueSlider from 'vue-slider-component/src/vue2-slider.vue'
 import Guidance from './Guidance.vue';
 import BuildCSV from '../mixins/buildCSV.vue'
+import toggle from '../mixins/toggle.vue'
 
 export default {
 	name: 'MenuDiv',
-	mixins: [ BuildCSV],
-	props: ['showControls'],
+	mixins: [ BuildCSV, toggle],
+
 	components: {
 		ToggleBar, Guidance, VueSlider
 	},
@@ -243,11 +246,6 @@ export default {
 			this.type = ''; 
 			this.parameterGroup = this.defaultParamGroup;
 			this.$emit('resetClicked');
-		},
-
-
-		toggle(){
-			this.$emit('toggle')
 		}
 	},
 	computed: {

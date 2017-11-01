@@ -14,8 +14,7 @@
 		<LegendDiv :layers = 'layers' 
 			:type='type' 
 			:param='param'
-			:showControls='showControls'
-			@toggle='toggle'>
+			:thresh='threshVals'>
 		</LegendDiv>
 
 		<MenuDiv 
@@ -24,8 +23,6 @@
 			@changeType='handleType'
 			@changeTrend = 'handleTrend'
 			@resetClicked = 'toggleReset'
-			@toggle='toggle'
-			:showControls = 'showControls'
 		></MenuDiv>
 	</div>
 </template>
@@ -35,9 +32,8 @@ import MapDiv from './components/mapDiv.vue';
 import LegendDiv from './components/legend';
 import MenuDiv from './components/menu';
 import Loader from './mixins/loader.vue';
+import * as esriFunctions from './mixins/esriFunctions.js'
 
-/* the width of the window is compared to a bound set in toggle.vue so that if the screen is below that size, this.showControls returns false*/
-import toggle from './mixins/toggle.vue'
 
 
 export default {
@@ -48,13 +44,15 @@ export default {
 			param: '',
 			type: '',
 			trend: '',
-			reset: false
+			reset: false,
+			thresholds: '',
+			threshVals: ''
 		}
 	},
 	components: {
 		MapDiv, MenuDiv, LegendDiv
 	},
-	mixins: [ Loader, toggle],
+	mixins: [ Loader],
 	methods: {
 		handleLayer(arr){
 			this.layers = arr;
@@ -62,6 +60,25 @@ export default {
 		handleParam(obj){
 			this.param = obj;
 			/* once updated, get data from arcserver and pass threshold values to the legend */
+			var that = this;
+
+			if(this.param.hasOwnProperty('pcode')){
+				this.thresholds.where("PCODE = '" + obj.pcode + "'");
+
+				this.thresholds.run(function(err, fc) {
+					if(err){ console.log(err); }
+					console.log(fc);
+					that.threshVals = fc.features[0].properties;
+
+
+					//TODO change how this.threshVals gets saved to match Bryant's news format
+					/* for(var i = 0; i < fc.features.length; i++) {
+						that.threshVals.legendItems.push({name: fc.features[i].properties.BenchmarkName, symbology: fc.features[i].properties.Symbology})
+					}
+					*/
+				});
+			}
+			
 		},
 		handleType(string){
 			return this.type = string;
@@ -79,6 +96,9 @@ export default {
 		if(isIE){
 			alert('It looks like you might be using Internet Explorer. Please make sure you are using a version currently supported by Microsoft (IE 10, 11, or Edge)')
 		}
+
+		this.thresholds = esriFunctions.getTable('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/trends_layers_thresholds/MapServer/');
+		this.thresholds.layer(40);
 	}
 }
 </script>

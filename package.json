@@ -12,6 +12,7 @@
     "test": "cross-env BABEL_ENV=test karma start test/karma.conf.js --single-run"
   },
   "dependencies": {
+    "chart.js": "^2.7.1",
     "esri-leaflet": "^2.0.8",
     "esri-leaflet-renderers": "^2.0.6",
     "leaflet": "^1.0.3",

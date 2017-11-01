@@ -11,11 +11,9 @@ The app's structure beings in src/app.vue. Global libraries are defined in src/m
 
 The components of the app are all within the components/ folder. The mapDiv.vue component is the most complicated component, clearing the map's layers and calling mixin functions depending on what values have been selected in the menu. 
 
-The requests to the arcServer are managed in the file mixins/getParamData.vue. This file defines the possible endpoints and returns esri.dynamicMapLayers to the mapDiv component. The mapDiv component then manages adding and removing the layers from L.featureGroups.
+The requests to the arcServer are managed in the file mixins/getData.vue. This file defines the possible endpoints and returns esri.dynamicMapLayers to the mapDiv component. The mapDiv component then manages adding and removing the layers from L.featureGroups.
 
-The following mixins are not being used as rendering is now coming from arcServer, but I left them in there in case we want to use them in the future, should we move away from arcServer
-- wellIcons.js
-
+Functions that build the popup content are housed in mixins/getTrendPopup and mixins/getParamPopup and mixins/buildTrendGraph
 
 User Stories:
 - User selects "Public trends sites", "VOCs", and "Trihalomethanes". Because changing this.param then changes this.trend, this.trend will be the final variable that is changed. The map div must avoid calling this.importParam when this.type === 0 or 4 and this.param.hasOwnProperty('trends') (line 94, mapDiv.vue). The layer is imported on line 81 of mapDiv.vue
@@ -33,3 +31,8 @@ Anytime a trend layer is available, the T0 layer is retrieved instead of the par
 
 Outstanding issues:
 - The name of columns differs from layersordered to the trends layers. E.g. param value 17, "fumigants", is either not in the layersordered menu or else is the herbicide one. Fumigants gives "FumDetects" as the column name in which to find its number of detects, but there's no column with that title in the layersordered universe.
+
+
+
+Future Changes:
+- change how threshVals get saved when the parameter gets changed (lines 71 - 82) in app.vue 

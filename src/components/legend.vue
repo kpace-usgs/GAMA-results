@@ -27,14 +27,29 @@
 
 		    <!-- Parameter Legend -->
 		    <!-- ph -->
-		    <div class="paramLayerLegend hasInfo" v-if='param.value == 20'>
-		    	<h3>{{param.name}} ({{param.units}})</h3>
-		    	<div><p>Category</p><p>Symbology</p></div>
-		    	<div><p>Basic</p><div><img src='../assets/images/ph.png'/><p>{{param.high}}</p></div></div>
-		    	<div><p></p><div><img src='../assets/images/low.png'/><p>{{param.mod}}</p></div></div>
-		    	<div><p>Acidic</p><div><img src='../assets/images/hi.png'/><p>{{param.low}}</p></div></div>
-		    	<div><p>Benchmark:</p><div><p> {{param.thresh_val}} {{param.thresh_src}}</p><img src='../assets/images/moreInfo.png' :alt='param.acr' :title='param.acr' /></div></div>
-		    </div>
+		    <legendContent v-if='param.value == 31' class='paramLayerLegend hasInfo '>
+				<h3 slot='h3'>{{param.name}} ({{param.units}})</h3>
+				<p slot='cat1'>Basic</p>
+				<div slot='img1'>
+					<img src='../assets/images/ph.png'/>
+					<p>{{thresh.Hi_Thresh}}</p>
+				</div>
+				<p slot='cat2'></p>
+				<div slot='img2'>
+					<img src='../assets/images/low.png'/>
+					<p>{{thresh.Mod_Thresh}}</p>
+				</div>
+				<p slot='cat3'>Acidic</p>
+				<div slot='img3'>
+					<img src='../assets/images/hi.png'/>
+					<p>{{thresh.Low_Thresh}}</p>
+				</div>
+				<div slot='benchmark'>
+					<p> {{thresh.Threshold}} {{thresh.ThresholdSource}} </p>
+					<img src='../assets/images/moreInfo.png' :alt='thresh.ThresholdDetail' :title='thresh.ThresholdDetail' />
+				</div>
+		    </legendContent>
+
 
 		    <!-- detects. the values of all paramaters that are measured by number of detections should be in this array -->
 		    <div class="paramLayerLegend detects" v-if='param.units === "Number of Detections"'>
@@ -67,23 +82,23 @@
 		    </div>
 
 		    <!-- main -->
-		    <div class="paramLayerLegend hasInfo" v-if='param.units !== "Number of Detections" && param.value !== "" '>
+		    <div class="paramLayerLegend hasInfo" v-if='param.units !== "Number of Detections" && param.value !== "" && param.value !== 31'>
 		    	<h3>{{param.name}} <span v-if='param.units'>({{param.units}})</span></h3>
 		    	<div><p>Category</p><p>Symbology</p></div>
-		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{param.high}}</p></div></div>
-		    	<div><p>Moderate</p><div><img src='../assets/images/mod.png'/><p>{{param.mod}}</p></div></div>
+		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{Hi_Thresh}}</p></div></div>
+		    	<div><p>Moderate</p><div><img src='../assets/images/mod.png'/><p>{{Mod_Thresh}}</p></div></div>
 		    	<div>
 		    		<p>Low</p>
 		    		<div>
 		    			<img src='../assets/images/low.png'/>
-		    			<p>{{param.low}}</p>
+		    			<p>{{Low_Thresh}}</p>
 		    		</div>
 		    	</div>
 		    	<div v-if='param.hasOwnProperty("thresh_val")'>
 		    		<p>Benchmark:</p>
 		    		<div>
-		    			<p> {{param.thresh_val}} {{param.thresh_src}}</p>
-		    			<img src='../assets/images/moreInfo.png' :alt='param.acr' :title='param.acr' />
+		    			<p> {{thresh.Threshold}} {{thresh.ThresholdSource}} </p>
+		    			<img src='../assets/images/moreInfo.png' :alt='thresh.ThresholdDetail' :title='thresh.ThresholdDetail' />
 		    		</div>
 		    	</div>
 		    	<div v-else>
@@ -132,202 +147,18 @@
 
 				<div v-if='layers.includes(3)' class="subLegend">
 					<h3>Public-supply Aquifers <br/>Study Unit Boundaries</h3>
-					<div>
-						<div style="background-color:#ffcd66"></div>
-						<p>Antelope Valley</p>
-					</div>
-					<div>
-						<div style="background-color:#c9d25a;"></div>
-						<p>Bear Valley & Lake Arrowhead watershed</p>
-					</div>
-					<div>
-						<div style="background-color:#bee8ff;"></div>
-						<p>Cascade Range & Modoc Plateau</p>
-					</div>
-					<div>
-						<div style="background-color:#946100;"></div>
-						<p>Central Eastside San Joaquin Valley</p>
-					</div>
-					<div>
-						<div style="background-color:#5360a6;"></div>
-						<p>Coastal Los Angeles basins</p>
-					</div>
-					<div>
-						<div style="background-color:#886f45;"></div>
-						<p>Borrego, Central Desert, and other desert basins</p>
-					</div>
-					<div>
-						<div style="background-color:#9fa9d7;"></div>
-						<p>Colorado River Valley</p>
-					</div>
-					<div>
-						<div style="background-color:#7b639a;"></div>
-						<p>Central Sierra Nevada</p>
-					</div>
-					<div>
-						<div style="background-color:#87a06c;"></div>
-						<p>Coachella Valley</p>
-					</div>
-					<div>
-						<div style="background-color:#5d008c;"></div>
-						<p>Santa Cruz Mtns & San Gabriel Mtns & Peninsular Ranges</p>
-					</div>
-					<div>
-						<div style="background-color:#a88130;"></div>
-						<p>Southeast San Joaquin Valley</p>
-					</div>
-					<div>
-						<div style="background-color:#e1d3b4;"></div>
-						<p>Kern basin</p>
-					</div>
-					<div>
-						<div style="background-color:#b87272;"></div>
-						<p>Klamath Mountains</p>
-					</div>
-					<div>
-						<div style="background-color:#823d3d;"></div>
-						<p>Mojave Valley</p>
-					</div>
-					<div>
-						<div style="background-color:#90d96b;"></div>
-						<p>Middle Sacramento Valley</p>
-					</div>
-					<div>
-						<div style="background-color:#ffffbe;"></div>
-						<p>Madera-Chowchilla basins</p>
-					</div>
-
-					<div>
-						<div style="background-color:#7d87a6;"></div>
-						<p>Monterey Bay and Salinas Valley basins</p>
-					</div>
-
-					<div>
-						<div style="background-color:#c98282;"></div>
-						<p>Northern San Joaquin Valley</p>
-					</div>
-
-					<div>
-						<div style="background-color:#a1a3e6;"></div>
-						<p>North San Francisco Bay basins</p>
-					</div>
-
-					<div>
-						<div style="background-color:#698c00;"></div>
-						<p>Northern Coast Ranges basins</p>
-					</div>
-					<div>
-						<div style="background-color:#e6cfa1;"></div>
-						<p>Owens & Indian Wells Valleys</p>
-					</div>
-					<div>
-						<div style="background-color:#558c7b;"></div>
-						<p>Northern Sacramento Valley</p>
-					</div>
-
-					<div>
-						<div style="background-color:#ffa900; "></div>
-						<p>Santa Maria R., San Antonio Ck., and Santa Ynez R. Valleys</p>
-					</div>
-
-					<div>
-						<div style="background-color:#74a000;"></div>
-						<p>Livermore, Gilroy-Hollister, and Cuyama Valleys</p>
-					</div>
-					<div>
-						<div style="background-color:#90badd;"></div>
-						<p>South and East San Francisco Bay basins</p>
-					</div>
-					<div>
-						<div style="background-color:#c2f3c2;"></div>
-						<p>Sierra Nevada Regional</p>
-					</div>
-				
-					<div>
-						<div style=""></div>
-						<p>Southern Sacramento Valley</p>
-					</div>
-					<div>
-						<div style="background-color:#ffffd9;"></div>
-						<p>San Diego region</p>
-					</div>
-					<div>
-						<div style="background-color:#247400;"></div>
-						<p>Santa Barbara area basins</p>
-					</div>
-					<div>
-						<div style="background-color:#517f4d;"></div>
-						<p>Southern Sierra Nevada</p>
-					</div>
-					<div>
-						<div style="background-color:#7f5f00;"></div>
-						<p>Lake Tahoe and Martis Valley watersheds</p>
-					</div>
-					<div>
-						<div style="background-color:#ffbe00;"></div>
-						<p>San Gabriel & San Fernando Valleys</p>
-					</div>
-					<div>
-						<div style="background-color:#66ceab;"></div>
-						<p>Upper Santa Ana Watershed basins</p>
-					</div>
-					<div>
-						<div style="background-color:#ff6c19;"></div>
-						<p>Santa Clara River Valley basins</p>
-					</div>
-					<div>
-						<div style="background-color:#475a96;"></div>
-						<p>Western San Joaquin Valley</p>
+					<div v-for='unit in listOfUnits'>
+						<div :style="{backgroundColor: unit.color}"></div>
+						<p>{{unit.name}}</p>
 					</div>
 				</div>	
 
 		  		<div v-if='layers.includes(4)' class="subLegend">
 		  			<h3>Hydrogeologic Provinces</h3>
-		  			<div>
-		  				<div style="background-color:#bf8d56; "></div>
-		  				<p>Basin and Range</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#95a894; "></div>
-		  				<p>Central Valley</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#d1c478;"></div>
-		  				<p>Desert</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#9c8aaa;"></div>
-		  				<p>Klamath Mountains</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#b46772;"></div>
-		  				<p>Modoc Plateu and Cascades</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#6fb0a3;"></div>
-		  				<p>Northern Coast Ranges</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#ac7c7d;"></div>
-		  				<p>San Diego</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#669a66; "></div>
-		  				<p>Sierra Nevada</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#b8c1e0;"></div>
-		  				<p>Southern Cal Islands (Group)</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#858b9c;"></div>
-		  				<p>Southern Coast Ranges</p>
-		  			</div>
-		  			<div>
-		  				<div style="background-color:#ba898a;"></div>
-		  				<p>Transverse and Selected Peninsular Range</p>
-		  			</div>
-		  	
+		  			<div v-for='unit in listOfProvinces'>
+						<div :style="{backgroundColor: unit.color}"></div>
+						<p>{{unit.name}}</p>
+					</div>
 		  		</div>
 		    </div>
 		 </div>
@@ -337,54 +168,28 @@
 <script>
 import toggle from '../mixins/toggle.vue'
 import ToggleBar from './toggleBar.vue';
+import legendContent from './legendContent.vue'
+import listOfUnits from '../assets/listOfUnits.js'
+import listOfProvinces from '../assets/listOfProvinces.js'
 
 export default {
 	name: 'LegendDiv',
-	props: ['layers', 'type', 'param', 'showControls'],
-	components: {
-		ToggleBar
-	},
-	methods: {
-		toggle(){
-			this.$emit('toggle')
+	data(){
+		return {
+			listOfUnits: listOfUnits,
+			listOfProvinces: listOfProvinces
 		}
-	}
+	},
+	props: ['layers', 'type', 'param',  'thresh'],
+	components: {
+		ToggleBar, legendContent
+	},
+	mixins: [toggle]
 }
 </script>
 
 
-<style scoped>
-.legendContent h3{
-	margin-top: -20px;
-	width: 80%;
-}
-.subLegend>div{
-	display: flex;
-	align-items: center;
-	align-content: flex-end;
-}
-.subLegend>div>img{
-	margin-right: 20px;
-}
-.subLegend>div>p{
-	margin: 0;
-	font-size: 16px;
-}
-.subLegend>div>div{
-	height:15px;
-	margin-right: 20px;
-	flex: 0 0 15px;
-}
-#map_legend{
-	bottom: 50px;
-	left: 10px;
-	width: 100%;
-	max-width: 200px;
-}
-#map_legend.min{
-	width: 60%;
-	max-width: 110px;
-}
+<style >
 .paramLayerLegend>div{
 	display: flex;
 	width: 100%;
@@ -424,6 +229,38 @@ export default {
 .paramLayerLegend>div>div>p{
 	margin: 0 0 0 3px;
 }
+.legendContent h3{
+	margin-top: -20px;
+	width: 80%;
+}
+.subLegend>div{
+	display: flex;
+	align-items: baseline;
+	align-content: flex-end;
+}
+.subLegend>div>img{
+	margin-right: 20px;
+}
+.subLegend>div>p{
+	margin: 0;
+	font-size: 16px;
+}
+.subLegend>div>div{
+	height:15px;
+	margin-right: 20px;
+	flex: 0 0 15px;
+}
+#map_legend{
+	bottom: 50px;
+	left: 10px;
+	width: 100%;
+	max-width: 200px;
+}
+#map_legend.min{
+	width: 60%;
+	max-width: 110px;
+}
+
 .leaflet-bar{
     background-color:white;
 }

@@ -1,13 +1,51 @@
 // buildTrendGraph.js
-var dataArr = [];
+import Chart from 'chart.js';
 
-function buildGraph(arr) {
-	console.log(arr);
+var dataArr;
+var labelArr;
+//var ctx = document.createElement('canvas');  //create canvas element on which to draw graph
+var ctx;
+
+
+function buildGraph() {
 	// build graph from the array
+	var myChart = new Chart(ctx, {
+		type: 'line',
+		data: {
+			labels: labelArr,
+			datasets: [{
+				data: dataArr
+			}]
+		},
+		options: {
+			legend: {
+				display: false
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						min: 0,
+						max: 4,
+						stepSize: 1
+					},
+					scaleLabel: {
+						display: true
+					}
+				}],
+				xAxes: [{
+					time: {
+						unit: 'month'
+					}
+				}]
+			}
+		}
+	});
+
+	return ctx;
 };
 
 var runFind = function(find, trendsLength, column){
-	console.log('running find function')
+	console.log(column);
 	
 	return find.run(function(err, fc) {
 		console.log('complete')
@@ -15,20 +53,41 @@ var runFind = function(find, trendsLength, column){
 			return; // catch error
 		}
 
-		var result = fc.features.length > 0 ? fc.features[0].properties : {SampleDate: '', Concentration: ''};
+		//var result = fc.features.length > 0 ? fc.features[0].properties : {SampleDate: '', Concentration: ''};
+		var resultLabel,
+			resultData;
+
+		if(fc.features.length > 0){
+			resultLabel = fc.features[0].properties.SampleDate;
+			resultData = fc.features[0].properties[column];
+			console.log(fc.features[0].properties);
+		} else {
+			resultLabel = 'Not sampled';
+			resultData = ''
+		}
 
 		// in each layer save the concentration or number of detects value to an array
-		dataArr.push([result.SampleDate, result[column]]);
+		//dataArr.push([result.SampleDate, result[column]]);
+		dataArr.push(resultData);
+		labelArr.push(resultLabel)
 		console.log(dataArr)
 		//hack of a call-back
 		if(dataArr.length === trendsLength){
-			return buildGraph(dataArr);
+			return buildGraph();
 		}
 	});
 };
 
-export default function (esriFind, trendsLength, column, param){
 
+/* function called as buildTrendGraph() */
+export default function (esriFind, trendsLength, column, param){
+	//ctx.getContext('2d');
+	ctx = document.getElementById('graph').getContext('2d');
+
+	//reset values
+	dataArr = [];
+	labelArr = [];
+	console.log(ctx);
 	// get all the trend layers with def set to GAMA_ID = gamaID
 	for(var i = 0; i < trendsLength; i++){
 
@@ -38,4 +97,5 @@ export default function (esriFind, trendsLength, column, param){
 
 		runFind(esriFind, trendsLength, column);
 	}
+	//return String(ctx)
 }

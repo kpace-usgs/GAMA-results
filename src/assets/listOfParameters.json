@@ -9,7 +9,7 @@
 		"units": "Number of Detections",
 		"statusColumns": {
 			"category": "",
-			"column": "FumDetects"
+			"column": "GasDetects"
 		}
 	},{
 		"name": "Gasoline Hydrocarbons, Oxygenates, and Degradates",
@@ -29,7 +29,7 @@
 		"units": "Number of Detections",
 		"statusColumns": {
 			"category": "",
-			"column": "OrgDetects"
+			"column": "GasDetects"
 		}
 	},{
 		"name": "Refrigerant",
@@ -38,8 +38,8 @@
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
-			"category": "RefrigerantCatg",
-			"column": "RefrigerantCt"
+			"category": "",
+			"column": "GasDetects"
 		}
 	},{
 		"name": "Solvent",
@@ -444,6 +444,7 @@
 	"key": 5,
 	"parameters": [{
 		"name": "Nitrite",
+		"trends": [15, 14, 13, 12],
 		"value": 27,
 		"type": "Inorganic",
 		"pcode": "00613",

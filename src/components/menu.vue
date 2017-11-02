@@ -235,7 +235,7 @@ export default {
 		trend(){
 			console.log('trend changed to : ' + this.trend);
 
-			this.$emit('changeTrend', this.trend)
+			this.$emit('changeTrend', this.trend, this.trendIndex)
 		}
 	},
 	methods: {
@@ -258,7 +258,7 @@ export default {
 		zipHref(){
 			if(this.parameterGroup.groupName !== ""){
 				var stringName = this.parameterGroup.groupName.replace(/\s/g, '');
-				return 'downloads/groups/'+ stringName + '.zip'
+				return './downloads/groups/'+ stringName + '.zip'
 			}
 		},
 

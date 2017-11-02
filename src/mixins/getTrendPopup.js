@@ -24,7 +24,6 @@ export default function(param){
 		</p><div><canvas id="graph"></canvas>`
 	};
 	
-
 	return {
 		string: stringToReturn,
 		column: column

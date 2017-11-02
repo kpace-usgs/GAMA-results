@@ -30,7 +30,7 @@ export default {
 		}
 	},
 	mixins: [GetData],
-	props: ['param', 'type', 'trend', 'layerArr', 'reset'],
+	props: ['param', 'type', 'trend', 'layerArr', 'reset', 'trendIndex'],
 
 	computed: {
 		isATrends(){
@@ -43,18 +43,14 @@ export default {
 	watch: { 
 		type(){	
 			this.map.closePopup(); // close any popups
+			this.pointGroup.clearLayers();
 
-			// don't necessarily clear layers from pointgroup. if the constituent layer is just being filtered, just redraw it.
-
-			// if the type layer is being changed on the constituent layer, filter the constituent layer that already exists
 			if(typeof(this.param.value) == 'number') {
 				if(this.isATrends){
-					// do nothing
-					console.log('dont filter by type')
+					console.log('dont filter by type') // do nothing
 				} else{
-					console.log('filter by type');
-					this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value)); 
-
+					console.log('import new param layer')
+					this.constituentLayer = this.importParam(); // load new layer
 					this.addConstituentLayer();
 				}
 			} 
@@ -67,8 +63,12 @@ export default {
 
 		trend(){
 			this.pointGroup.clearLayers();
+			this.map.closePopup();
+
+			console.log('map sees trend has been changed')
+
 			if(this.trend !== ""){
-				this.constituentLayer = this.importTrend();
+				this.constituentLayer = this.importTrend(this.trendIndex);
 				this.addConstituentLayer();
 			}
 		},

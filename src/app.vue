@@ -4,6 +4,7 @@
 			:param = 'param'
 			:type = 'type'
 			:trend='trend'
+			:trendIndex='trendIndex'
 			:layerArr = 'layers'
 			:reset = 'reset'
 			@toggleLoading = 'toggleLoading'
@@ -44,6 +45,7 @@ export default {
 			param: '',
 			type: '',
 			trend: '',
+			trendIndex: '',
 			reset: false,
 			thresholds: '',
 			threshVals: ''
@@ -83,8 +85,9 @@ export default {
 		handleType(string){
 			return this.type = string;
 		},
-		handleTrend(num){
-			this.trend = num;
+		handleTrend(trend, index){
+			this.trend = trend;
+			this.trendIndex = index;
 		},
 		toggleReset(){
 			this.reset = !this.reset;

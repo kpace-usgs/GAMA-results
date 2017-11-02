@@ -85,13 +85,13 @@
 		    <div class="paramLayerLegend hasInfo" v-if='param.units !== "Number of Detections" && param.value !== "" && param.value !== 31'>
 		    	<h3>{{param.name}} <span v-if='param.units'>({{param.units}})</span></h3>
 		    	<div><p>Category</p><p>Symbology</p></div>
-		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{Hi_Thresh}}</p></div></div>
-		    	<div><p>Moderate</p><div><img src='../assets/images/mod.png'/><p>{{Mod_Thresh}}</p></div></div>
+		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{thresh.Hi_Thresh}}</p></div></div>
+		    	<div><p>Moderate</p><div><img src='../assets/images/mod.png'/><p>{{thresh.Mod_Thresh}}</p></div></div>
 		    	<div>
 		    		<p>Low</p>
 		    		<div>
 		    			<img src='../assets/images/low.png'/>
-		    			<p>{{Low_Thresh}}</p>
+		    			<p>{{thresh.Low_Thresh}}</p>
 		    		</div>
 		    	</div>
 		    	<div v-if='param.hasOwnProperty("thresh_val")'>
@@ -199,18 +199,32 @@ export default {
 .paramLayerLegend h3{
 	font-weight: 700;
 }
+
+
+/* align the text to the center for number of detects constituents */
+.paramLayerLegend.detects>div>p{
+	text-align: center;
+}
+.paramLayerLegend.detects>div>div{
+	justify-content: center;
+}
+
+
 .paramLayerLegend>div:nth-child(2){
 	border-bottom: 1px solid grey;
 }
-.paramLayerLegend.hasInfo>div:last-child>div>img{
-	margin-left: auto;
-}
+
 .paramLayerLegend>div>p{
 	width: 100%;
 	margin: 0;
 	text-align: left;
 	font-size: 16px;
 	word-break: keep-all;
+}
+
+/* for legend entries with info about the benchmark source */
+.paramLayerLegend.hasInfo>div:last-child>div>img{
+	margin-left: auto;
 }
 .paramLayerLegend.hasInfo>div>p:first-child{
 	text-align: left;

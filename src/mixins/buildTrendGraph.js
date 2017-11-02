@@ -1,19 +1,42 @@
 // buildTrendGraph.js
 import Chart from 'chart.js';
 
-var dataArr;
-var labelArr;
+var chartData = [];
+var index;
+var yTitle;
 
 function buildGraph() {
-	var ctx = document.getElementById('graph').getContext('2d')
+	var ctx = document.getElementById('graph').getContext('2d');
+
+	// populate arrays from chartData objects
+	var labels = [];
+	var data = [];
+	var colors = [];
+	var hoverColors = [];
+	for(var j = 0; j<chartData.length; j++){
+		labels.push(chartData[j].label);
+		data.push(chartData[j].data);
+		hoverColors.push('#896FC3');
+
+		/* if this point is the current trendindex, it should be highlighted */
+		if(j === index){
+			colors.push('#896FC3')
+		} else {
+			colors.push('#E5E4E6');
+		}
+	};
+
 
 	// build graph from the array
 	var myChart = new Chart(ctx, {
 		type: 'line',
 		data: {
-			labels: labelArr,
+			labels: labels,
 			datasets: [{
-				data: dataArr
+				data: data,
+				pointBackgroundColor: colors,
+				pointHoverBackgroundColor: hoverColors,
+				pointBorderColor: colors
 			}]
 		},
 		options: {
@@ -28,7 +51,8 @@ function buildGraph() {
 						stepSize: 1
 					},
 					scaleLabel: {
-						display: true
+						display: true,
+						labelString: yTitle
 					}
 				}],
 				xAxes: [{
@@ -41,47 +65,51 @@ function buildGraph() {
 	});
 };
 
-var runFind = function(find, trendsLength, column){
-	console.log(column);
+// function that will sort the returned array to keep in order of trend visits
+function compare(a, b){
+	if(a.index < b.index) {
+		return -1;
+	} else if( a.index > b.index) {
+		return 1;
+	}
+	return 0;
+};
+
+var runFind = function(find, trendsLength, i, column){
 	
 	return find.run(function(err, fc) {
-		console.log('complete')
+
 		if(err){
 			return; // catch error
 		}
 
-		//var result = fc.features.length > 0 ? fc.features[0].properties : {SampleDate: '', Concentration: ''};
-		var resultLabel,
-			resultData;
+		/* push featurecollection results into chartData array. include the i value so that the array can be sorted */
+		var hasResults = fc.features.length > 0;
 
-		if(fc.features.length > 0){
-			resultLabel = fc.features[0].properties.SampleDate;
-			resultData = fc.features[0].properties[column];
-			console.log(fc.features[0].properties);
-		} else {
-			resultLabel = 'Not sampled';
-			resultData = ''
-		}
+		chartData.push({
+			index: i,
+			label: hasResults ? fc.features[0].properties.SampleDate : 'Not sampled',
+			data: hasResults ? fc.features[0].properties[column] : ''
+		});
 
-		// in each layer save the concentration or number of detects value to an array
-		//dataArr.push([result.SampleDate, result[column]]);
-		dataArr.push(resultData);
-		labelArr.push(resultLabel)
-		console.log(dataArr)
-		//hack of a call-back
-		if(dataArr.length === trendsLength){
-			return buildGraph();
+		/* hack of a call-back */
+		if(chartData.length === trendsLength){
+			chartData.sort(compare) // sort chartData by index value
+			return buildGraph(index);
 		}
 	});
 };
 
 
 /* function called as buildTrendGraph() */
-export default function (esriFind, trendsLength, column, param){
+export default function (esriFind, trendsLength, column, param, trendsIndex){
 
 	//reset values
-	dataArr = [];
-	labelArr = [];
+	chartData = [];
+
+	//save index and units values to local variables
+	index = trendsIndex;
+	yTitle = param.units;
 
 	// get all the trend layers with def set to GAMA_ID = gamaID
 	for(var i = 0; i < trendsLength; i++){
@@ -90,7 +118,7 @@ export default function (esriFind, trendsLength, column, param){
 
 		esriFind.layers(val); //add val info to the esri.find() object created in getData.vue
 
-		runFind(esriFind, trendsLength, column);
+		runFind(esriFind, trendsLength, i, column);
 	}
 
 	return ''

@@ -20,7 +20,7 @@ export default {
 
 	methods: {
 
-		importTrend(){
+		importTrend(index){
 			// save values to be passed to popup
 			var content = getTrendPopup(this.param);
 			var url = this.urlForTrendData;
@@ -35,7 +35,7 @@ export default {
 					var properties = fc.features[i].properties;
 					// this.getTrendsForGraph(properties.GAMA_ID, content.column, url);
 
-					return L.Util.template(content.string(properties), properties) + this.getTrendsForGraph(properties.GAMA_ID, content.column, url)   
+					return L.Util.template(content.string(properties), properties) + this.getTrendsForGraph(properties.GAMA_ID, content.column, url, index)   
 				}
 			});
 
@@ -44,14 +44,14 @@ export default {
 			return layer;
 		},
 
-		getTrendsForGraph(gamaID, column, url){
+		getTrendsForGraph(gamaID, column, url, index){
 			var trendsLength = this.param.trends.length;
 			/* use esri-leaflet find function */
 			var layer = esriFunctions.getData(url);
 
 			layer.text(gamaID).fields("GAMA_ID").returnGeometry(true); //shared settings
 
-			return buildTrendGraph(layer, trendsLength, column, this.param); //buildTrendGraph.js
+			return buildTrendGraph(layer, trendsLength, column, this.param, index); //buildTrendGraph.js
 		},
 		// get well markers as featureLayer
 		importParam(){

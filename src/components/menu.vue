@@ -233,10 +233,10 @@ export default {
 			return this.$emit('changeType', this.type);
 		},
 		trend(){
-			if(this.trend !== ""){
-				console.log('trend changed to : ' + this.trend);
-				this.$emit('changeTrend', this.trend, this.trendIndex)
-			}
+
+			console.log('trend changed to : ' + this.trend);
+			this.$emit('changeTrend', this.trend, this.trendIndex)
+
 		}
 	},
 	methods: {

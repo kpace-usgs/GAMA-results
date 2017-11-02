@@ -9,7 +9,7 @@
 		"units": "Number of Detections",
 		"statusColumns": {
 			"category": "",
-			"column": "GasDetects"
+			"column": "FumDetects"
 		}
 	},{
 		"name": "Gasoline Hydrocarbons, Oxygenates, and Degradates",
@@ -48,8 +48,8 @@
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
-			"category": "SolventCatg",
-			"column": "SolventCt"
+			"category": "",
+			"column": "SolvDetects"
 		}
 	},{
 		"name": "Trihalomethanes",

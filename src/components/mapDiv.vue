@@ -45,12 +45,14 @@ export default {
 			this.map.closePopup(); // close any popups
 			this.pointGroup.clearLayers();
 
-			if(typeof(this.param.value) == 'number') {
-				if(this.isATrends){
+			if(typeof(this.param.value) == 'number') { // if a constituent has been selected
+				if(this.isATrends){ // if trends layers exist and a trends option has been selected 
 					if(this.trend !== ""){
 						// if trend value already exists, filter existing constituentlayer by new type. if the trend value doesn't change, the map won't call this.importTrend().
 						this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.trend));
-					} // else do nothing; the trend value will be updated next and this.importTrend will be called
+					} else {
+						return;
+					}// else do nothing; the trend value will be updated to the first value in the parameter's trends array, and this.importTrend will be called next.
 				} else{
 					// if a trend value exists then need to change from trends layer to param layer
 					if(this.trend !== ""){
@@ -64,7 +66,7 @@ export default {
 				this.addConstituentLayer();
 			} 
 
-			// otherwise the map is showing the wells by type, with no constituent data
+			// if no constituent has been selected, then show the well locations by type
 			else {
 				this.wellsByType();
 			}
@@ -77,9 +79,10 @@ export default {
 			console.log('map sees trend has been changed')
 
 			if(this.trend !== ""){
+				// the trend value has been changed to an integer, get trend layer
 				this.constituentLayer = this.importTrend(this.trendIndex);
 				this.addConstituentLayer();
-			}
+			} // otherwise either the parameter or the study type has been changed, and the watchers on those will handle updating the map
 		},
 
 		param(){

@@ -47,12 +47,21 @@ export default {
 
 			if(typeof(this.param.value) == 'number') {
 				if(this.isATrends){
-					console.log('dont filter by type') // do nothing
+					if(this.trend !== ""){
+						// if trend value already exists, filter existing constituentlayer by new type. if the trend value doesn't change, the map won't call this.importTrend().
+						this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.trend));
+					} // else do nothing; the trend value will be updated next and this.importTrend will be called
 				} else{
-					console.log('import new param layer')
-					this.constituentLayer = this.importParam(); // load new layer
-					this.addConstituentLayer();
+					// if a trend value exists then need to change from trends layer to param layer
+					if(this.trend !== ""){
+						console.log('import new param layer');
+						this.constituentLayer = this.importParam(); // load new layer
+					} else {
+						this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value)); // just update existing param layer
+					}
+					
 				}
+				this.addConstituentLayer();
 			} 
 
 			// otherwise the map is showing the wells by type, with no constituent data
@@ -146,6 +155,7 @@ export default {
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){
 				console.log('add layer')
 				this.pointGroup.addLayer(this.constituentLayer);
+				this.constituentLayer.redraw();
 			} else {
 				this.constituentLayer.redraw();
 			}

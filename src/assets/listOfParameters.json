@@ -29,7 +29,7 @@
 		"units": "Number of Detections",
 		"statusColumns": {
 			"category": "",
-			"column": "GasDetects"
+			"column": "OrgDetects"
 		}
 	},{
 		"name": "Refrigerant",
@@ -39,7 +39,7 @@
 		"units": "Number of Detections",
 		"statusColumns": {
 			"category": "",
-			"column": "GasDetects"
+			"column": "RefDetects"
 		}
 	},{
 		"name": "Solvent",
@@ -543,31 +543,23 @@
 		"trends": [3, 2, 1, 0],
 		"type": "Inorganic",
 		"pcode": "07000",
-		"units": "",
+		"units": "tritium units",
 		"low": "< 0.3",
 		"mod": "0.3 - 2",
 		"high": "> 2",
 		"thresh_val": "",
 		"thresh_src": "",
-		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water",
-		"statusColumns": {
-			"category": "",
-			"column": "Tritium, wu (07000)"
-		}
+		"acr": "Maximum Contaminant Level established by the California State Water Resources Control Board Department of Drinking Water"
 	},{
 		"name": "Carbon-14",
 		"value": 9,
 		"trends": [7, 6, 5, 4],
 		"type": "Inorganic",
 		"pcode": 49933,
-		"units": null,
+		"units": "carbon-14 units",
 		"thresh_val": "",
 		"thresh_src": "",
-		"acr": "",
-		"statusColumns": {
-			"category": "",
-			"column": "C-14, wf (49933)"
-		}
+		"acr": ""
 	}]
 },{
 	"groupName": "Field Water Quality Indicators",

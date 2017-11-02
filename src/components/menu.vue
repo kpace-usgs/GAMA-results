@@ -233,9 +233,10 @@ export default {
 			return this.$emit('changeType', this.type);
 		},
 		trend(){
-			console.log('trend changed to : ' + this.trend);
-
-			this.$emit('changeTrend', this.trend, this.trendIndex)
+			if(this.trend !== ""){
+				console.log('trend changed to : ' + this.trend);
+				this.$emit('changeTrend', this.trend, this.trendIndex)
+			}
 		}
 	},
 	methods: {
@@ -297,6 +298,7 @@ export default {
 				//this.trendIndex is the index currently selected on the slider bar
 				return this.param.trends[this.trendIndex]
 			}
+			return "";
 		},
 
 		trendArr(){

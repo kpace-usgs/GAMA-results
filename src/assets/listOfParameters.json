@@ -58,8 +58,8 @@
 		"type": "Organic",
 		"units": "Number of Detections",
 		"statusColumns": {
-			"category": "TrihalomethaneCatg",
-			"column": "TrihalomethaneCt"
+			"category": "",
+			"column": "THMDetects"
 		}
 	}]
 },

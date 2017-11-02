@@ -24,7 +24,6 @@ export default {
 			// save values to be passed to popup
 			var content = getTrendPopup(this.param);
 			var url = this.urlForTrendData;
-
 			// get layer
 			var defs = this.decideHowToFilter(this.type, this.trend);
 			var layer = esriFunctions.getLayer(defs, url, this.trend);
@@ -33,8 +32,6 @@ export default {
 			layer.bindPopup( (err, fc) => {
 				for(var i = 0; i < fc.features.length; i++){
 					var properties = fc.features[i].properties;
-					// this.getTrendsForGraph(properties.GAMA_ID, content.column, url);
-
 					return L.Util.template(content.string(properties), properties) + this.getTrendsForGraph(properties.GAMA_ID, content.column, url, index)   
 				}
 			});
@@ -51,7 +48,7 @@ export default {
 
 			layer.text(gamaID).fields("GAMA_ID").returnGeometry(true); //shared settings
 
-			return buildTrendGraph(layer, trendsLength, column, this.param, index); //buildTrendGraph.js
+			return buildTrendGraph(layer, trendsLength, column, this.param, index, this.thresh); //buildTrendGraph.js
 		},
 		// get well markers as featureLayer
 		importParam(){

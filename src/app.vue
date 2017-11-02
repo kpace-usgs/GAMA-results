@@ -7,6 +7,7 @@
 			:trendIndex='trendIndex'
 			:layerArr = 'layers'
 			:reset = 'reset'
+			:thresh = 'threshVals.Threshold'
 			@toggleLoading = 'toggleLoading'
 		></MapDiv>
 
@@ -48,11 +49,18 @@ export default {
 			trendIndex: '',
 			reset: false,
 			thresholds: '',
-			threshVals: ''
+			threshVals: {
+				Threshold: 4
+			}
 		}
 	},
 	components: {
 		MapDiv, MenuDiv, LegendDiv
+	},
+	computed: {
+		max(){
+			return this.threshVals.Threshold;
+		}
 	},
 	mixins: [ Loader],
 	methods: {
@@ -72,15 +80,15 @@ export default {
 					console.log(fc);
 					that.threshVals = fc.features[0].properties;
 
-
 					//TODO change how this.threshVals gets saved to match Bryant's news format
 					/* for(var i = 0; i < fc.features.length; i++) {
 						that.threshVals.legendItems.push({name: fc.features[i].properties.BenchmarkName, symbology: fc.features[i].properties.Symbology})
 					}
 					*/
 				});
+			}else {
+				this.threshVals.Threshold = 4;
 			}
-			
 		},
 		handleType(string){
 			return this.type = string;

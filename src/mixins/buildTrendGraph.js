@@ -4,6 +4,7 @@ import Chart from 'chart.js';
 var chartData = [];
 var index;
 var yTitle;
+var max = 0;
 
 function buildGraph() {
 	var ctx = document.getElementById('graph').getContext('2d');
@@ -13,6 +14,9 @@ function buildGraph() {
 	var data = [];
 	var colors = [];
 	var hoverColors = [];
+
+	console.log(chartData);
+
 	for(var j = 0; j<chartData.length; j++){
 		labels.push(chartData[j].label);
 		data.push(chartData[j].data);
@@ -20,9 +24,9 @@ function buildGraph() {
 
 		/* if this point is the current trendindex, it should be highlighted */
 		if(j === index){
-			colors.push('#896FC3')
+			colors.push('#896FC3');
 		} else {
-			colors.push('#E5E4E6');
+			colors.push('#CCC5CE');
 		}
 	};
 
@@ -36,7 +40,8 @@ function buildGraph() {
 				data: data,
 				pointBackgroundColor: colors,
 				pointHoverBackgroundColor: hoverColors,
-				pointBorderColor: colors
+				pointBorderColor: 'black',
+				lineTension: 0
 			}]
 		},
 		options: {
@@ -47,7 +52,7 @@ function buildGraph() {
 				yAxes: [{
 					ticks: {
 						min: 0,
-						max: 4,
+						max: max,
 						stepSize: 1
 					},
 					scaleLabel: {
@@ -58,6 +63,10 @@ function buildGraph() {
 				xAxes: [{
 					time: {
 						unit: 'month'
+					},
+					scaleLabel: {
+						display: true,
+						labelString: 'Sample Date'
 					}
 				}]
 			}
@@ -84,12 +93,18 @@ var runFind = function(find, trendsLength, i, column){
 		}
 
 		/* push featurecollection results into chartData array. include the i value so that the array can be sorted */
+		var labelString = '';
+		var dataVal = null;
 		var hasResults = fc.features.length > 0;
+		if(hasResults){
+			labelString = fc.features[0].properties.SampleDate;
+			dataVal = fc.features[0].properties[column];
+		};
 
 		chartData.push({
 			index: i,
-			label: hasResults ? fc.features[0].properties.SampleDate : 'Not sampled',
-			data: hasResults ? fc.features[0].properties[column] : ''
+			label: labelString,
+			data: dataVal
 		});
 
 		/* hack of a call-back */
@@ -102,8 +117,10 @@ var runFind = function(find, trendsLength, i, column){
 
 
 /* function called as buildTrendGraph() */
-export default function (esriFind, trendsLength, column, param, trendsIndex){
+export default function (esriFind, trendsLength, column, param, trendsIndex, thresh){
 
+	console.log('threshold: ' + thresh);
+	max = thresh;
 	//reset values
 	chartData = [];
 

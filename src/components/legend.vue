@@ -45,7 +45,7 @@
 					<p>{{thresh.Low_Thresh}}</p>
 				</div>
 				<div slot='benchmark'>
-					<p> {{thresh.Threshold}} {{thresh.ThresholdSource}} </p>
+					<p> {{thresh.ThresholdSource}} </p>
 					<img src='../assets/images/moreInfo.png' :alt='thresh.ThresholdDetail' :title='thresh.ThresholdDetail' />
 				</div>
 		    </legendContent>
@@ -97,7 +97,7 @@
 		    	<div v-if='param.hasOwnProperty("thresh_val")'>
 		    		<p>Benchmark:</p>
 		    		<div>
-		    			<p> {{thresh.Threshold}} {{thresh.ThresholdSource}} </p>
+		    			<p> {{thresh.ThresholdSource}} </p>
 		    			<img src='../assets/images/moreInfo.png' :alt='thresh.ThresholdDetail' :title='thresh.ThresholdDetail' />
 		    		</div>
 		    	</div>

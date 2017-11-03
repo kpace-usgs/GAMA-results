@@ -74,15 +74,15 @@ export default {
 
 		trend(){
 			this.pointGroup.clearLayers();
-			this.map.closePopup();
-
 			console.log('map sees trend has been changed')
-
-			if(this.trend !== ""){
+			if(this.trend === ""){
+				// trend is being reset
+				this.map.closePopup(); // do I really need this? wouldn't changing the param or type that resets the trend to "" already have called this?
+			} else{
 				// the trend value has been changed to an integer, get trend layer
-				this.constituentLayer = this.importTrend(this.trendIndex);
+				this.constituentLayer = this.importTrend(this.type, this.trend);
 				this.addConstituentLayer();
-			} // otherwise either the parameter or the study type has been changed, and the watchers on those will handle updating the map
+			}
 		},
 
 		param(){

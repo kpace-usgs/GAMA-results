@@ -57,11 +57,7 @@ export default {
 	components: {
 		MapDiv, MenuDiv, LegendDiv
 	},
-	computed: {
-		max(){
-			return this.threshVals.Threshold;
-		}
-	},
+
 	mixins: [ Loader],
 	methods: {
 		handleLayer(arr){

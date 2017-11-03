@@ -7,30 +7,21 @@ var yTitle;
 var max = 0;
 
 function buildGraph() {
-	var ctx = document.getElementById('graph').getContext('2d');
-
-	// populate arrays from chartData objects
-	var labels = [];
-	var data = [];
-	var colors = [];
-	var hoverColors = [];
-
-	console.log(chartData);
-
-	for(var j = 0; j<chartData.length; j++){
-		labels.push(chartData[j].label);
-		data.push(chartData[j].data);
-		hoverColors.push('#896FC3');
-
-		/* if this point is the current trendindex, it should be highlighted */
-		if(j === index){
-			colors.push('#896FC3');
-		} else {
-			colors.push('#CCC5CE');
-		}
+	
+	/* declare variables used by chart from chartData array*/
+	function createFromArr(arr, key) {
+		return arr.map((dataPoint, i) => {return dataPoint[key]})
 	};
+	var labels = createFromArr(chartData, 'label');
+	var data = createFromArr(chartData, 'data');
+	var colors = Array(chartData.length).fill().map((item, i) => { 
+		var color = i === index ? '#896FC3'  : '#CCC5CE' ;
+		return color;
+	});
 
+	var hoverColors = Array(chartData.length).fill().map(() => { '#896FC3' });
 
+	var ctx = document.getElementById('graph').getContext('2d');
 	// build graph from the array
 	var myChart = new Chart(ctx, {
 		type: 'line',

@@ -336,17 +336,13 @@ select{
 	width: 300px;
 	background-color: #ebedee;
 	border-radius: 3px;
+	box-shadow: 1px 1px 5px grey;
 }
 select.highlighted{
 	border: 2px solid #896FC3;
 }
-select.shaded{
 
-}
-option{
-
-}
-select:hover, input:hover, button:hover{
+select:hover, input:hover{
 	box-shadow: 1px 1px 10px grey;
 	cursor: pointer;
 	font-family: 'Calibri';
@@ -359,6 +355,7 @@ select:hover, input:hover, button:hover{
 }
 
 .button{
+	box-shadow: 1px 1px 5px grey;
 	text-align: center;
 	width: 100%;
 	display: block;
@@ -377,7 +374,7 @@ select:hover, input:hover, button:hover{
 	margin-top: 7px;
 }
 .button:not(.disabled):hover{
-	box-shadow: 2px 2px 10px 1px grey;
+	box-shadow: 1px 1px 10px grey;
 	width: 100%;
 	height: 40px;
 }

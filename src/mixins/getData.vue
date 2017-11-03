@@ -2,7 +2,6 @@
 /* import functions that will be used to construct popups and map layers*/
 import getParamPopup from './getParamPopup.js'
 import getTrendPopup from './getTrendPopup.js'
-import buildTrendGraph from './buildTrendGraph.js'
 import listeners from './addEventListeners.vue'
 import * as esriFunctions from './esriFunctions.js'
 
@@ -22,17 +21,18 @@ export default {
 
 		importTrend(index){
 			// save values to be passed to popup
-			var content = getTrendPopup(this.param);
+			var content = getTrendPopup(this.param, index, this.thresh);
 			var url = this.urlForTrendData;
 			// get layer
 			var defs = this.decideHowToFilter(this.type, this.trend);
 			var layer = esriFunctions.getLayer(defs, url, this.trend);
+			var graphData = esriFunctions.getData(url);
 
 			/* bind a popup that includes the info about that well, plus that well's trend graph */
 			layer.bindPopup( (err, fc) => {
 				for(var i = 0; i < fc.features.length; i++){
 					var properties = fc.features[i].properties;
-					return L.Util.template(content.string(properties), properties) + this.getTrendsForGraph(properties.GAMA_ID, content.column, url, index)   
+					return L.Util.template(content.string(properties), properties) + content.graph(properties.GAMA_ID, graphData)  
 				}
 			});
 
@@ -41,15 +41,6 @@ export default {
 			return layer;
 		},
 
-		getTrendsForGraph(gamaID, column, url, index){
-			var trendsLength = this.param.trends.length;
-			/* use esri-leaflet find function */
-			var layer = esriFunctions.getData(url);
-
-			layer.text(gamaID).fields("GAMA_ID").returnGeometry(true); //shared settings
-
-			return buildTrendGraph(layer, trendsLength, column, this.param, index, this.thresh); //buildTrendGraph.js
-		},
 		// get well markers as featureLayer
 		importParam(){
 			/* use the param data available in the component that has registered this file as a mixin */

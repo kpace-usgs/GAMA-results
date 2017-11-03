@@ -122,9 +122,6 @@
 		    <a @click='reset' id='reset' class='button' >
 				<p>Reset Map</p>
 		    </a>
-
-
-		    <!-- <canvas id='graph' style='height: 100%;'></canvas> -->
 		
 	    </div>
 	</div>

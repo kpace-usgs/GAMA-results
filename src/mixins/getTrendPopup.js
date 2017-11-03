@@ -1,6 +1,7 @@
 import moment from 'moment';
+import buildTrendGraph from './buildTrendGraph.js';
 
-export default function(param){
+export default function(param, index, thresh){
 
 	// if no value for the category's column has been provided, return 'Category'. If a blank string has been provided for the value, return 'N/A'
 	var category = param.hasOwnProperty('statusColumns') ? param.statusColumns.category == '' ? 'N/A': param.statusColumns.category : '{Category}';
@@ -23,9 +24,15 @@ export default function(param){
 		Study Unit Trend Number: {VisitNo}
 		</p><div><canvas id="graph"></canvas>`
 	};
+
+	var getTrendsForGraph = function(gamaID, esriObj){
+		esriObj.text(gamaID).fields("GAMA_ID");
+		return buildTrendGraph(esriObj, param, column, index, thresh);
+	};
 	
 	return {
 		string: stringToReturn,
+		graph: getTrendsForGraph,
 		column: column
-	}
+	};
 };

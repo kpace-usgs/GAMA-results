@@ -117,7 +117,7 @@ var runFind = function(find, trendsLength, i, column){
 
 
 /* function called as buildTrendGraph() */
-export default function (esriFind, trendsLength, column, param, trendsIndex, thresh){
+export default function (esriObj, param, column, trendsIndex, thresh){
 
 	console.log('threshold: ' + thresh);
 	max = thresh;
@@ -129,13 +129,13 @@ export default function (esriFind, trendsLength, column, param, trendsIndex, thr
 	yTitle = param.units;
 
 	// get all the trend layers with def set to GAMA_ID = gamaID
-	for(var i = 0; i < trendsLength; i++){
+	for(var i = 0; i < param.trends.length ; i++){
 
 		var val = param.trends[i]; // get the number of the trends layer to query
 
-		esriFind.layers(val); //add val info to the esri.find() object created in getData.vue
+		esriObj.layers(val); //add val info to the esri.find() object created in getData.vue
 
-		runFind(esriFind, trendsLength, i, column);
+		runFind(esriObj, param.trends.length, i, column);
 	}
 
 	return ''

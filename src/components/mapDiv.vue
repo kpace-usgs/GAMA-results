@@ -30,7 +30,7 @@ export default {
 		}
 	},
 	mixins: [GetData],
-	props: ['param', 'type', 'trend', 'layerArr', 'reset', 'trendIndex', 'thresh'],
+	props: ['param', 'type', 'trend', 'layerArr', 'reset', 'trendIndex', 'thresh', 'groupKey'],
 
 	computed: {
 		isATrends(){

@@ -80,28 +80,34 @@ export default {
 			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties));
 			this.popup.insertAdjacentHTML('beforeend', `<br/>Study Unit Trend Number: ${properties.VisitNo}</p>`); //add additional line
 			this.popup.insertAdjacentElement('beforeend', this.canvas);
-			return this.buildGraph(properties.GAMA_ID, esriObj);
+			return this.defineFind(properties.STAID, esriObj, this.groupKey);
 		},
 
-		/* run the esri find object for rows where GAMA_ID = gamaID */
-		buildGraph(gamaID, esriObj) {
-			esriObj.text(gamaID).fields("GAMA_ID");
+		/* run the esri find object for rows where STAID = staid */
+		defineFind(staid, esriObj, layerKey) {
+			esriObj.text(staid).fields("STAID");
+			esriObj.layers(layerKey)
 
-			for(var i = 0; i < this.param.trends.length; i++){
-				var val = this.param.trends[i];
-				esriObj.layers(val);
-				this.runFind(esriObj, i); //run esri find object
+			this.runFind(esriObj);
 
-				// when done, return popup
-				if(i === this.param.trends.length - 1){
-					return this.popup;
-				}
-			}
+			return this.popup;
+
+			// for(var i = 0; i < this.param.trends.length; i++){
+			// 	var val = this.param.trends[i];
+			// 	esriObj.layers(val);
+			// 	this.runFind(esriObj, i); //run esri find object
+
+			// 	// when done, return popup
+			// 	if(i === this.param.trends.length - 1){
+			// 		return this.popup;
+			// 	}
+			// }
 		},
 
 		runFind(find, i){
 
 			return find.run( (err, fc) => {
+				console.log(fc);
 				if(err) {
 					return; //catch error
 				}

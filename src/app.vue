@@ -8,6 +8,7 @@
 			:layerArr = 'layers'
 			:reset = 'reset'
 			:thresh = 'threshVals.Threshold'
+			:groupKey = 'groupKey'
 			@toggleLoading = 'toggleLoading'
 		></MapDiv>
 
@@ -22,6 +23,7 @@
 		<MenuDiv 
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
+			@changeParamGroup='handleParamGroup'
 			@changeType='handleType'
 			@changeTrend = 'handleTrend'
 			@resetClicked = 'toggleReset'
@@ -44,6 +46,7 @@ export default {
 		return {
 			layers: [],
 			param: '',
+			groupKey: 0,
 			type: '',
 			trend: '',
 			trendIndex: '',
@@ -85,6 +88,9 @@ export default {
 			}else {
 				this.threshVals.Threshold = 4;
 			}
+		},
+		handleParamGroup(key){
+			this.groupKey = key;
 		},
 		handleType(string){
 			return this.type = string;

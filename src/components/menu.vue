@@ -150,6 +150,7 @@ export default {
 			listOfParameters: listOfParameters,
 			parameterGroup: '',
 			defaultParamGroup: {
+				"key": 0,
 				"parameters": [{
 					"name": "Select constituent class first",
 					"value": ""
@@ -201,11 +202,13 @@ export default {
 	watch: {
 		parameterGroup(){
 			console.log(this.parameterGroup);
-			// reset the param value if the groupname is being reset or if it's being changed while the param doesn't have a value
+			// reset the param value if the groupname is being reset or if it's being changed while the param hasn't changed
 			if(this.parameterGroup.groupName == "" || this.param.value != ""){
 				this.param = this.defaultParamGroup.parameters[0];
 				this.trendIndex = ""
-			} 
+			} else {
+				this.$emit('changeParamGroup', this.parameterGroup.key)
+			}
 		},
 		layerName(){
 			return this.$emit('changeLayer', this.layerName);

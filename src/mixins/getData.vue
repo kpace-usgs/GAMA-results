@@ -9,7 +9,8 @@ export default {
 	data(){
 		return {
 			urlForParamData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_symbolsordered/MapServer/',
-			urlForTrendData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/trends_layers_thresholds/MapServer/',
+			urlForTrendView: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/trends_layers_thresholds/MapServer/',
+			urlForTrendData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/data/MapServer/',
 			urlForPolygonData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/',
 			urlForTypeData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sites2/MapServer/'
 		}
@@ -19,13 +20,13 @@ export default {
 	methods: {
 
 		importTrend(type, trend){
-			// save values to be passed to popup
-			//var content = getTrendPopup(this.param, index, this.thresh);
-			var url = this.urlForTrendData;
+
 			// get layer
 			var defs = this.decideHowToFilter(type, trend);
-			var layer = esriFunctions.getLayer(defs, url, trend);
-			var esriObj = esriFunctions.getData(url);
+			var layer = esriFunctions.getLayer(defs, this.urlForTrendView, trend);
+
+			// get data for popup. layer number is set by parameter group key value
+			var esriObj = esriFunctions.getData(this.urlForTrendData);
 
 			/* save functions from TrendPopup.vue mixin as local variables so the popup can access them */
 			var popup = this.returnTrendPopup;

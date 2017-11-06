@@ -1,6 +1,6 @@
 [{
 	"groupName": "Volatile Organic Compounds",
-	"key": 0,
+	"key": 10,
 	"parameters": [{
 		"name": "Fumigants",
 		"value": 300, 
@@ -248,7 +248,7 @@
 	}]
 },{
 	"groupName": "Pesticides and Degradates",
-	"key": 4,
+	"key": 7,
 	"parameters": [{
 		"name": "Herbicides and Herbicide Degradates",
 		"value": 17,
@@ -297,7 +297,7 @@
 	}]
 },{
 	"groupName": "Microbiological Parameters",
-	"key": 6,
+	"key": 3,
 	"parameters": [{
 		"name": "All Microbial",
 		"value": 24,
@@ -310,7 +310,7 @@
 	}]
 },{
 	"groupName": "Major and Minor Ions",
-	"key": 7,
+	"key": 12,
 	"parameters": [{
 		"name": "Chloride",
 		"value": 10,
@@ -338,7 +338,7 @@
 	}]
 },{
 	"groupName": "Geochemical and Age-Dating Tracers",
-	"value": 8,
+	"value": 1,
 	"parameters": [{
 		"name": "Tritium",
 		"value": 45,
@@ -356,7 +356,7 @@
 	}]
 },{
 	"groupName": "Field Water Quality Indicators",
-	"value": 9,
+	"value": 4,
 	"parameters": [{
 		"name": "Specific Conductance",
 		"value": 39,
@@ -377,7 +377,7 @@
 		"name": "Perchlorate",
 		"value": 30,
 		"type": "Inorganic",
-		"pcode": "63790 61209",
+		"pcode": "63790",
 		"units": "µg/L",
 		"low": "< 3",
 		"mod": "3 - 6",

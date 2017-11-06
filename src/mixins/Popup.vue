@@ -10,7 +10,8 @@ export default {
 			chartData: [],
 			canvas: document.createElement('canvas'),
 			popup: document.createElement('div'),
-			chart: ''
+			chart: '',
+			popupProperties: ''
 		}
 	},
 
@@ -51,7 +52,13 @@ export default {
 				this.chart.update();
 				this.popup.innerHTML = ''; //clear
 				var properties = this.chartData[this.trendIndex].properties;
-				this.popup.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Number: ${properties.VisitNo}</p>`); //add additional line
+				if(properties.hasOwnProperty('StudyUnit')){
+					this.popup.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}</p>`); //add additional line
+				}
+				else {
+					this.popup.insertAdjacentHTML('beforeend', `<p>Study Unit: ${this.popupProperties.StudyUnit}<br/>GAMA ID: ${this.popupProperties.GAMA_ID}<br/>Sample Date: Not sampled in this visit<br/>${this.lookFor}: N/A ${this.units}<br/>Category: N/A<br/>Study Unit Trend Visit: ${this.trendIndex + 1}</p>`)
+				}
+				
 				this.popup.insertAdjacentElement('beforeend', this.canvas);
 			}
 		}
@@ -79,8 +86,9 @@ export default {
 		returnTrendPopup(properties, esriObj){
 			this.popup.innerHTML = ''; //clear popup
 			this.canvas.innerHTML = ''; //clear canvas
+			this.popupProperties = properties;
 			this.chartData = []; //clear array
-			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Number: ${properties.VisitNo}</p>`); //add additional line
+			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}</p>`); //add additional line
 			this.popup.insertAdjacentElement('beforeend', this.canvas);
 			return this.buildGraph(properties.GAMA_ID, esriObj);
 		},

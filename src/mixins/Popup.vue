@@ -49,6 +49,10 @@ export default {
 			if(this.chart.hasOwnProperty('data') && this.trendIndex !== ''){
 				this.chart.data.datasets[0].pointBackgroundColor = this.backgroundColors;
 				this.chart.update();
+				this.popup.innerHTML = ''; //clear
+				var properties = this.chartData[this.trendIndex].properties;
+				this.popup.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Number: ${properties.VisitNo}</p>`); //add additional line
+				this.popup.insertAdjacentElement('beforeend', this.canvas);
 			}
 		}
 	},
@@ -69,16 +73,14 @@ export default {
 			GAMA ID: ${properties.GAMA_ID}<br/>\
 			Sample Date: ${date}<br/>\
 			${this.lookFor}: ${lookFor} ${this.units}<br/>\
-			Category: ${this.category}
-			</p>`
+			Category: ${this.category}`
 		},
 
 		returnTrendPopup(properties, esriObj){
 			this.popup.innerHTML = ''; //clear popup
 			this.canvas.innerHTML = ''; //clear canvas
 			this.chartData = []; //clear array
-			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties));
-			this.popup.insertAdjacentHTML('beforeend', `<br/>Study Unit Trend Number: ${properties.VisitNo}</p>`); //add additional line
+			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Number: ${properties.VisitNo}</p>`); //add additional line
 			this.popup.insertAdjacentElement('beforeend', this.canvas);
 			return this.buildGraph(properties.GAMA_ID, esriObj);
 		},
@@ -108,11 +110,15 @@ export default {
 				// if a layer exists for the param.value at the given trend, push data to arrays
 				var hasResults = fc.features.length > 0;
 
+				console.log(fc);
+
 				this.chartData.push({
 					index: i,
-					label: hasResults ? fc.features[0].properties.SampleDate : '',
-					data: hasResults ? fc.features[0].properties[this.column] : null
+					label: hasResults ? fc.features[0].properties.SampleDate : 'NA',
+					data: hasResults ? fc.features[0].properties[this.column] : null,
+					properties: hasResults ? fc.features[0].properties: {}
 				});
+
 				/* hack of a callback */
 				if(this.chartData.length === this.trendsLength){
 					this.chartData.sort(this.compare);

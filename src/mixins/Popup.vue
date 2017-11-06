@@ -9,7 +9,8 @@ export default {
 		return {
 			chartData: [],
 			canvas: document.createElement('canvas'),
-			popup: document.createElement('div')
+			popup: document.createElement('div'),
+			chart: ''
 		}
 	},
 
@@ -33,10 +34,33 @@ export default {
 
 		trendsLength(){
 			return this.param.trends.length;
+		},
+
+		backgroundColors(){
+			return Array(this.chartData.length).fill().map((item, i) => {
+				return i === this.trendIndex ? '#896FC3'  : '#CCC5CE' ;
+			});
+		}
+	},
+
+	watch: {
+		trendIndex(){
+			// watch for change in trend index and if there's a chart attached to this.chart value, change the array of colors
+			if(this.chart.hasOwnProperty('data') && this.trendIndex !== ''){
+				this.chart.data.datasets[0].pointBackgroundColor = this.backgroundColors;
+				this.chart.update();
+			}
 		}
 	},
 
 	methods: {
+		returnParamPopup(properties) {
+			this.popup.innerHTML = ''; //clear popup
+			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties));
+			this.popup.insertAdjacentHTML('beforeend', '</p>');
+			return this.popup;
+		},
+
 		returnString(properties){
 			var date = moment(properties.SampleDate).format('MM/DD/YYYY');
 			var lookFor = properties[this.column];
@@ -45,16 +69,16 @@ export default {
 			GAMA ID: ${properties.GAMA_ID}<br/>\
 			Sample Date: ${date}<br/>\
 			${this.lookFor}: ${lookFor} ${this.units}<br/>\
-			Category: ${this.category}<br/>\
-			Study Unit Trend Number: ${properties.VisitNo}
+			Category: ${this.category}
 			</p>`
 		},
 
-		returnPopup(properties, esriObj){
+		returnTrendPopup(properties, esriObj){
 			this.popup.innerHTML = ''; //clear popup
 			this.canvas.innerHTML = ''; //clear canvas
 			this.chartData = []; //clear array
 			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties));
+			this.popup.insertAdjacentHTML('beforeend', `<br/>Study Unit Trend Number: ${properties.VisitNo}</p>`); //add additional line
 			this.popup.insertAdjacentElement('beforeend', this.canvas);
 			return this.buildGraph(properties.GAMA_ID, esriObj);
 		},
@@ -104,21 +128,17 @@ export default {
 			};
 			var labels = createFromArr(this.chartData, 'label');
 			var data = createFromArr(this.chartData, 'data');
-			var colors = Array(this.chartData.length).fill().map((item, i) => { 
-				var color = i === index ? '#896FC3'  : '#CCC5CE' ;
-				return color;
-			});
 			var hoverColors = Array(this.chartData.length).fill().map(() => { '#896FC3' });
 
 			// build graph from the array
 			var graph = this.canvas.getContext('2d')
-			var myChart = new Chart(graph, {
+			this.chart = new Chart(graph, {
 				type: 'line',
 				data: {
 					labels: labels,
 					datasets: [{
 						data: data,
-						pointBackgroundColor: colors,
+						pointBackgroundColor: this.backgroundColors,
 						pointHoverBackgroundColor: hoverColors,
 						pointBorderColor: 'black',
 						lineTension: 0

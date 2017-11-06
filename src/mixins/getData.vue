@@ -1,7 +1,6 @@
 <script>
 /* import functions that will be used to construct popups and map layers*/
-import getParamPopup from './getParamPopup.js'
-import TrendPopup from './TrendPopup.vue';
+import Popup from './Popup.vue';
 import listeners from './addEventListeners.vue'
 import * as esriFunctions from './esriFunctions.js'
 
@@ -15,7 +14,7 @@ export default {
 			urlForTypeData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sites2/MapServer/'
 		}
 	},
-	mixins: [listeners, TrendPopup],
+	mixins: [listeners, Popup],
 
 	methods: {
 
@@ -29,7 +28,7 @@ export default {
 			var esriObj = esriFunctions.getData(url);
 
 			/* save functions from TrendPopup.vue mixin as local variables so the popup can access them */
-			var popup = this.returnPopup;
+			var popup = this.returnTrendPopup;
 
 			/* bind a popup that includes the info about that well, plus that well's trend graph */
 			layer.bindPopup( (err, fc) => {
@@ -50,15 +49,13 @@ export default {
 
 			/* filter by state's type and param.value */
 			var defs = this.decideHowToFilter(this.type, this.param.value);
-
-			var content = getParamPopup(this.param);
-
 			var layer = esriFunctions.getLayer(defs, this.urlForParamData, this.param.value);
+			var popup = this.returnParamPopup;
 
 			layer.bindPopup( (err, fc) => {
 				for(var i = 0; i < fc.features.length; i++){
 					var properties = fc.features[i].properties;
-					return L.Util.template(content.string(properties), properties)
+					return popup(properties);
 				}
 			});
 

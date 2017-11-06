@@ -104,8 +104,8 @@ export default {
 			alert('It looks like you might be using Internet Explorer. Please make sure you are using a version currently supported by Microsoft (IE 10, 11, or Edge)')
 		}
 
-		this.thresholds = esriFunctions.getTable('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/trends_layers_thresholds/MapServer/');
-		this.thresholds.layer(40);
+		this.thresholds = esriFunctions.getTable('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/data/MapServer/');
+		this.thresholds.layer(8);
 	}
 }
 </script>

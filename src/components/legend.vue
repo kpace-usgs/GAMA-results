@@ -11,8 +11,8 @@
 		    <!-- show if there's a value for the study type but no value for the param -->
 		    <div v-if='type != "" && param.value == ""' id="mainLayerLegend" class='subLegend'>
 		    	<h3 style='font-weight: bold;'>Groundwater Study Type</h3>
-		        <div v-if='type == 0 || type == 3'>
-					<img src="../assets/images/trends.png"/>
+		        <div v-if='type == 0 || type == 3 || type == 4'>
+					<img src="../assets/images/trends_new.png"/>
 					<p>GAMA Trends Sites</p>
 				</div>
 				<div v-if='type == 1 || type == 3'>
@@ -94,15 +94,14 @@
 		    			<p>{{thresh.Low_Thresh}}</p>
 		    		</div>
 		    	</div>
-		    	<div v-if='param.hasOwnProperty("thresh_val")'>
+		    	<div>
 		    		<p>Benchmark:</p>
 		    		<div>
 		    			<p> {{thresh.ThresholdSource}} </p>
 		    			<img src='../assets/images/moreInfo.png' :alt='thresh.ThresholdDetail' :title='thresh.ThresholdDetail' />
 		    		</div>
 		    	</div>
-		    	<div v-else>
-		    	</div>
+
 		    </div>
 
 		    <!-- Shapefiles Legend -->

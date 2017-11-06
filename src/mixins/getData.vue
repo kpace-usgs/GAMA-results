@@ -5,13 +5,13 @@ import listeners from './addEventListeners.vue'
 import * as esriFunctions from './esriFunctions.js'
 
 export default {
-
+	/* store all the urls where data are queried for map. note the app queries the thresholds table separately, see line 107 in app.vue */
 	data(){
 		return {
 			urlForParamData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_symbolsordered/MapServer/',
 			urlForTrendData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/trends_layers_thresholds/MapServer/',
 			urlForPolygonData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/',
-			urlForTypeData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sites2/MapServer/'
+			urlForTypeData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sitesss/MapServer/'
 		}
 	},
 	mixins: [listeners, Popup],
@@ -99,7 +99,7 @@ export default {
 				if(err || featureCollection.features.length === 0) {
 					return false;
 				} else {
-					return 'Well type: ' + getType(featureCollection.features[0]);
+					return 'Well type: ' + featureCollection.features[0].properties.StudyType + ' ' + featureCollection.features[0].properties.Purpose;
 				}
 			});
 			this.addEventListeners(layer);

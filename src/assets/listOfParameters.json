@@ -377,7 +377,7 @@
 		"name": "Perchlorate",
 		"value": 30,
 		"type": "Inorganic",
-		"pcode": "63790 61209",
+		"pcode": "63790",
 		"units": "µg/L",
 		"low": "< 3",
 		"mod": "3 - 6",

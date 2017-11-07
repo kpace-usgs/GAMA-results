@@ -10,8 +10,10 @@ export default {
 			chartData: [],
 			canvas: document.createElement('canvas'),
 			popup: document.createElement('div'),
+			results: document.createElement('div'),
 			chart: '',
-			popupProperties: ''
+			popupProperties: '',
+			numOfSamples: 0
 		}
 	},
 
@@ -46,29 +48,33 @@ export default {
 
 	watch: {
 		trendIndex(){
-			// watch for change in trend index and if there's a chart attached to this.chart value, change the array of colors
+			// watch for change in trend index and if there's a chart attached to this.chart value, change the array of colors and the data shown in the popup
 			if(this.chart.hasOwnProperty('data') && this.trendIndex !== ''){
 				this.chart.data.datasets[0].pointBackgroundColor = this.backgroundColors;
 				this.chart.update();
-				this.popup.innerHTML = ''; //clear
+				this.results.innerHTML = ''; //clear
 				var properties = this.chartData[this.trendIndex].properties;
 				if(properties.hasOwnProperty('StudyUnit')){
-					this.popup.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}</p>`); //add additional line
+					this.results.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}</p>`); //add additional line
 				}
 				else {
-					this.popup.insertAdjacentHTML('beforeend', `<p>Study Unit: ${this.popupProperties.StudyUnit}<br/>GAMA ID: ${this.popupProperties.GAMA_ID}<br/>Sample Date: Not sampled in this visit<br/>${this.lookFor}: N/A ${this.units}<br/>Category: N/A<br/>Study Unit Trend Visit: ${this.trendIndex + 1}</p>`)
+					this.results.insertAdjacentHTML('beforeend', `<p>Study Unit: ${this.popupProperties.StudyUnit}<br/>GAMA ID: ${this.popupProperties.GAMA_ID}<br/>Sample Date: Not sampled in this visit<br/>${this.lookFor}: N/A ${this.units}<br/>Category: N/A<br/>Study Unit Trend Visit: Trend${this.trendIndex}<br/>Number of Samples at this Well: ${this.numOfSamples}</p>`)
 				}
 				
-				this.popup.insertAdjacentElement('beforeend', this.canvas);
 			}
 		}
 	},
 
+	mounted(){
+		this.popup.insertAdjacentElement('afterbegin', this.results);
+		this.popup.insertAdjacentElement('beforeend', this.canvas);
+	},
+
 	methods: {
 		returnParamPopup(properties) {
-			this.popup.innerHTML = ''; //clear popup
-			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties));
-			this.popup.insertAdjacentHTML('beforeend', '</p>');
+			this.results.innerHTML = ''; //clear popup
+			this.results.insertAdjacentHTML('beforeend', this.returnString(properties));
+			this.results.insertAdjacentHTML('beforeend', '</p>');
 			return this.popup;
 		},
 
@@ -84,12 +90,13 @@ export default {
 		},
 
 		returnTrendPopup(properties, esriObj){
-			this.popup.innerHTML = ''; //clear popup
+			this.results.innerHTML = ''; //clear popup
 			this.canvas.innerHTML = ''; //clear canvas
+			this.numOfSamples = 0; //reset
 			this.popupProperties = properties;
 			this.chartData = []; //clear array
-			this.popup.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}</p>`); //add additional line
-			this.popup.insertAdjacentElement('beforeend', this.canvas);
+			this.results.insertAdjacentHTML('afterbegin', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}<br/>`); //add additional line
+			//this.popup.insertAdjacentElement('beforeend', this.canvas);
 			return this.buildGraph(properties.GAMA_ID, esriObj);
 		},
 
@@ -118,7 +125,10 @@ export default {
 				// if a layer exists for the param.value at the given trend, push data to arrays
 				var hasResults = fc.features.length > 0;
 
-				console.log(fc);
+				// add to a counter if the well has results at that trend index
+				if(hasResults){
+					this.numOfSamples ++;
+				}
 
 				this.chartData.push({
 					index: i,
@@ -130,6 +140,8 @@ export default {
 				/* hack of a callback */
 				if(this.chartData.length === this.trendsLength){
 					this.chartData.sort(this.compare);
+					// add final line to popup now that numOfSamples has been calculated
+					this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${this.numOfSamples}</p>`)
 					return this.createChart(this.trendIndex); //this.trendIndex is received as a prop by mapDiv.vue
 				}
 			});

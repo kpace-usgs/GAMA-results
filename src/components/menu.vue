@@ -49,12 +49,12 @@
 
 	            <select :class='{ highlighted: param.value == "" && parameterGroup.groupName != "", shaded: param.value != "" || parameterGroup.groupName == ""}' v-model='param'>
 	         		<option :value='defaultParamGroup.parameters[0]' default></option>
-	            	<option v-for='parameter in sortedParameters' :value='parameter'>{{parameter.name}}</option>
+	            	<option v-for='parameter in sortedParameters' :value='parameter'>{{parameter.Constituent}}</option>
 	            </select>
 	        </div>
 
 	        <!-- add slider bar to change trend series. if this.type == 0 or 4 the trends t0 layer is returned instead of the param layer and is queried for Public-supply or Domestic-supply -->
-	        <div v-if='(type === "0" || type==="4") && param.hasOwnProperty("trends")' style='z-index: 99;' >
+	        <div v-if='(type === "0" || type==="4")' style='z-index: 99;' >
 
 				<label class='labelDiv'>
 					Select a study unit trend visit
@@ -128,7 +128,7 @@
 </template>
 
 <script>
-import listOfParameters from '../assets/listOfParameters.json';
+//import listOfParameters from '../assets/listOfParameters.json';
 import ToggleBar from './toggleBar.vue';
 import VueSlider from 'vue-slider-component/src/vue2-slider.vue'
 import Guidance from './Guidance.vue';
@@ -138,7 +138,7 @@ import toggle from '../mixins/toggle.vue'
 export default {
 	name: 'MenuDiv',
 	mixins: [ BuildCSV, toggle],
-
+	props: [ 'infos' ],
 	components: {
 		ToggleBar, Guidance, VueSlider
 	},
@@ -147,18 +147,17 @@ export default {
 		return {
 			type: '',
 			trendIndex: '',
-			listOfParameters: listOfParameters,
 			parameterGroup: '',
 			defaultParamGroup: {
 				"parameters": [{
-					"name": "Select constituent class first",
-					"value": ""
+					"Constituent": "Select constituent class first",
+					"PCODE": ""
 				}],
 				"groupName": ""
 			},
 			param: {
-				"name": "",
-				"value": ""
+				"Constituent": "",
+				"PCODE": ""
 			},
 			layers: [{
 				"prefix": "Domestic-supply",
@@ -260,7 +259,7 @@ export default {
 		},
 
 		sortedParameterGroups(){
-			return this.listOfParameters.sort( (a, b) => {
+			return this.infos.sort( (a, b) => {
 				var nameA = a.groupName.toLowerCase();
 				var nameB = b.groupName.toLowerCase();
 				if (nameA < nameB) {
@@ -276,8 +275,8 @@ export default {
 
 		sortedParameters(){
 			return this.parameterGroup.parameters.sort( (a, b) => {
-				var nameA = a.name;
-				var nameB = b.name;
+				var nameA = a.Constituent;
+				var nameB = b.Constituent;
 				if (nameA < nameB) {
 				    return -1;
 				  }

@@ -5,13 +5,13 @@ import listeners from './addEventListeners.vue'
 import * as esriFunctions from './esriFunctions.js'
 
 export default {
-	/* store all the urls where data are queried for map. note the app queries the thresholds table separately, see line 107 in app.vue */
+	/* store all the urls where data are queried for map. all GAMA data are on AllGAMAData map server, all base layers and legend info are on SitesLayersLegend map server*/
 	data(){
 		return {
-			urlForParamData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/layers_symbolsordered/MapServer/',
-			urlForTrendData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/trends_layers_thresholds/MapServer/',
-			urlForPolygonData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/base/MapServer/',
-			urlForTypeData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/sitesss/MapServer/'
+			urlForParamData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/AllGAMAData/MapServer',
+			urlForTrendData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/AllGAMAData/MapServer',
+			urlForPolygonData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer',
+			urlForTypeData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer'
 		}
 	},
 	mixins: [listeners, Popup],

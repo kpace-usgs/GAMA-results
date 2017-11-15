@@ -3,13 +3,13 @@
 	<div id='map_legend' class='leaflet-bar container' :class='{"min" : !showControls}'>
 
 		<ToggleBar :show='showControls' @click='toggle'>
-			<h2 slot='title' v-if='type == "" && param.value == "" && layers.length == 0'>Legend</h2>
+			<h2 slot='title' v-if='type == "" && param.PCODE == "" && layers.length == 0'>Legend</h2>
 		</ToggleBar>
 
 		<div v-if='showControls' class='legendContent'>
 		    <!-- Groundwater Study Type Legend -->
 		    <!-- show if there's a value for the study type but no value for the param -->
-		    <div v-if='type != "" && param.value == ""' id="mainLayerLegend" class='subLegend'>
+		    <div v-if='type != "" && param.PCODE == ""' id="mainLayerLegend" class='subLegend'>
 		    	<h3 style='font-weight: bold;'>Groundwater Study Type</h3>
 		        <div v-if='type == 0 || type == 3 || type == 4'>
 					<img src="../assets/images/trends_new.png"/>
@@ -26,83 +26,34 @@
 		    </div>
 
 		    <!-- Parameter Legend -->
-		    <!-- ph -->
-		    <legendContent v-if='param.value == 31' class='paramLayerLegend hasInfo '>
-				<h3 slot='h3'>{{param.name}} ({{param.units}})</h3>
-				<p slot='cat1'>Basic</p>
-				<div slot='img1'>
-					<img src='../assets/images/ph.png'/>
-					<p>{{thresh.Hi_Thresh}}</p>
-				</div>
-				<p slot='cat2'></p>
-				<div slot='img2'>
-					<img src='../assets/images/low.png'/>
-					<p>{{thresh.Mod_Thresh}}</p>
-				</div>
-				<p slot='cat3'>Acidic</p>
-				<div slot='img3'>
-					<img src='../assets/images/hi.png'/>
-					<p>{{thresh.Low_Thresh}}</p>
-				</div>
-				<div slot='benchmark'>
-					<p> {{thresh.ThresholdSource}} </p>
-					<img src='../assets/images/moreInfo.png' :alt='thresh.ThresholdDetail' :title='thresh.ThresholdDetail' />
-				</div>
-		    </legendContent>
+			<div v-if='param.PCODE !== ""' class='paramLayerLegend hasInfo'>
+				<h3>{{param.Constituent}}
+					<span v-if='param.Units' >({{param.Units}})</span>
+				</h3>
 
+				<div>
+					<!-- add table header here -->
+					<p v-if='param.Units'>Category</p>
+					<p v-else>Number of Detects</p>
+					<p>Symbology</p>
+				</div>
+				<div v-for='legend in param.Legend'>
+					<p>{{legend.Category}}</p>
+					<div>
+						<!-- <img :src='../assets/images/low.png'/> -->
+						<!-- TODO draw image like it shows on map -->
+						<p>{{legend.Symbology}}</p>
+					</div>
+				</div>
+				<div>
+					<p>Benchmark:</p>
+					<div>
+						<p> {{param.BenchmarkType}} </p>
+						<img src='../assets/images/moreInfo.png' :alt='param.BenchmarkDefinition' :title='param.BenchmarkDefinition' />
+					</div>
+				</div>
+			</div>
 
-		    <!-- detects. the values of all paramaters that are measured by number of detections should be in this array -->
-		    <div class="paramLayerLegend detects" v-if='param.units === "Number of Detections"'>
-		    	<h3>{{param.name}}</h3>
-		    	<div><p>Number of Detects</p><p>Symbology</p></div>
-		    	<div>
-		    		<p>>3</p>
-		    		<div>
-		    			<img src='../assets/images/hi.png'/>
-		    		</div>
-		    	</div>
-		    	<div>
-		    		<p>2-3</p>
-		    		<div>
-		    			<img src='../assets/images/mod.png'/>
-		    		</div>
-		    	</div>
-		    	<div>
-		    		<p>1</p>
-		    		<div>
-		    			<img src='../assets/images/low.png'/>
-		    		</div>
-		    	</div>
-		    	<div>
-		    		<p>None</p>
-		    		<div>
-		    			<img src='../assets/images/zero.png'/>
-		    		</div>
-		    	</div>
-		    </div>
-
-		    <!-- main -->
-		    <div class="paramLayerLegend hasInfo" v-if='param.units !== "Number of Detections" && param.value !== "" && param.value !== 31'>
-		    	<h3>{{param.name}} <span v-if='param.units'>({{param.units}})</span></h3>
-		    	<div><p>Category</p><p>Symbology</p></div>
-		    	<div><p>High</p><div><img src='../assets/images/hi.png'/><p>{{thresh.Hi_Thresh}}</p></div></div>
-		    	<div><p>Moderate</p><div><img src='../assets/images/mod.png'/><p>{{thresh.Mod_Thresh}}</p></div></div>
-		    	<div>
-		    		<p>Low</p>
-		    		<div>
-		    			<img src='../assets/images/low.png'/>
-		    			<p>{{thresh.Low_Thresh}}</p>
-		    		</div>
-		    	</div>
-		    	<div>
-		    		<p>Benchmark:</p>
-		    		<div>
-		    			<p> {{thresh.ThresholdSource}} </p>
-		    			<img src='../assets/images/moreInfo.png' :alt='thresh.ThresholdDetail' :title='thresh.ThresholdDetail' />
-		    		</div>
-		    	</div>
-
-		    </div>
 
 		    <!-- Shapefiles Legend -->
 		    <div id="extraLayerLegend" style="max-height:300px;overflow:auto;">
@@ -167,7 +118,6 @@
 <script>
 import toggle from '../mixins/toggle.vue'
 import ToggleBar from './toggleBar.vue';
-import legendContent from './legendContent.vue'
 import listOfUnits from '../assets/listOfUnits.js'
 import listOfProvinces from '../assets/listOfProvinces.js'
 
@@ -179,9 +129,9 @@ export default {
 			listOfProvinces: listOfProvinces
 		}
 	},
-	props: ['layers', 'type', 'param',  'thresh'],
+	props: ['layers', 'type', 'param'],
 	components: {
-		ToggleBar, legendContent
+		ToggleBar
 	},
 	mixins: [toggle]
 }

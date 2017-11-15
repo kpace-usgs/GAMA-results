@@ -7,7 +7,7 @@
 			:trendIndex='trendIndex'
 			:layerArr = 'layers'
 			:reset = 'reset'
-			:thresh = 'threshVals.Threshold'
+			:thresh = 'param.Threshold_Hi' 
 			@toggleLoading = 'toggleLoading'
 		></MapDiv>
 
@@ -16,10 +16,11 @@
 		<LegendDiv :layers = 'layers' 
 			:type='type' 
 			:param='param'
-			:thresh='threshVals'>
+		>
 		</LegendDiv>
 
 		<MenuDiv 
+			:infos = 'infos'
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
 			@changeType='handleType'
@@ -43,15 +44,28 @@ export default {
 	data() {
 		return {
 			layers: [],
-			param: '',
+			param: {
+				PCODE: '',
+				Threshold_Low: '',
+				Threshold_Hi: 4,
+				ThresholdSource: '',
+				Benchmark: '',
+				BenchmarkType: '',
+				BenchmarkDefinition: '',
+				Constituent: '',
+				Units: '',
+				LegendItems: [{
+					LegendCount: 1,
+					LegendItem: 1,
+					Category: '',
+					Symbology: ''
+				}]
+			},
 			type: '',
 			trend: '',
 			trendIndex: '',
 			reset: false,
-			thresholds: '',
-			threshVals: {
-				Threshold: 4
-			}
+			infos: [] 
 		}
 	},
 	components: {
@@ -64,27 +78,7 @@ export default {
 			this.layers = arr;
 		},
 		handleParam(obj){
-			this.param = obj;
-			/* once updated, get data from arcserver and pass threshold values to the legend */
-			var that = this;
-
-			if(this.param.hasOwnProperty('pcode')){
-				this.thresholds.where("PCODE = '" + obj.pcode + "'");
-
-				this.thresholds.run(function(err, fc) {
-					if(err){ console.log(err); }
-					console.log(fc);
-					that.threshVals = fc.features[0].properties;
-
-					//TODO change how this.threshVals gets saved to match Bryant's news format
-					/* for(var i = 0; i < fc.features.length; i++) {
-						that.threshVals.legendItems.push({name: fc.features[i].properties.BenchmarkName, symbology: fc.features[i].properties.Symbology})
-					}
-					*/
-				});
-			}else {
-				this.threshVals.Threshold = 4;
-			}
+			this.param = obj;	
 		},
 		handleType(string){
 			return this.type = string;
@@ -95,8 +89,101 @@ export default {
 		},
 		toggleReset(){
 			this.reset = !this.reset;
+		},
+
+		getParamInfo(){
+			/* get legend table data from server */
+			var that = this;
+			var thresholds = esriFunctions.getTable('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer');
+			thresholds.layer(8);
+
+			thresholds.run( (err, fc) => {
+				if(err) { console.log(err) }
+				console.log(fc);
+				that.infos = that.makeInfosArr(fc.features); // parse returned feature collection into a format used by the app's components
+			});
+		},
+
+		makeInfosArr(arr) {
+			var uniqueNames = []; //track constituent group names here
+			var toReturn = [];
+
+			// go through the array and look for group names that haven't been handled yet. 
+			for(var i = 0; i < arr.length; i++) {
+
+				var name = arr[i].properties.ConstituentGroup;
+
+				// when the loop encounters a new constituent group, add that name to the tracking array
+				if(uniqueNames.indexOf(name) === -1 && name !== null) {
+					uniqueNames.push(name);
+
+
+					// then, get array of all parameters in that group
+					var uniqueParameters = []; // track which parameters have been handled
+					var paramArrToReturn = [];
+
+					// create a subarray of all objects that have the constituent group name being handled
+					var paramArray = arr.filter( feature => {
+						return feature.properties.ConstituentGroup == name;
+					});
+
+					// go through that subarray and handle each unique PCODE value
+					for(var j = 0; j < paramArray.length; j++) {
+						var param = paramArray[j].properties;
+
+						// if not already handled, add to the object
+						if(uniqueParameters.indexOf(param.PCODE) == -1 ) {
+
+							uniqueParameters.push(param.PCODE); //push to tracking array
+
+							// final step: get all legend items for that pcode, to show in menu
+							var legendArrToReturn = [];
+							var legendArray = paramArray.filter( feature => {
+								return feature.properties.PCODE == param.PCODE
+							});
+
+							legendArray.forEach( legend => {
+								legendArrToReturn.push({
+									LegendItem: legend.properties.LegendItem,
+									Category: legend.properties.Category,
+									Symbology: legend.properties.Symbology
+								});
+							});
+							// sort them in order according to LegendItem so 3 comes before 1
+							legendArrToReturn.sort( (a, b) => {
+								var numA = a.LegendItem;
+								var numB = b.LegendItem;
+								return numB - numA;
+							});
+							// save a parameter object
+							paramArrToReturn.push({
+								Constituent: param.Constituent,
+								PCODE: param.PCODE,
+								Threshold_Low: param.Threshold_Low,
+								Threshold_Hi: param.Threshold_Hi,
+								ThresholdSource: param.ThresholdSource,
+								Benchmark: param.Benchmark,
+								BenchmarkType: param.BenchmarkType,
+								BenchmarkDefinition: param.BenchmarkDefinition,
+								Units: param.Units,
+								Legend: legendArrToReturn
+							});
+						}
+					};
+
+					toReturn.push({
+						groupName: name,
+						parameters: paramArrToReturn
+					})
+				}
+			};
+
+			console.log(toReturn)
+
+			return toReturn;
 		}
 	},
+
 	mounted(){
 		// Internet Explorer 6-11
 		var isIE = /*@cc_on!@*/false || !!document.documentMode;
@@ -104,8 +191,7 @@ export default {
 			alert('It looks like you might be using Internet Explorer. Please make sure you are using a version currently supported by Microsoft (IE 10, 11, or Edge)')
 		}
 
-		this.thresholds = esriFunctions.getTable('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/data/MapServer/');
-		this.thresholds.layer(8);
+		this.getParamInfo();
 	}
 }
 </script>

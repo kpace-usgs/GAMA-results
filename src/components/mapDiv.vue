@@ -41,6 +41,7 @@ export default {
 
 	// watch for changes made on the menu component
 	watch: { 
+
 		type(){	
 			this.map.closePopup(); // close any popups
 			this.pointGroup.clearLayers();
@@ -57,7 +58,8 @@ export default {
 					// if a trend value exists then need to change from trends layer to param layer
 					if(this.trend !== ""){
 						console.log('import new param layer');
-						this.constituentLayer = this.importParam(); // load new layer
+						console.log(this.param.value);
+						this.constituentLayer = this.importParam(this.type, this.param.value); // load new layer
 					} else {
 						this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value)); // just update existing param layer
 					}
@@ -74,11 +76,13 @@ export default {
 
 		trend(){
 			this.pointGroup.clearLayers();
-			console.log('map sees trend has been changed')
+			
 			if(this.trend === ""){
+				console.log('map sees trend has been changed to blank')
 				// trend is being reset
 				this.map.closePopup(); // do I really need this? wouldn't changing the param or type that resets the trend to "" already have called this?
 			} else{
+				console.log("map sees trend has been changed to a value")
 				// the trend value has been changed to an integer, get trend layer
 				this.constituentLayer = this.importTrend(this.type, this.trend);
 				this.addConstituentLayer();
@@ -97,7 +101,7 @@ export default {
 					// do nothing, wait for the new this.trends value to control things
 				} else {
 					console.log('import param')
-					this.constituentLayer = this.importParam();
+					this.constituentLayer = this.importParam(this.type, this.param.value);
 					this.addConstituentLayer();
 				}
 			}
@@ -116,13 +120,8 @@ export default {
 			// get each selected pane layer
 			for(var i = 0; i < this.layerArr.length; i++){
 				var layerName = this.layerArr[i];
-				// if not already saved in this.polygons, import
-				if(!this.polygons.hasOwnProperty(layerName)){
-					var layer = this.importPaneJson(layerName);
-					this.polygonGroup.addLayer(layer);
-				} else {
-					this.polygonGroup.addLayer(this.polygons[layerName]);
-				}
+				var layer = this.importPaneJson(layerName);
+				this.polygonGroup.addLayer(layer);
 			}
 		},
 

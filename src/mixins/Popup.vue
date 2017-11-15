@@ -67,12 +67,12 @@ export default {
 
 	mounted(){
 		this.popup.insertAdjacentElement('afterbegin', this.results);
-		this.popup.insertAdjacentElement('beforeend', this.canvas);
 	},
 
 	methods: {
 		returnParamPopup(properties) {
 			this.results.innerHTML = ''; //clear popup
+			this.canvas.remove(); //remove canvas from popup if its been added previously
 			this.results.insertAdjacentHTML('beforeend', this.returnString(properties));
 			this.results.insertAdjacentHTML('beforeend', '</p>');
 			return this.popup;
@@ -90,6 +90,10 @@ export default {
 		},
 
 		returnTrendPopup(properties, esriObj){
+			// insert the canvas element if it's not already in the popup (it's removed for non-trends popups)
+			if(this.popup.childNodes[this.popup.childNodes.length - 1].nodeName != "CANVAS"){
+				this.popup.insertAdjacentElement('beforeend', this.canvas);
+			}
 			this.results.innerHTML = ''; //clear popup
 			this.canvas.innerHTML = ''; //clear canvas
 			this.numOfSamples = 0; //reset

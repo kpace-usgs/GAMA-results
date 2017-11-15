@@ -19,13 +19,13 @@ export default {
 	methods: {
 
 		importTrend(type, trend){
-			// save values to be passed to popup
-			//var content = getTrendPopup(this.param, index, this.thresh);
-			var url = this.urlForTrendData;
-			// get layer
-			var defs = this.decideHowToFilter(type, trend);
-			var layer = esriFunctions.getLayer(defs, url, trend);
-			var esriObj = esriFunctions.getData(url);
+			var url = this.urlForTrendData; // pick which url endpoint will be used
+
+			var defs = this.decideHowToFilter(type, trend); // get a layer definition based on type and trend selections 
+
+			var layer = esriFunctions.getLayer(defs, url, trend); //get layer for map
+			var esriObj = esriFunctions.getData(url); // get data for popup
+
 
 			/* save functions from TrendPopup.vue mixin as local variables so the popup can access them */
 			var popup = this.returnTrendPopup;
@@ -44,12 +44,12 @@ export default {
 		},
 
 		// get well markers as featureLayer
-		importParam(){
+		importParam(type, val){
 			/* use the param data available in the component that has registered this file as a mixin */
 
 			/* filter by state's type and param.value */
-			var defs = this.decideHowToFilter(this.type, this.param.value);
-			var layer = esriFunctions.getLayer(defs, this.urlForParamData, this.param.value);
+			var defs = this.decideHowToFilter(type, val);
+			var layer = esriFunctions.getLayer(defs, this.urlForParamData, val);
 			var popup = this.returnParamPopup;
 
 			layer.bindPopup( (err, fc) => {
@@ -73,25 +73,11 @@ export default {
 		},
 
 		importTypeJson(val) {
-			/* for all study types and all status types, don't filter, but for either trends type, do filter*/
-			var filterType;
-			switch(this.type){
-				case '0':
-					filterType = 0
-					break;
-				case '4': 
-					filterType = 4
-					break;
-				default:	
-					filterType = ""
-			}
-			console.log('filter type is: ' + filterType);
-
-
 			// because there are only 3 layers in the TypeJson service, both val == 4 and val === 0 are actually getting the layer val === 0
 			var layerValue = val === '4' ? 0: val;
 
-			var defs = this.decideHowToFilter(filterType, layerValue);
+			// only need to filter if a trends type has been chosen. otherwise, this.filterType returns "" and this.decideHowToFilter returns an empty layer def. all records for the layerValue will be returned.
+			var defs = this.decideHowToFilter(this.filterType, layerValue);
 
 			/* get layer and return */
 			var layer = esriFunctions.getLayer(defs, this.urlForTypeData, layerValue);
@@ -128,6 +114,22 @@ export default {
 			// otherwise don't filter; return all entries
 			else {
 				return `{${value}: ""}`
+			}
+		}
+	},
+
+	computed: {
+		filterType(){
+			/* if a trends type has been selected, then the imported layer will need to be filtered by type since there's only one trends layer; otherwise, the query has already been done so we don't need to filter again and we can return just an empty "". */
+			switch(this.type){
+				case '0':
+					return 0
+					break;
+				case '4': 
+					return 4
+					break;
+				default:	
+					return ""
 			}
 		}
 	}

@@ -3,11 +3,9 @@
 		<MapDiv
 			:param = 'param'
 			:type = 'type'
-			:trend='trend'
 			:trendIndex='trendIndex'
 			:layerArr = 'layers'
 			:reset = 'reset'
-			:thresh = 'param.Threshold_Hi' 
 			@toggleLoading = 'toggleLoading'
 		></MapDiv>
 
@@ -16,8 +14,7 @@
 		<LegendDiv :layers = 'layers' 
 			:type='type' 
 			:param='param'
-		>
-		</LegendDiv>
+		></LegendDiv>
 
 		<MenuDiv 
 			:infos = 'infos'
@@ -35,8 +32,7 @@ import MapDiv from './components/mapDiv.vue';
 import LegendDiv from './components/legend';
 import MenuDiv from './components/menu';
 import Loader from './mixins/loader.vue';
-import * as esriFunctions from './mixins/esriFunctions.js'
-
+import esri from 'esri-leaflet'
 
 
 export default {
@@ -83,8 +79,8 @@ export default {
 		handleType(string){
 			return this.type = string;
 		},
-		handleTrend(trend, index){
-			this.trend = trend;
+		handleTrend(index){
+			/* user changes sliding trend bar in menu and the index position of that gets broadcast to the map*/
 			this.trendIndex = index;
 		},
 		toggleReset(){
@@ -94,7 +90,7 @@ export default {
 		getParamInfo(){
 			/* get legend table data from server */
 			var that = this;
-			var thresholds = esriFunctions.getTable('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer');
+			var thresholds = esri.query('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer');
 			thresholds.layer(8);
 
 			thresholds.run( (err, fc) => {
@@ -103,6 +99,11 @@ export default {
 				that.infos = that.makeInfosArr(fc.features); // parse returned feature collection into a format used by the app's components
 			});
 		},
+
+		// getTypeInfo(){
+		// 	esri.query('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/AllGAMAData/MapServer')
+		// 	// TODO get metadata ? get all the possible trend types?
+		// }
 
 		makeInfosArr(arr) {
 			var uniqueNames = []; //track constituent group names here

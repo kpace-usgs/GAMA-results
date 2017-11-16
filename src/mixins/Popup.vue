@@ -2,7 +2,7 @@
 import moment from 'moment';
 import Chart from 'chart.js';
 
-/* must be a mixin to a component that has state values for param and threshIndex */
+/* must be a mixin to a component that has state values for param */
 export default {
 	name: 'getTrendPopup',
 	data(){
@@ -20,23 +20,20 @@ export default {
 	computed: {
 		category() {
 			// if no value for the category's column has been provided, return 'Category'. If a blank string has been provided for the value, return 'N/A'
-			return this.param.hasOwnProperty('statusColumns') ? this.param.statusColumns.category == '' ? 'N/A' : this.param.statusColumns.category : '{Category}'
+			return this.param.Units ? '{Category}' : 'N/A'; // number of detects type constituents aren't categorized
 		},
 
 		lookFor() {
-			return this.param.units === 'Number of Detections' ? this.param.units : this.param.name === 'pH' ? this.param.name : 'Concentration'
+			return this.param.Constituent === 'pH' ? 'pH' : this.param.Units ? 'Concentration' : 'Number of Detections'; // the server approach still doesn't include text for what this label should be.
 		},
 
-		column() {
-			return this.param.hasOwnProperty('statusColumns') ? this.param.statusColumns.column : 'Concentration'
-		},
 
 		units(){
-			return this.param.units === 'Number of Detections' ? '' : `(${this.param.units})`; //don't show if a number of detections constituent
+			return this.param.Units ? `(${this.param.Units})` : ''; //don't show if a number of detections constituent
 		},
 
 		trendsLength(){
-			return this.param.trends.length;
+			return 4 //TODO pass this value from getData.vue
 		},
 
 		backgroundColors(){
@@ -80,16 +77,15 @@ export default {
 
 		returnString(properties){
 			var date = moment(properties.SampleDate).format('MM/DD/YYYY');
-			var lookFor = properties[this.column];
 
 			return `<p>Study Unit: ${properties.StudyUnit}<br/>\
 			GAMA ID: ${properties.GAMA_ID}<br/>\
 			Sample Date: ${date}<br/>\
-			${this.lookFor}: ${lookFor} ${this.units}<br/>\
+			${this.lookFor}: ${properties.ValueConcat} ${this.units}<br/>\
 			Category: ${this.category}`
 		},
 
-		returnTrendPopup(properties, esriObj){
+		returnTrendPopup(properties, featureCollection){
 			// insert the canvas element if it's not already in the popup (it's removed for non-trends popups)
 			if(this.popup.childNodes[this.popup.childNodes.length - 1].nodeName != "CANVAS"){
 				this.popup.insertAdjacentElement('beforeend', this.canvas);
@@ -101,55 +97,84 @@ export default {
 			this.chartData = []; //clear array
 			this.results.insertAdjacentHTML('afterbegin', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}<br/>`); //add additional line
 			//this.popup.insertAdjacentElement('beforeend', this.canvas);
-			return this.buildGraph(properties.GAMA_ID, esriObj);
+			return this.buildGraph(properties.GAMA_ID, featureCollection);
 		},
 
 		/* run the esri find object for rows where GAMA_ID = gamaID */
-		buildGraph(gamaID, esriObj) {
-			esriObj.text(gamaID).fields("GAMA_ID");
+		buildGraph(gamaID, featureCollection) {
 
-			for(var i = 0; i < this.param.trends.length; i++){
-				var val = this.param.trends[i];
-				esriObj.layers(val);
-				this.runFind(esriObj, i); //run esri find object
+			// filter featureCollection to only those where GAMA_ID = gamaID
+			var filtered = featureCollection.filter(feature => {
+				return feature.GAMA_ID == gamaID
+			});
 
-				// when done, return popup
-				if(i === this.param.trends.length - 1){
-					return this.popup;
-				}
-			}
-		},
+			// push properties from each object in filtered into this.chartData
+			this.numOfSamples = filtered.length;
+			var hasResults = this.numOfSamples > 0;
 
-		runFind(find, i){
-
-			return find.run( (err, fc) => {
-				if(err) {
-					return; //catch error
-				}
-				// if a layer exists for the param.value at the given trend, push data to arrays
-				var hasResults = fc.features.length > 0;
-
-				// add to a counter if the well has results at that trend index
-				if(hasResults){
-					this.numOfSamples ++;
-				}
-
+			for(var i = 0; i < filtered.length; i ++){
 				this.chartData.push({
 					index: i,
-					label: hasResults ? fc.features[0].properties.SampleDate : 'NA',
-					data: hasResults ? fc.features[0].properties[this.column] : null,
-					properties: hasResults ? fc.features[0].properties: {}
+					label: hasResults ? filtered[0].properties.SampleDate : 'NA',
+					data: hasResults ? filtered[0].properties[this.column] : null,
+					properties: hasResults ? filtered[i].properties: {}
 				});
 
-				/* hack of a callback */
-				if(this.chartData.length === this.trendsLength){
+				// hack of a callback
+				if(i === this.numOfSamples - 1 ) {
 					this.chartData.sort(this.compare);
 					// add final line to popup now that numOfSamples has been calculated
-					this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${this.numOfSamples}</p>`)
-					return this.createChart(this.trendIndex); //this.trendIndex is received as a prop by mapDiv.vue
+					this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${this.numOfSamples}</p>`);
+					this.createChart(this.trendIndex);
+					return this.popup;
 				}
-			});
+			};
+			
+
+			//esriObj.text(gamaID).fields("GAMA_ID");
+
+			// for(var i = 0; i < this.param.trends.length; i++){
+			// 	var val = this.param.trends[i];
+			// 	esriObj.layers(val);
+			// 	this.runFind(esriObj, i); //run esri find object
+
+			// 	// when done, return popup
+			// 	if(i === this.param.trends.length - 1){
+			// 		return this.popup;
+			// 	}
+			// }
 		},
+
+		// runFind(find, i){
+
+		// 	return find.run( (err, fc) => {
+		// 		if(err) {
+		// 			return; //catch error
+		// 		}
+		// 		// if a layer exists for the param.value at the given trend, push data to arrays
+		// 		var hasResults = fc.features.length > 0;
+
+		// 		// add to a counter if the well has results at that trend index
+		// 		if(hasResults){
+		// 			this.numOfSamples ++;
+		// 		}
+
+		// 		this.chartData.push({
+		// 			index: i,
+		// 			label: hasResults ? fc.features[0].properties.SampleDate : 'NA',
+		// 			data: hasResults ? fc.features[0].properties[this.column] : null,
+		// 			properties: hasResults ? fc.features[0].properties: {}
+		// 		});
+
+		// 		/* hack of a callback */
+		// 		if(this.chartData.length === this.trendsLength){
+		// 			this.chartData.sort(this.compare);
+		// 			// add final line to popup now that numOfSamples has been calculated
+		// 			this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${this.numOfSamples}</p>`)
+		// 			return this.createChart(this.trendIndex); //this.trendIndex is received as a prop by mapDiv.vue
+		// 		}
+		// 	});
+		// },
 
 		createChart(index) {
 			/* declare variables used by chart from chartData array*/
@@ -183,12 +208,12 @@ export default {
 							ticks: {
 								min: 0,
 								suggestedMax: 4,
-								max: this.tresh,
+								max: this.param.Threshold_Hi,
 								stepSize: 1
 							},
 							scaleLabel: {
 								display: true,
-								labelString: this.param.units
+								labelString: this.param.Units
 							}
 						}],
 						xAxes: [{

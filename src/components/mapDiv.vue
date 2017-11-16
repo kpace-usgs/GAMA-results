@@ -6,9 +6,9 @@
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
 import GetData from '../mixins/getData.vue' //functions that talk to arcserver
-import esri from 'esri-leaflet'
-import 'esri-leaflet-renderers'
-
+import Popup from '../mixins/Popup.vue';
+import listeners from '../mixins/addEventListeners.vue'
+import pointStyle from '../mixins/pointStyle.js'
 
 export default {
 	name: 'MapDiv',
@@ -29,13 +29,13 @@ export default {
 			constituentLayer: ''
 		}
 	},
-	mixins: [GetData],
-	props: ['param', 'type', 'trend', 'layerArr', 'reset', 'trendIndex', 'thresh'],
+	mixins: [GetData, Popup, listeners ],
+	props: ['param', 'type', 'trend', 'layerArr', 'reset', 'trendIndex'],
 
 	computed: {
 		isATrends(){
-			/* if groundwater study type is one of the trends and the selected param has a trends array, return true */
-			return (this.type === "0" || this.type === "4") && this.param.hasOwnProperty('trends') ? true : false;
+			/* if groundwater study type is one of the trends, return true */
+			return (this.type === "0" || this.type === "4") ? true : false;
 		}
 	},
 
@@ -46,26 +46,15 @@ export default {
 			this.map.closePopup(); // close any popups
 			this.pointGroup.clearLayers();
 
-			if(typeof(this.param.value) == 'number') { // if a constituent has been selected
-				if(this.isATrends){ // if trends layers exist and a trends option has been selected 
-					if(this.trend !== ""){
-						// if trend value already exists, filter existing constituentlayer by new type. if the trend value doesn't change, the map won't call this.importTrend().
-						this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.trend));
-					} else {
-						return;
-					}// else do nothing; the trend value will be updated to the first value in the parameter's trends array, and this.importTrend will be called next.
+			if(this.param.PCODE != '') { // if a constituent has been selected
+				if(this.isATrends){ // if a trends type has been selected 
+					this.constituentLayer = this.buildTrendLayer();
+
 				} else{
 					// if a trend value exists then need to change from trends layer to param layer
-					if(this.trend !== ""){
-						console.log('import new param layer');
-						console.log(this.param.value);
-						this.constituentLayer = this.importParam(this.type, this.param.value); // load new layer
-					} else {
-						this.constituentLayer.setLayerDefs(this.decideHowToFilter(this.type, this.param.value)); // just update existing param layer
-					}
-					
+					this.constituentLayer = this.buildStatusLayer();
 				}
-				this.addConstituentLayer();
+				this.addPoints();
 			} 
 
 			// if no constituent has been selected, then show the well locations by type
@@ -74,18 +63,18 @@ export default {
 			}
 		},
 
-		trend(){
-			this.pointGroup.clearLayers();
+		trendIndex(){
 			
-			if(this.trend === ""){
+			
+			if(this.trendIndex == "" || !this.trendIndex){
 				console.log('map sees trend has been changed to blank')
-				// trend is being reset
-				this.map.closePopup(); // do I really need this? wouldn't changing the param or type that resets the trend to "" already have called this?
+				// trend is being reset by type changing
 			} else{
+				this.pointGroup.clearLayers();
 				console.log("map sees trend has been changed to a value")
 				// the trend value has been changed to an integer, get trend layer
-				this.constituentLayer = this.importTrend(this.type, this.trend);
-				this.addConstituentLayer();
+				this.constituentLayer = this.buildTrendLayer();
+				this.addPoints();
 			}
 		},
 
@@ -93,24 +82,25 @@ export default {
 			this.map.closePopup();
 			this.pointGroup.clearLayers();
 			/* if selection box has a value, save this.constituentLayer */
-			if(this.param.value !== ""){
+			if(this.param.PCODE !== ""){
 
-				/* only import param if the parameter is not trends (either this.type isn't trends, or the parameter value doesn't have a trends array) */
+				/* only import param if type is not a trend type */
 				if(this.isATrends){
 					console.log('dont import param')
-					// do nothing, wait for the new this.trends value to control things
+					this.consituentLayer = this.buildTrendLayer();
 				} else {
 					console.log('import param')
-					this.constituentLayer = this.importParam(this.type, this.param.value);
-					this.addConstituentLayer();
+					this.constituentLayer = this.buildStatusLayer();
 				}
+
+				this.addPoints();
 			}
 
 			/* if param value is being cleared, revert back to showing wells by type */
 			else {
 				this.wellsByType();
 			}
-			// else if this.param.value is an empty string, the pointGroup will already be cleared
+			// else if this.param.PCODE is an empty string, the pointGroup will already be cleared
 		},
 
 		layerArr(){
@@ -120,7 +110,8 @@ export default {
 			// get each selected pane layer
 			for(var i = 0; i < this.layerArr.length; i++){
 				var layerName = this.layerArr[i];
-				var layer = this.importPaneJson(layerName);
+				var layer = this.buildPolygonLayer(layerName);
+				this.addEventListeners(layer);
 				this.polygonGroup.addLayer(layer);
 			}
 		},
@@ -132,26 +123,77 @@ export default {
 	
 	methods: {
 
+		buildTrendLayer() {
+			var featureCollection = this.buildData(this.type, this.param.PCODE); // returns a feature collection of wells filtered by PCODE and type
+			var popup = this.returnTrendPopup;
+
+			var layer = L.geoJSON(featureCollection, {
+				style: pointStyle(feature),
+				filter: ( feature ) => {
+					// filter by this.trendIndex
+				}
+			}).bindPopup( layer => {
+				return popup(layer.feature.properties, featureCollection);
+			})
+
+			this.addEventListeners(layer);
+
+			// filter by trendIndex
+			return layer;
+		},
+
+		buildStatusLayer() {
+			var featureCollection = this.buildData(this.type, this.param.PCODE);
+
+			var popup = this.returnParamPopup;
+
+			var layer = L.geoJSON(featureCollection, {
+				style: pointStyle(feature)
+			}).bindPopup( layer => {
+				return popup(layer.feature.properties)
+			});
+
+			this.addEventListeners(layer);
+			return layer;
+		},
+
 		wellsByType(){
 			this.pointGroup.clearLayers();
 			/* if there's a value in the study type menu, load those wells */
 			if(this.type !== ""){
 				// load the wells by type and add to the map
 				console.log('load wells by type')
+	
 				// if trend sites, domestic supply, public supply is chosen, just get that layer
 				if(this.type != 3){
-					this.pointGroup.addLayer(this.importTypeJson(this.type));
+					var layer = this.buildLayer(this.type);
+					this.addLayer(layer);
 				}
 				else {
 					// load all 3 type layers. order is important
-					this.pointGroup.addLayer(this.importTypeJson(1)).bringToFront();
-					this.pointGroup.addLayer(this.importTypeJson(0)).bringToBack();
-					this.pointGroup.addLayer(this.importTypeJson(2)).bringToBack();
+					this.addLayer(this.buildLayer(1));
+					this.addLayer(this.buildLayer(0));
+					this.addLayer(this.buildLayer(2));
 				}
 			}
 		},
 
-		addConstituentLayer(){
+		buildPolygonLayer(val){
+			var layer = this.getLayer(val);
+			return layer;
+		},
+
+		addLayer(layer){
+			this.addEventListeners(layer);
+			if(this.pointGroup.hasLayer(layer)) {
+				layer.redraw();
+			}
+			else {
+				this.pointGroup.addLayer(layer);
+			}
+		},
+
+		addPoints(){
 			// if constituent layer of markers not already added to map, add it now
 			
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){

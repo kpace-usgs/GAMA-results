@@ -1,120 +1,77 @@
 <script>
 /* import functions that will be used to construct popups and map layers*/
-import Popup from './Popup.vue';
-import listeners from './addEventListeners.vue'
-import * as esriFunctions from './esriFunctions.js'
+import esri from 'esri-leaflet';
+import buildDef from './buildDefs.js'
 
 export default {
 	/* store all the urls where data are queried for map. all GAMA data are on AllGAMAData map server, all base layers and legend info are on SitesLayersLegend map server*/
 	data(){
 		return {
-			urlForParamData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/AllGAMAData/MapServer',
-			urlForTrendData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/AllGAMAData/MapServer',
-			urlForPolygonData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer',
-			urlForTypeData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer'
+			urlForData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/AllGAMAData/MapServer',
+	
+			urlForPolygon: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer'
 		}
 	},
-	mixins: [listeners, Popup],
 
 	methods: {
+		/* build point layer of wells by pcode */
+		buildData(type, code){
+			var url = this.urlForData; // pick which url endpoint will be used
 
-		importTrend(type, trend){
-			var url = this.urlForTrendData; // pick which url endpoint will be used
+			var defs = buildDef(type, code); // get a layer definition based on type, param.PCODE, and trendIndex selections 
 
-			var defs = this.decideHowToFilter(type, trend); // get a layer definition based on type and trend selections 
+			var data = this.getTable(url).layer('0').where(def); //get layer for map
 
-			var layer = esriFunctions.getLayer(defs, url, trend); //get layer for map
-			var esriObj = esriFunctions.getData(url); // get data for popup
+			var featureCollection; //create variable
 
-
-			/* save functions from TrendPopup.vue mixin as local variables so the popup can access them */
-			var popup = this.returnTrendPopup;
-
-			/* bind a popup that includes the info about that well, plus that well's trend graph */
-			layer.bindPopup( (err, fc) => {
-				for(var i = 0; i < fc.features.length; i++){
-					var properties = fc.features[i].properties;
-					return popup(properties, esriObj);
-				}
+			/* run query and return the resulting feature collection */
+			data.run( (err, fc) => {
+				if(err){ console.log(err) }
+				console.log(fc);
+				featureCollection = fc;
 			});
 
-			this.addEventListeners(layer);
-
-			return layer;
+			return featureCollection;
 		},
 
-		// get well markers as featureLayer
-		importParam(type, val){
-			/* use the param data available in the component that has registered this file as a mixin */
-
-			/* filter by state's type and param.value */
-			var defs = this.decideHowToFilter(type, val);
-			var layer = esriFunctions.getLayer(defs, this.urlForParamData, val);
-			var popup = this.returnParamPopup;
-
-			layer.bindPopup( (err, fc) => {
-				for(var i = 0; i < fc.features.length; i++){
-					var properties = fc.features[i].properties;
-					return popup(properties);
-				}
-			});
-
-			this.addEventListeners(layer);
-
-			return layer;
-		},
-
-		importPaneJson(val) {
-			var layer = esriFunctions.getPane(this.urlForPolygonData, val)
-
-			this.addEventListeners(layer);
-
-			return layer;			
-		},
-
-		importTypeJson(val) {
-			// because there are only 3 layers in the TypeJson service, both val == 4 and val === 0 are actually getting the layer val === 0
-			var layerValue = val === '4' ? 0: val;
-
-			// only need to filter if a trends type has been chosen. otherwise, this.filterType returns "" and this.decideHowToFilter returns an empty layer def. all records for the layerValue will be returned.
-			var defs = this.decideHowToFilter(this.filterType, layerValue);
-
+		/* build point layer of wells by type */
+		buildLayer(type) {
+			console.log('getting layer: ' + this.layerValue + ' from SitesLayersLegend service');
 			/* get layer and return */
-			var layer = esriFunctions.getLayer(defs, this.urlForTypeData, layerValue);
+			var layer = this.getLayer(this.layerValue, this.layerDef);
+
+			/* bind popup. the arguments are different than those for bindPopup function in the mapDiv because this is an esri dynamic map layer whereas those are leaflet geojsons. the functions to bind popups are slightly different */
 			layer.bindPopup( (err, featureCollection) => {
 				if(err || featureCollection.features.length === 0) {
 					return false;
 				} else {
-					return 'Well type: ' + featureCollection.features[0].properties.StudyType + ' ' + featureCollection.features[0].properties.Purpose;
+					return 'Well type: ' + featureCollection.features[0].properties.StudyType;
 				}
 			});
-			this.addEventListeners(layer);
+	
 			return layer;
 		},
 
-		decideHowToFilter(type, value){
-			/* if this.type == 1 or 2, the layer is from ParamData and must be filtered by StudyType and Purpose. If this.type === 0 or 4, the layer is from TrendsData. The type value determines studyType but the purpose is determined by the index of the trends array (if we're looking at t0 or t1)*/
-			console.log('filtering by type: '+ type)
-			if(type === 1 || type === "1"){
-				return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'"}`
-			}
+		getData(url){
+			return esri.find({
+				url: url
+			});
+		},
 
-			else if(type === 2 || type === "2"){
-				return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Public-supply'"}`
-			}
+		getTable(url) {
+			return esri.query({
+				url: url
+			});
+		},
 
-			else if(type === 0 || type === "0"){
-				return `{${value}: "StudyType = 'Public-supply'"}`
-			}
+		getLayer(layer, def) {
+			var url = this.urlForPolygon;
 
-			else if(type === 4 || type === '4'){
-				return `{${value}: "StudyType = 'Domestic-supply'"}`
-			}
-
-			// otherwise don't filter; return all entries
-			else {
-				return `{${value}: ""}`
-			}
+			return esri.dynamicMapLayer({
+				url: url,
+				layers: [layer],
+				layerDefs: def
+			});
 		}
 	},
 
@@ -130,6 +87,40 @@ export default {
 					break;
 				default:	
 					return ""
+			}
+		},
+
+		layerValue() {
+			// because there are only 3 layers that show wells by type, both type == 4 and type === 0 are actually getting the layer number 0 (trends)
+			return this.type == 4 ? 0 : this.type;
+		},
+
+		layerDef(){
+			/* layer definition for dynamicMapLayer well type points */
+			console.log('filtering by type: ' + this.type);
+
+			var value = this.layerValue;
+			// only need to filter if a trends type has been chosen. otherwise, this.filterType returns "" and this.decideHowToFilter returns an empty layer def. all records for the layerValue will be returned.
+			
+			// if(this.type === 1 || type === "1"){
+			// 	return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'"}`
+			// }
+
+			// else if(type === 2 || type === "2"){
+			// 	return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Public-supply'"}`
+			// }
+
+			if(this.type === 0 || this.type === "0"){
+				return `{${value}: "StudyType = 'Public-supply'"}`
+			}
+
+			else if(this.type === 4 || this.type === '4'){
+				return `{${value}: "StudyType = 'Domestic-supply'"}`
+			}
+
+			// otherwise don't filter; return all entries
+			else {
+				return `{${value}: ""}`
 			}
 		}
 	}

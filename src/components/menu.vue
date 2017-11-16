@@ -135,6 +135,8 @@ import Guidance from './Guidance.vue';
 import BuildCSV from '../mixins/buildCSV.vue'
 import toggle from '../mixins/toggle.vue'
 
+
+// TODO changing type to non-trend changes this.trendIndex to ""; changing type to a trend changes this.trendIndex to 0
 export default {
 	name: 'MenuDiv',
 	mixins: [ BuildCSV, toggle],
@@ -228,9 +230,9 @@ export default {
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
 		},
-		trend(){
-			console.log('trend changed to : ' + this.trend);
-			this.$emit('changeTrend', this.trend, this.trendIndex)
+		trendIndex(){
+			console.log('trend index changed to : ' + this.trendIndex);
+			this.$emit('changeTrend', this.trendIndex)
 
 		}
 	},
@@ -286,14 +288,6 @@ export default {
 				  // names must be equal
 				  return 0;
 			})
-		},
-
-		trend(){
-			if(this.param.trends && this.trendIndex !== ""){
-				//this.trendIndex is the index currently selected on the slider bar
-				return this.param.trends[this.trendIndex]
-			}
-			return "";
 		},
 
 		trendArr(){

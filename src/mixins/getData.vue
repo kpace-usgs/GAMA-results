@@ -15,14 +15,14 @@ export default {
 
 	methods: {
 		/* build point layer of wells by pcode. return a function that returns a layer */
-		buildData(type, code, callback){
+		buildData(callback){
 			this.$emit('toggleLoading', true);
 
 
 			console.log('building data')
 			var url = this.urlForData; // pick which url endpoint will be used
 
-			var defs = buildDef(type, code); // get a layer definition based on type, and param.PCODE
+			var defs = buildDef(this.type, this.param.PCODE); // get a layer definition based on type, and param.PCODE
 			console.log(defs);
 
 			// create esri-leaflet find object
@@ -31,13 +31,14 @@ export default {
 			// data.limit(100)
 			// data.where(defs);
 
-			var data = this.getData(url).layers('0').fields('PCode').text(code).layerDefs(defs);
+			var data = this.getData(url).layers('0').layerDefs(0, defs).fields('PCode').text(this.param.PCODE);
 
 			var that = this;
 			/* run query and return the resulting feature collection */
 			data.run( (err, fc) => {
 				console.log('running')
-				if(err){ console.log(err) }
+				if(err){ console.log(err); that.$emit('toggleLoading', false)}
+					console.log('number of features: ' + fc.features.length);
 				that.fc = fc;
 				callback(fc);
 			});
@@ -45,9 +46,10 @@ export default {
 
 		/* build point layer of wells by type */
 		buildLayer(type) {
-			console.log('getting layer: ' + this.layerValue + ' from SitesLayersLegend service');
+
+			console.log('getting layer: ' + type + ' from SitesLayersLegend service');
 			/* get layer and return */
-			var layer = this.getLayer(this.layerValue, this.layerDef);
+			var layer = this.getLayer(type, this.layerDef);
 
 			/* bind popup. the arguments are different than those for bindPopup function in the mapDiv because this is an esri dynamic map layer whereas those are leaflet geojsons. the functions to bind popups are slightly different */
 			layer.bindPopup( (err, featureCollection) => {
@@ -58,7 +60,7 @@ export default {
 				}
 			});
 	
-			return layer;
+			return layer.bringToBack();
 		},
 
 		getData(url){

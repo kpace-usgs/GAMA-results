@@ -52,7 +52,7 @@ export default {
 	
 				if(this.isATrends){ // if a trends type has been selected 
 					var callback = this.buildTrendLayer;
-					this.buildData(this.type, this.param.PCODE, callback);
+					this.buildData( callback);
 				} 
 
 				else{
@@ -81,7 +81,7 @@ export default {
 				console.log("map sees trend has been changed to a value")
 
 				// the trend value has been changed to an integer, get trend layer
-				this.buildData(this.type, this.param.PCODE, this.buildTrendLayer);
+				this.buildData( this.buildTrendLayer);
 			}
 		},
 
@@ -100,7 +100,7 @@ export default {
 					var callback = this.buildStatusLayer;
 				}
 
-				this.buildData(this.type, this.param.PCODE, callback);
+				this.buildData(callback);
 			}
 
 			/* if param value is being cleared, revert back to showing wells by type */
@@ -194,14 +194,14 @@ export default {
 	
 				// if trend sites, domestic supply, public supply is chosen, just get that layer
 				if(this.type != 3){
-					var layer = this.buildLayer(this.type);
+					var layer = this.buildLayer(this.layerValue);
 					this.addLayer(layer);
 				}
 				else {
 					// load all 3 type layers. order is important
-					this.addLayer(this.buildLayer(1));
 					this.addLayer(this.buildLayer(0));
 					this.addLayer(this.buildLayer(2));
+					this.addLayer(this.buildLayer(1));
 				}
 			}
 		},

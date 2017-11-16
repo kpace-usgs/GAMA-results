@@ -7,6 +7,7 @@
 			:layerArr = 'layers'
 			:reset = 'reset'
 			@toggleLoading = 'toggleLoading'
+			@trendsCounted = 'updateTrendVisits'
 		></MapDiv>
 
 		<PulseLoader :loading='isLoading'></PulseLoader>
@@ -18,6 +19,7 @@
 
 		<MenuDiv 
 			:infos = 'infos'
+			:trendVisits = 'trendVisits'
 			@changeLayer='handleLayer' 
 			@changeParam='handleParam'
 			@changeType='handleType'
@@ -60,6 +62,7 @@ export default {
 			type: '',
 			trend: '',
 			trendIndex: '',
+			trendVisits: 1,
 			reset: false,
 			infos: [] 
 		}
@@ -90,8 +93,9 @@ export default {
 		getParamInfo(){
 			/* get legend table data from server */
 			var that = this;
-			var thresholds = esri.query('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer');
-			thresholds.layer(8);
+			var thresholds = esri.query({
+				url: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer'});
+			thresholds.layer('8');
 
 			thresholds.run( (err, fc) => {
 				if(err) { console.log(err) }
@@ -100,6 +104,9 @@ export default {
 			});
 		},
 
+		updateTrendVisits(num){
+			this.trendVisits = num;
+		},
 		// getTypeInfo(){
 		// 	esri.query('https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/AllGAMAData/MapServer')
 		// 	// TODO get metadata ? get all the possible trend types?

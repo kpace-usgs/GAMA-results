@@ -54,7 +54,7 @@
 	        </div>
 
 	        <!-- add slider bar to change trend series. if this.type == 0 or 4 the trends t0 layer is returned instead of the param layer and is queried for Public-supply or Domestic-supply -->
-	        <div v-if='(type === "0" || type==="4")' style='z-index: 99;' >
+	        <div v-if='(type === "0" || type==="4") && param.PCODE' style='z-index: 99;' >
 
 				<label class='labelDiv'>
 					Select a study unit trend visit
@@ -140,7 +140,7 @@ import toggle from '../mixins/toggle.vue'
 export default {
 	name: 'MenuDiv',
 	mixins: [ BuildCSV, toggle],
-	props: [ 'infos' ],
+	props: [ 'infos', 'trendVisits' ],
 	components: {
 		ToggleBar, Guidance, VueSlider
 	},
@@ -214,7 +214,7 @@ export default {
 		param(){
 			console.log('menu sees param changed');
 
-			return this.$emit('changeParam', this.param);
+			return this.$emit('changeParam', this.param); // tell the app that param has changed. if type === 0 or 4, the app will return the number of trend visits for that param.
 		},
 		type(){
 			console.log(this.type);
@@ -226,7 +226,8 @@ export default {
 				this.parameterGroup = this.defaultParamGroup;
 			}
 
-			this.trendIndex = ""
+			//this.trendIndex = ""; //changng the type resets the trendIndex 
+
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
 		},
@@ -292,11 +293,11 @@ export default {
 
 		trendArr(){
 			var arrToReturn = [];
-			if(this.param.hasOwnProperty("trends")){
-				for(var i = 0; i < this.param.trends.length; i++){
-					arrToReturn.push(i);
-				}
-			}
+
+			for(var i = 0; i < this.trendVisits; i++){
+				arrToReturn.push(i);
+			};
+
 			return arrToReturn;
 		}
 	}

@@ -64,8 +64,7 @@ export default {
 		},
 
 		trendIndex(){
-			
-			
+		
 			if(this.trendIndex == "" || !this.trendIndex){
 				console.log('map sees trend has been changed to blank')
 				// trend is being reset by type changing
@@ -126,6 +125,9 @@ export default {
 		buildTrendLayer() {
 			var featureCollection = this.buildData(this.type, this.param.PCODE); // returns a feature collection of wells filtered by PCODE and type
 			var popup = this.returnTrendPopup;
+
+			console.log(featureCollection); //count how many trend visits
+			// TODO this.$emit('trendsCounted', trendVisits);
 
 			var layer = L.geoJSON(featureCollection, {
 				style: pointStyle(feature),

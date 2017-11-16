@@ -32,7 +32,7 @@ export default (type, pcode) => {
 	var trendFunction = () => {
 		// if type == 0 or type == 4, get all results, but if type == "" or 1 or 2, only get first trend result
 
-		return type == 0 || type == 4 || type == "" ? '' : ` and SU_VisitNo = "1"`
+		return type == 0 || type == 4 || type == "" ? '' : 'SU_VisitNo = "1"'
 	};
 
 	// save results

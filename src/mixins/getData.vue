@@ -22,8 +22,8 @@ export default {
 			console.log('building data')
 			var url = this.urlForData; // pick which url endpoint will be used
 
-			// var defs = buildDef(type, code); // get a layer definition based on type, and param.PCODE
-			// console.log(defs);
+			var defs = buildDef(type, code); // get a layer definition based on type, and param.PCODE
+			console.log(defs);
 
 			// create esri-leaflet find object
 			// var data = this.getTable(url);
@@ -31,12 +31,14 @@ export default {
 			// data.limit(100)
 			// data.where(defs);
 
-			var data = this.getData(url).layers('0').fields('PCode').text(code);
+			var data = this.getData(url).layers('0').fields('PCode').text(code).layerDefs(defs);
 
+			var that = this;
 			/* run query and return the resulting feature collection */
 			data.run( (err, fc) => {
 				console.log('running')
 				if(err){ console.log(err) }
+				that.fc = fc;
 				callback(fc);
 			});
 		},

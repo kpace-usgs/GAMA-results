@@ -27,7 +27,8 @@ export default {
 			}),
 			typeLayer: '',
 			constituentLayer: '',
-			trendVisits: 0
+			trendVisits: 0,
+			fc: ''
 		}
 	},
 	mixins: [GetData, Popup, listeners ],
@@ -51,15 +52,17 @@ export default {
 	
 				if(this.isATrends){ // if a trends type has been selected 
 					var callback = this.buildTrendLayer;
+					this.buildData(this.type, this.param.PCODE, callback);
 				} 
 
 				else{
 					// if a trend value exists then need to change from trends layer to param layer
-					var callback = this.buildStatusLayer;
+					//var callback = this.buildStatusLayer;
+					this.buildStatusLayer(this.fc);
 				}
 
-				// get data for layer, call callback when data returned
-				this.buildData(this.type, this.param.PCODE, callback);
+				// // get data for layer, call callback when data returned
+				// this.buildData(this.type, this.param.PCODE, callback);
 			} 
 
 			// if no constituent has been selected, then show the well locations by type

@@ -160,6 +160,8 @@ export default {
 
 			var popup = this.returnParamPopup;
 			var param = this.param;
+			var typeString = this.typeString;
+			console.log(typeString)
 
 			var layer = L.geoJSON(fc, {
 				pointToLayer: (feature, latlng) => {
@@ -168,6 +170,10 @@ export default {
 				onEachFeature: (feature, layer) => {
 					return layer.bindPopup( () => popup(feature.properties)
 					); // must return the popup content each time or else all popups will just be the same, equal to the last feature to load
+				},
+				filter: feature => {
+
+					return this.type == "" || this.type == 3 ? feature.properties.SU_VisitNo == '1' : feature.properties.SU_VisitNo == '1' && feature.properties.StudyType == typeString;
 				}
 			});
 

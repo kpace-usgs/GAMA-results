@@ -22,22 +22,21 @@ export default {
 			console.log('building data')
 			var url = this.urlForData; // pick which url endpoint will be used
 
-			var defs = buildDef(type, code); // get a layer definition based on type, and param.PCODE
-			console.log(defs);
+			// var defs = buildDef(type, code); // get a layer definition based on type, and param.PCODE
+			// console.log(defs);
 
 			// create esri-leaflet find object
 			// var data = this.getTable(url);
-			// data.layer('0')
+			// data.layer(0)
+			// data.limit(100)
 			// data.where(defs);
 
-			var data = this.getData(url).layers('0').fields('PCode').text(code)
-			//layerDef(0, defs); //get layer for map
+			var data = this.getData(url).layers('0').fields('PCode').text(code);
 
 			/* run query and return the resulting feature collection */
 			data.run( (err, fc) => {
 				console.log('running')
 				if(err){ console.log(err) }
-				console.log(fc);
 				callback(fc);
 			});
 		},
@@ -109,6 +108,26 @@ export default {
 			else {
 				return `{${value}: ""}`
 			}
+		},
+
+		typeString() {
+
+			switch(this.type) {
+				case '0':
+					return "Public-supply Trends Sites"
+					break;
+				case '1':
+					return 'Domestic-supply Aquifer Sites'
+					break;
+				case '2': 
+					return 'Public-supply Aquifer Sites'
+					break;
+				case '4': 
+					return 'Domestic-supply Trends Sites'
+					break;
+				default:
+					return '';
+			};
 		}
 	}
 }

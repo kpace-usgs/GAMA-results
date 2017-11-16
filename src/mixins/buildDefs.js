@@ -26,7 +26,7 @@ export default (type, pcode) => {
 		};
 
 
-		return type == 3 || type === "" ? '' : ` and StudyType = "${string}"`
+		return type == 3 || type === "" ? '' : `StudyType = "${string}"`
 	};
 
 	var trendFunction = () => {
@@ -36,9 +36,10 @@ export default (type, pcode) => {
 	};
 
 	// save results
-	//var typeString = typeFunction();
-	var typeString = '';
+	var typeString = typeFunction();
+
 	var trendString = trendFunction();
 	
-	return `PCode = "${pcode}"${typeString}`;
+	return typeString;
+	//return `PCode = "${pcode}"${typeString}`;
 }

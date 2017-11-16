@@ -30,5 +30,6 @@ export default (feature, latlng, param) => {
 		color: 'black',
 		radius: 4,
 		zIndexOffset: 40
-	})
+	});
+
 };

@@ -40,8 +40,7 @@
 				<div v-for='legend in param.Legend'>
 					<p>{{legend.Category}}</p>
 					<div>
-						<!-- <img :src='../assets/images/low.png'/> -->
-						<!-- TODO draw image like it shows on map -->
+						<i :style='{background: getColor(legend.LegendItem), width: "8px", height: "8px", borderRadius: "7px", border: "1px solid black", marginRight: "5px"}'></i>
 						<p>{{legend.Symbology}}</p>
 					</div>
 				</div>
@@ -120,6 +119,7 @@ import toggle from '../mixins/toggle.vue'
 import ToggleBar from './toggleBar.vue';
 import listOfUnits from '../assets/listOfUnits.js'
 import listOfProvinces from '../assets/listOfProvinces.js'
+import * as wellColor from '../mixins/wellColor.js';
 
 export default {
 	name: 'LegendDiv',
@@ -133,7 +133,12 @@ export default {
 	components: {
 		ToggleBar
 	},
-	mixins: [toggle]
+	mixins: [toggle],
+	methods: {
+		getColor(legendItem) {
+			return legendItem == 3 ? wellColor.low : legendItem == 1 ? wellColor.hi : legendItem == 4 ? wellColor.none : wellColor.med;
+		}
+	}
 }
 </script>
 
@@ -163,6 +168,7 @@ export default {
 	border-bottom: 1px solid grey;
 }
 
+/* styling for the word "symbology" */
 .paramLayerLegend>div>p{
 	width: 100%;
 	margin: 0;
@@ -175,8 +181,10 @@ export default {
 .paramLayerLegend.hasInfo>div:last-child>div>img{
 	margin-left: auto;
 }
+
+/* styling for items on left side of table */
 .paramLayerLegend.hasInfo>div>p:first-child{
-	text-align: left;
+	text-align: right;
 	padding-right: 20px;
 	width: 100%;
 }

@@ -7,31 +7,39 @@ export default {
 	/* store all the urls where data are queried for map. all GAMA data are on AllGAMAData map server, all base layers and legend info are on SitesLayersLegend map server*/
 	data(){
 		return {
-			urlForData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/AllGAMAData/MapServer',
+			urlForData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/WQR_WebMap_Data/MapServer',
 	
 			urlForPolygon: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer'
 		}
 	},
 
 	methods: {
-		/* build point layer of wells by pcode */
-		buildData(type, code){
+		/* build point layer of wells by pcode. return a function that returns a layer */
+		buildData(type, code, callback){
+			this.$emit('toggleLoading', true);
+
+
+			console.log('building data')
 			var url = this.urlForData; // pick which url endpoint will be used
 
-			var defs = buildDef(type, code); // get a layer definition based on type, param.PCODE, and trendIndex selections 
+			var defs = buildDef(type, code); // get a layer definition based on type, and param.PCODE
+			console.log(defs);
 
-			var data = this.getTable(url).layer('0').where(def); //get layer for map
+			// create esri-leaflet find object
+			// var data = this.getTable(url);
+			// data.layer('0')
+			// data.where(defs);
 
-			var featureCollection; //create variable
+			var data = this.getData(url).layers('0').fields('PCode').text(code)
+			//layerDef(0, defs); //get layer for map
 
 			/* run query and return the resulting feature collection */
 			data.run( (err, fc) => {
+				console.log('running')
 				if(err){ console.log(err) }
 				console.log(fc);
-				featureCollection = fc;
+				callback(fc);
 			});
-
-			return featureCollection;
 		},
 
 		/* build point layer of wells by type */
@@ -76,20 +84,7 @@ export default {
 	},
 
 	computed: {
-		filterType(){
-			/* if a trends type has been selected, then the imported layer will need to be filtered by type since there's only one trends layer; otherwise, the query has already been done so we don't need to filter again and we can return just an empty "". */
-			switch(this.type){
-				case '0':
-					return 0
-					break;
-				case '4': 
-					return 4
-					break;
-				default:	
-					return ""
-			}
-		},
-
+	
 		layerValue() {
 			// because there are only 3 layers that show wells by type, both type == 4 and type === 0 are actually getting the layer number 0 (trends)
 			return this.type == 4 ? 0 : this.type;
@@ -100,15 +95,7 @@ export default {
 			console.log('filtering by type: ' + this.type);
 
 			var value = this.layerValue;
-			// only need to filter if a trends type has been chosen. otherwise, this.filterType returns "" and this.decideHowToFilter returns an empty layer def. all records for the layerValue will be returned.
-			
-			// if(this.type === 1 || type === "1"){
-			// 	return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Domestic-supply'"}`
-			// }
-
-			// else if(type === 2 || type === "2"){
-			// 	return `{${value}: "Purpose = 'STATUS' AND StudyType = 'Public-supply'"}`
-			// }
+			// only need to filter if a trends type has been chosen. 
 
 			if(this.type === 0 || this.type === "0"){
 				return `{${value}: "StudyType = 'Public-supply'"}`

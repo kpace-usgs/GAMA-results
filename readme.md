@@ -28,7 +28,8 @@ The point of doing it this was is to avoid if-statements for different kinds of 
 
 
 TODO: 
-- draw icon in legend based on how parameter is styled on map
+- fix polygon layer numbers
 - add style for point L.geoJSONs 
 - when this.buildTrendLayer() is called in mapDiv.vue, filter the layer by this.trendIndex()
+- trend popup doesn't have to run separate query
 - populate trend options from the server instead of being hand-coded into menu and map logic (in getData.vue and buildDefs.js). Instead on mount the app component should get unique StudyType values and use those to fill in the map and the logic.

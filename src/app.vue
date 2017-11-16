@@ -52,7 +52,7 @@ export default {
 				BenchmarkDefinition: '',
 				Constituent: '',
 				Units: '',
-				LegendItems: [{
+				Legend: [{
 					LegendCount: 1,
 					LegendItem: 1,
 					Category: '',
@@ -99,7 +99,6 @@ export default {
 
 			thresholds.run( (err, fc) => {
 				if(err) { console.log(err) }
-				console.log(fc);
 				that.infos = that.makeInfosArr(fc.features); // parse returned feature collection into a format used by the app's components
 			});
 		},
@@ -157,13 +156,14 @@ export default {
 									Symbology: legend.properties.Symbology
 								});
 							});
-							// sort them in order according to LegendItem so 3 comes before 1
+							
+							// sort them in order according to LegendItem so 3 comes before 1 because in arcServer table, the High category is LegendItem 1 and the Low category is LegendItem 3
 							legendArrToReturn.sort( (a, b) => {
 								var numA = a.LegendItem;
 								var numB = b.LegendItem;
-								return numB - numA;
+								return numA - numB;
 							});
-							// save a parameter object
+							// // save a parameter object
 							paramArrToReturn.push({
 								Constituent: param.Constituent,
 								PCODE: param.PCODE,
@@ -174,6 +174,7 @@ export default {
 								BenchmarkType: param.BenchmarkType,
 								BenchmarkDefinition: param.BenchmarkDefinition,
 								Units: param.Units,
+								LegendCount: param.LegendCount,
 								Legend: legendArrToReturn
 							});
 						}

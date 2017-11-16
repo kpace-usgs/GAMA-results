@@ -20,7 +20,7 @@ export default {
 	computed: {
 		category() {
 			// if no value for the category's column has been provided, return 'Category'. If a blank string has been provided for the value, return 'N/A'
-			return this.param.Units ? '{Category}' : 'N/A'; // number of detects type constituents aren't categorized
+			return this.param.Units ? 'properties.Category' : 'N/A'; // number of detects type constituents aren't categorized
 		},
 
 		lookFor() {
@@ -79,10 +79,10 @@ export default {
 			var date = moment(properties.SampleDate).format('MM/DD/YYYY');
 
 			return `<p>Study Unit: ${properties.StudyUnit}<br/>\
-			GAMA ID: ${properties.GAMA_ID}<br/>\
+			USGS Station ID: ${properties.USGSStationID}<br/>\
 			Sample Date: ${date}<br/>\
-			${this.lookFor}: ${properties.ValueConcat} ${this.units}<br/>\
-			Category: ${this.category}`
+			${this.lookFor}: ${properties.ReptValue} ${this.units}<br/>\
+			Category: ${this.param.Units ? properties.Category : "N/A"}`
 		},
 
 		returnTrendPopup(properties, featureCollection){
@@ -95,17 +95,17 @@ export default {
 			this.numOfSamples = 0; //reset
 			this.popupProperties = properties;
 			this.chartData = []; //clear array
-			this.results.insertAdjacentHTML('afterbegin', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}<br/>`); //add additional line
+			this.results.insertAdjacentHTML('afterbegin', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.SU_VisitNo}<br/>`); //add additional line
 			//this.popup.insertAdjacentElement('beforeend', this.canvas);
-			return this.buildGraph(properties.GAMA_ID, featureCollection);
+			return this.buildGraph(properties.USGSStationID, featureCollection);
 		},
 
 		/* run the esri find object for rows where GAMA_ID = gamaID */
-		buildGraph(gamaID, featureCollection) {
+		buildGraph(id, featureCollection) {
 
 			// filter featureCollection to only those where GAMA_ID = gamaID
 			var filtered = featureCollection.filter(feature => {
-				return feature.GAMA_ID == gamaID
+				return feature.USGSStationID == id
 			});
 
 			// push properties from each object in filtered into this.chartData

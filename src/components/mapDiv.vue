@@ -26,7 +26,8 @@ export default {
 				pane: 'markerPane'
 			}),
 			typeLayer: '',
-			constituentLayer: ''
+			constituentLayer: '',
+			trendVisits: 0
 		}
 	},
 	mixins: [GetData, Popup, listeners ],
@@ -47,14 +48,18 @@ export default {
 			this.pointGroup.clearLayers();
 
 			if(this.param.PCODE != '') { // if a constituent has been selected
+	
 				if(this.isATrends){ // if a trends type has been selected 
-					this.constituentLayer = this.buildTrendLayer();
+					var callback = this.buildTrendLayer;
+				} 
 
-				} else{
+				else{
 					// if a trend value exists then need to change from trends layer to param layer
-					this.constituentLayer = this.buildStatusLayer();
+					var callback = this.buildStatusLayer;
 				}
-				this.addPoints();
+
+				// get data for layer, call callback when data returned
+				this.buildData(this.type, this.param.PCODE, callback);
 			} 
 
 			// if no constituent has been selected, then show the well locations by type
@@ -71,9 +76,9 @@ export default {
 			} else{
 				this.pointGroup.clearLayers();
 				console.log("map sees trend has been changed to a value")
+
 				// the trend value has been changed to an integer, get trend layer
-				this.constituentLayer = this.buildTrendLayer();
-				this.addPoints();
+				this.buildData(this.type, this.param.PCODE, this.buildTrendLayer);
 			}
 		},
 
@@ -85,21 +90,21 @@ export default {
 
 				/* only import param if type is not a trend type */
 				if(this.isATrends){
-					console.log('dont import param')
-					this.consituentLayer = this.buildTrendLayer();
+					console.log('import trend');
+					var callback = this.buildTrendLayer;
 				} else {
-					console.log('import param')
-					this.constituentLayer = this.buildStatusLayer();
+					console.log('import status');
+					var callback = this.buildStatusLayer;
 				}
 
-				this.addPoints();
+				this.buildData(this.type, this.param.PCODE, callback);
 			}
 
 			/* if param value is being cleared, revert back to showing wells by type */
-			else {
+			else { // else if this.param.PCODE is an empty string, the pointGroup will already be cleared
 				this.wellsByType();
 			}
-			// else if this.param.PCODE is an empty string, the pointGroup will already be cleared
+			
 		},
 
 		layerArr(){
@@ -122,41 +127,53 @@ export default {
 	
 	methods: {
 
-		buildTrendLayer() {
-			var featureCollection = this.buildData(this.type, this.param.PCODE); // returns a feature collection of wells filtered by PCODE and type
+		buildTrendLayerfc() {
+
 			var popup = this.returnTrendPopup;
+			console.log(fc); 
+			var index = this.trendIndex + 1;
+			var param = this.param;
 
-			console.log(featureCollection); //count how many trend visits
-			// TODO this.$emit('trendsCounted', trendVisits);
-
-			var layer = L.geoJSON(featureCollection, {
-				style: pointStyle(feature),
+			var layer = L.geoJSON(fc, {
+				pointToLayer: (feature, latlng) => {
+					return pointStyle(feature,latlng, param);
+				},
+				onEachFeature: (feature, layer) => {
+					return layer.bindPopup(popup(feature.properties, fc));
+				},
 				filter: ( feature ) => {
+					return feature.properties.SU_VisitNo == index;
 					// filter by this.trendIndex
 				}
-			}).bindPopup( layer => {
-				return popup(layer.feature.properties, featureCollection);
-			})
+			});
 
 			this.addEventListeners(layer);
 
 			// filter by trendIndex
-			return layer;
+			this.constituentLayer = layer;
+			this.addPoints(this.constituentLayer);
+
+			this.countTrendVisits(fc); // count how many trend visits
 		},
 
-		buildStatusLayer() {
-			var featureCollection = this.buildData(this.type, this.param.PCODE);
+		buildStatusLayer(fc) {
 
 			var popup = this.returnParamPopup;
+			var param = this.param;
 
-			var layer = L.geoJSON(featureCollection, {
-				style: pointStyle(feature)
-			}).bindPopup( layer => {
-				return popup(layer.feature.properties)
+			var layer = L.geoJSON(fc, {
+				pointToLayer: (feature, latlng) => {
+					return pointStyle(feature, latlng, param)
+				},
+				onEachFeature: (feature, layer) => {
+					return layer.bindPopup( () => popup(feature.properties)
+					); // must return the popup content each time or else all popups will just be the same, equal to the last feature to load
+				}
 			});
 
 			this.addEventListeners(layer);
-			return layer;
+			this.constituentLayer = layer;
+			this.addPoints(this.constituentLayer);
 		},
 
 		wellsByType(){
@@ -197,14 +214,28 @@ export default {
 
 		addPoints(){
 			// if constituent layer of markers not already added to map, add it now
-			
 			if(!this.pointGroup.hasLayer(this.constituentLayer)){
 				console.log('add layer')
 				this.pointGroup.addLayer(this.constituentLayer);
-				this.constituentLayer.redraw();
 			} else {
 				this.constituentLayer.redraw();
 			}
+			this.$emit('toggleLoading', false)
+		},
+
+		countTrendVisits(fc){
+			var uniqueVisits = [];
+			this.trendVisits = 0;
+
+			for(var i = 0; i < fc.features.length; i ++) {
+				var visit = fc.features[i].SU_VisitNo;
+				if(uniqueVisits.indexOf(visit) === -1) {
+					uniqueVisits.push(visit);
+					this.trendVisits ++;
+				}
+			}
+
+			this.$emit('trendsCounted', this.trendVisits);
 		},
 
 		checkReset(){

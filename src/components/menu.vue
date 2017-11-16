@@ -214,7 +214,7 @@ export default {
 		param(){
 			console.log('menu sees param changed');
 
-			return this.$emit('changeParam', this.param); // tell the app that param has changed. if type === 0 or 4, the app will return the number of trend visits for that param.
+			return this.$emit('changeParam', this.param); 
 		},
 		type(){
 			console.log(this.type);

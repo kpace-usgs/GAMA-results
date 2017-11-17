@@ -269,7 +269,7 @@ export default {
 			return arr;
 		},
 		
-
+		/* CHECKME create the url string that will point the user to the folder to be downloaded */
 		zipHref(){
 			if(this.parameterGroup.groupName !== ""){
 				var stringName = this.parameterGroup.groupName.replace(/\s/g, '');

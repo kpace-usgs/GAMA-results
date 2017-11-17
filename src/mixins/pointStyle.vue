@@ -7,7 +7,7 @@ export default {
 		// save the symbology colors for each entry in the selected parameter's legend array
 		color_low(){
 			return this.param.Legend.find(item => {
-				return item.LegendItem == 3
+				return item.LegendItem == this.param.LegendCount; //find the final item
 			}).Color;
 		},
 
@@ -25,7 +25,7 @@ export default {
 		},
 
 		thresh_low(){
-			return this.param.Threshold_Low ? parseFloat(this.param.Threshold_Low) : parseInt(this.param.Legend[this.param.LegendCount - 1].Category);
+			return this.param.Threshold_Low ? parseFloat(this.param.Threshold_Low) : parseInt(this.param.Legend[this.param.LegendCount - 1].Category);  // this still isn't great for Carbon-14 where no Threshold_Low is given but also shouldn't be using Category
 		},
 
 		thresh_high() {

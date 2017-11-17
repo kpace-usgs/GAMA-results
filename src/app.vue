@@ -64,7 +64,8 @@ export default {
 			trendIndex: '',
 			trendVisits: 1,
 			reset: false,
-			infos: [] 
+			infos: [] ,
+			urlForData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer'
 		}
 	},
 	components: {
@@ -94,7 +95,7 @@ export default {
 			/* get legend table data from server */
 			var that = this;
 			var thresholds = esri.query({
-				url: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer'});
+				url: this.urlForData });
 			thresholds.layer('8');
 
 			thresholds.run( (err, fc) => {

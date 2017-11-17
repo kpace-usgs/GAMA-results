@@ -13,7 +13,8 @@ export default {
 			results: document.createElement('div'),
 			chart: '',
 			popupProperties: '',
-			numOfSamples: 0
+			filtered: '',
+			maxY: 4
 		}
 	},
 
@@ -36,11 +37,11 @@ export default {
 			return 4 //TODO pass this value from getData.vue
 		},
 
-		// backgroundColors(){
-		// 	return Array(this.chartData.length).fill().map((item, i) => {
-		// 		return i === this.trendIndex ? '#896FC3'  : '#CCC5CE' ;
-		// 	});
-		// }
+		backgroundColors(){
+			return Array(this.chartData.length).fill().map((item, i) => {
+				return i === this.trendIndex ? '#896FC3'  : '#CCC5CE' ;
+			});
+		}
 	},
 
 	watch: {
@@ -52,10 +53,10 @@ export default {
 				this.results.innerHTML = ''; //clear
 				var properties = this.chartData[this.trendIndex].properties;
 				if(properties.hasOwnProperty('StudyUnit')){
-					this.results.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.VisitNo}</p>`); //add additional line
+					this.results.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.SU_VisitNo}</p>`); //add additional line
 				}
 				else {
-					this.results.insertAdjacentHTML('beforeend', `<p>Study Unit: ${this.popupProperties.StudyUnit}<br/>GAMA ID: ${this.popupProperties.GAMA_ID}<br/>Sample Date: Not sampled in this visit<br/>${this.lookFor}: N/A ${this.units}<br/>Category: N/A<br/>Study Unit Trend Visit: Trend${this.trendIndex}<br/>Number of Samples at this Well: ${this.numOfSamples}</p>`)
+					this.results.insertAdjacentHTML('beforeend', `<p>Study Unit: ${this.popupProperties.StudyUnit}<br/>GAMA ID: ${this.popupProperties.USGSStationID}<br/>Sample Date: Not sampled in this visit<br/>${this.lookFor}: ${this.popupProperties.ReptValue} ${this.popupProperties.Units}<br/>Category: ${this.popupProperties.Category}<br/>Study Unit Trend Visit: ${this.trendIndex}<br/>Number of Samples at this Well: ${this.filtered.length}</p>`)
 				}
 				
 			}
@@ -108,7 +109,7 @@ export default {
 			console.log('filter to only see usgsstationid equal to ' + id);
 			var uniqueVals = [];
 			// filter featureCollection to only those where GAMA_ID = gamaID
-			var filtered = featureCollection.features.filter(feature => {
+			thisfiltered = featureCollection.features.filter(feature => {
 				var idVal = feature.properties.USGSStationID; //save as shorter variable
 				var visit = feature.properties.SU_VisitNo;
 				// only add this feature to the filtered array if it matches the id AND if that SU Trend visit isn't already represented
@@ -121,28 +122,37 @@ export default {
 				return false;
 			});
 
-			console.log(filtered);
+			console.log(this.filtered);
 
 
 			// create all charts to have same number of x intervals as slider in menu has, using this.trendVisits across components
 			for(var i = 1; i <= this.trendVisits; i ++){
 
 				// find the filtered value for trendVisit i
-				var result = filtered.find(item => {
+				var result = this.filtered.find(item => {
 					return parseInt(item.properties.SU_VisitNo) == i 
 				});
-	
-				// push data into form that will go to the chart
+
+				if(result){
+					// if the labValue of the result is greater than this.max, update this.max
+					var resultNum = parseInt(result.properties.LabValue);
+					if(resultNum > this.max) {
+						this.max = resultNum;
+					}
+					
+				}
+				
+				// push data into form that will go to the chart. if result is undefined, we still want to populate the array with placeholders
 				this.chartData.push({
 					index: i,
 					label: result ? result.properties.SampleDate : 'NA',
-					data: result ? parseInt(result.properties.ReptValue) : null,
+					data: result ? resultNum : null,
 					properties: result ? result.properties: {}
 				});
 			};
 
 			// add final line to popup now that numOfSamples has been calculated
-			this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${filtered.length}</p>`);
+			this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${this.filtered.length}</p>`);
 			
 			this.createChart(this.trendIndex);
 
@@ -160,22 +170,25 @@ export default {
 			var labels = createFromArr(this.chartData, 'label');
 			var data = createFromArr(this.chartData, 'data');
 			var hoverColors = Array(this.chartData.length).fill().map(() => { '#896FC3' });
-			var backgroundColors = Array(this.chartData.length).fill().map((item, i) => {
-				return i === this.trendIndex ? '#896FC3'  : '#CCC5CE' ;
-			});
+
+			/* keep backgroundColors as component-level state value so it can be updated when trendIndex changes */
+			// var backgroundColors = Array(this.chartData.length).fill().map((item, i) => {
+			// 	return i === this.trendIndex ? '#896FC3'  : '#CCC5CE' ;
+			// });
 
 			console.log(data);
 			console.log(labels);
 
 			// build graph from the array
-			var graph = this.canvas.getContext('2d')
+			var graph = this.canvas.getContext('2d');
+
 			this.chart = new Chart(graph, {
 				type: 'line',
 				data: {
 					labels: labels,
 					datasets: [{
 						data: data,
-						pointBackgroundColor: backgroundColors,
+						pointBackgroundColor: this.backgroundColors,
 						pointHoverBackgroundColor: hoverColors,
 						pointBorderColor: 'black',
 						lineTension: 0
@@ -188,9 +201,10 @@ export default {
 					scales: {
 						yAxes: [{
 							ticks: {
+								display: true,
 								min: 0,
-								max: this.param.Threshold_Hi ? this.param.Threshold_Hi * 1.5 : 4,
-								stepSize: this.param.Threshold_Hi ? this.param.Threshold_Hi / 4 : 1
+								max: this.max,
+								stepSize: this.max / 4
 							},
 							scaleLabel: {
 								display: true,
@@ -200,6 +214,11 @@ export default {
 						xAxes: [{
 							time: {
 								unit: 'month'
+							},
+							ticks: {
+								display: true,
+								stepSize: 1,
+								autoSkip: false
 							},
 							scaleLabel: {
 								display: true,

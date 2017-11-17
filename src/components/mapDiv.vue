@@ -54,7 +54,6 @@ export default {
 				console.log("map sees trend has been changed to a value")
 
 				// the trend value has been changed to an integer, get trend layer
-				//this.buildData( this.buildTrendLayer);
 				this.buildTrendLayer(this.fc);
 			}
 		},

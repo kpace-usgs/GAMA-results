@@ -48,7 +48,14 @@ export default {
 
 			if(this.trendIndex === "" || !this.trendIndex){
 				console.log('map sees trendIndex has been changed to: ' + this.trendIndex)
-				// trend is being reset by type changing
+				// if trend is being reset by type changing, menu shouldn't be emitting it, but if it does, map needs to not do anything
+
+				// except if the trendIndex slider on the menu has been changed back to 0, then do update the layer
+				if(this.trendIndex === 0) {
+					console.log('trend index reset to 0');
+					this.pointGroup.clearLayers();
+					this.buildTrendLayer(this.fc);
+				}
 			} else{
 				this.pointGroup.clearLayers();
 				console.log("map sees trend has been changed to a value")

@@ -64,7 +64,7 @@
 	        	<VueSlider
 	        	ref='slider'
 	        	v-model='trendIndex'
-	     
+	        	v-if='trendVisits'
 	        	:data='trendArr'
 	        	:interval = 1
 	        	:piecewiseLabel='true'
@@ -228,7 +228,9 @@ export default {
 				this.parameterGroup = this.defaultParamGroup;
 			}
 
-			//this.trendIndex = ""; //changng the type resets the trendIndex 
+			if(this.type != 0 || this.type != 4){
+				this.trendIndex = ""; //changng the type resets the trendIndex 
+			}
 
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
@@ -237,8 +239,14 @@ export default {
 
 		/* when the slider on the menu is moved, emit to app */
 		trendIndex(){
-			console.log('trend index changed to : ' + this.trendIndex);
-			this.$emit('changeTrend', this.trendIndex)
+			console.log('menu trend index changed to : ' + this.trendIndex + ' and trend visits is: ' + this.trendVisits);
+
+			// only emit a change if the featureCollection has already loaded in the map and passed the trendVisits back to the menu
+			if(this.trendVisits !== ""){
+				console.log('menu emmitting trendIndex')
+				this.$emit('changeTrend', this.trendIndex)
+			}
+			
 		},
 
 		trendVisits(){

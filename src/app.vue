@@ -62,7 +62,7 @@ export default {
 			type: '',
 			trend: '',
 			trendIndex: '',
-			trendVisits: 1,
+			trendVisits: '',
 			reset: false,
 			infos: [] ,
 			urlForData: 'https://igswcawwwb1301.wr.usgs.gov:6443/arcgis/rest/services/SitesLayersLegend/MapServer'

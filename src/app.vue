@@ -120,7 +120,7 @@ export default {
 			// go through the array and look for group names that haven't been handled yet. 
 			for(var i = 0; i < arr.length; i++) {
 
-				var name = arr[i].properties.Constituen;
+				var name = arr[i].properties.ConstituentGroup;
 
 				// when the loop encounters a new constituent group, add that name to the tracking array
 				if(uniqueNames.indexOf(name) === -1 && name !== null) {
@@ -133,7 +133,7 @@ export default {
 
 					// create a subarray of all objects that have the constituent group name being handled
 					var paramArray = arr.filter( feature => {
-						return feature.properties.Constituen == name;
+						return feature.properties.ConstituentGroup == name;
 					});
 
 					// go through that subarray and handle each unique PCODE value
@@ -168,16 +168,16 @@ export default {
 							});
 							// // save a parameter object
 							paramArrToReturn.push({
-								Constituent: param.Constitu_1,
+								Constituent: param.Constituent,
 								PCODE: param.PCODE,
-								Threshold_Low: param.Threshold_,
-								Threshold_Hi: param.Threshold1,
-								ThresholdSource: param.ThresholdS,
+								Threshold_Low: param.Threshold_Low,
+								Threshold_Hi: param.Threshold_Hi,
+								ThresholdSource: param.ThresholdSource,
 								Benchmark: param.Benchmark,
-								BenchmarkType: param.BenchmarkT,
-								BenchmarkDefinition: param.BenchmarkD,
+								BenchmarkType: param.BenchmarkType,
+								BenchmarkDefinition: param.BenchmarkDefinition,
 								Units: param.Units,
-								LegendCount: param.LegendCoun,
+								LegendCount: param.LegendCount,
 								Legend: legendArrToReturn
 							});
 						}

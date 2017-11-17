@@ -44,24 +44,24 @@ export default {
 		}
 	},
 
-	watch: {
-		trendIndex(){
-			// watch for change in trend index and if there's a chart attached to this.chart value, change the array of colors and the data shown in the popup
-			if(this.chart.hasOwnProperty('data') && this.trendIndex !== ''){
-				this.chart.data.datasets[0].pointBackgroundColor = this.backgroundColors;
-				this.chart.update();
-				this.results.innerHTML = ''; //clear
-				var properties = this.chartData[this.trendIndex].properties;
-				if(properties.hasOwnProperty('StudyUnit')){
-					this.results.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.SU_VisitNo}</p>`); //add additional line
-				}
-				else {
-					this.results.insertAdjacentHTML('beforeend', `<p>Study Unit: ${this.popupProperties.StudyUnit}<br/>GAMA ID: ${this.popupProperties.USGSStationID}<br/>Sample Date: Not sampled in this visit<br/>${this.lookFor}: ${this.popupProperties.ReptValue} ${this.popupProperties.Units}<br/>Category: ${this.popupProperties.Category}<br/>Study Unit Trend Visit: ${this.trendIndex}<br/>Number of Samples at this Well: ${this.filtered.length}</p>`)
-				}
+	// watch: {
+	// 	trendIndex(){
+	// 		// watch for change in trend index and if there's a chart attached to this.chart value, change the array of colors and the data shown in the popup
+	// 		if(this.chart.hasOwnProperty('data') && this.trendIndex !== ''){
+	// 			this.chart.data.datasets[0].pointBackgroundColor = this.backgroundColors;
+	// 			this.chart.update();
+	// 			this.results.innerHTML = ''; //clear
+	// 			var properties = this.chartData[this.trendIndex].properties;
+	// 			if(properties.hasOwnProperty('StudyUnit')){
+	// 				this.results.insertAdjacentHTML('beforeend', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.SU_VisitNo}</p>`); //add additional line
+	// 			}
+	// 			else {
+	// 				this.results.insertAdjacentHTML('beforeend', `<p>Study Unit: ${this.popupProperties.StudyUnit}<br/>GAMA ID: ${this.popupProperties.USGSStationID}<br/>Sample Date: Not sampled in this visit<br/>${this.lookFor}: ${this.popupProperties.ReptValue} ${this.popupProperties.Units}<br/>Category: ${this.popupProperties.Category}<br/>Study Unit Trend Visit: ${this.trendIndex}<br/>Number of Samples at this Well: ${this.filtered.length}</p>`)
+	// 			}
 				
-			}
-		}
-	},
+	// 		}
+	// 	}
+	// },
 
 	mounted(){
 		this.popup.insertAdjacentElement('afterbegin', this.results);

@@ -7,8 +7,15 @@
 			<h2 slot='elseTitle'>Show Menu</h2>
 		</ToggleBar>
 
+
+
+
+
 	    <!-- Begin Controller Form -->
 	    <div v-if='showControls' class='form'>
+
+
+
 	        <!-- Groundwater Study Type Selector -->
 	        <div>
 		        <label class='labelDiv'>Groundwater Study Type: 
@@ -27,8 +34,11 @@
 	        </div>
 
 
+
+
+
+			<!-- Constituent Class Selector -->
 			<div>
-		        <!-- Constituent Class Selector -->
 		        <label class='labelDiv'>Select Constituent Class:
 		        	<Guidance :text='defineClass'></Guidance>
 		        </label>
@@ -41,6 +51,12 @@
 	            </select>
 	        </div>
 
+
+
+
+
+
+
 			<div>
 		        <!-- Parameter Selector, dynamically populated based on which Parameter Group selected -->
 		        <label class='labelDiv'>Select Constituent: 
@@ -52,6 +68,13 @@
 	            	<option v-for='parameter in sortedParameters' :value='parameter'>{{parameter.Constituent}}</option>
 	            </select>
 	        </div>
+
+
+
+
+
+
+
 
 	        <!-- add slider bar to change trend series. if this.type == 0 or 4 the trends t0 layer is returned instead of the param layer and is queried for Public-supply or Domestic-supply -->
 	        <div v-if='(type === "0" || type==="4") && param.PCODE' style='z-index: 99;' >
@@ -84,8 +107,10 @@
 
 
 
+
+			<!-- Shapefile Selector -->
 			<div id='layerSelector'>
-		        <!-- Shapefile Selector -->
+		        
 		        <label class='labelDiv'>Select Layers:
 		        	<Guidance text='Polygons showing how the state is divided into grid cells, study units, and hydrogeologic provinces'></Guidance>
 		        </label>
@@ -106,6 +131,8 @@
 		        </div>
      		</div>
 	      
+
+
 			<!-- Download Button -->
 			<!-- this option is using zip files made sometime in 2016 (?) until we can work out the server script -->
             <a id="downloadButton" 
@@ -121,6 +148,7 @@
 		    <p class='small'>*The Groundwater Ambient Monitoring and Assessment - Priority Basin Project (GAMA - PBP) is a cooperative program between the <a href='http://www.swrcb.ca.gov/gama/' target='_blank' style='width: 100%; margin: 0;display: inline;'>California State Water Resources Control Board</a> and the <a href='/index.html' target='_blank' style='width: 100%; margin: 0;display: inline;'>U.S. Geological Survey</a>.</p>
 		    
 
+			<!-- reset button -->
 		    <a @click='reset' id='reset' class='button' >
 				<p>Reset Map</p>
 		    </a>
@@ -130,7 +158,6 @@
 </template>
 
 <script>
-//import listOfParameters from '../assets/listOfParameters.json';
 import ToggleBar from './toggleBar.vue';
 import VueSlider from 'vue-slider-component/src/vue2-slider.vue'
 import Guidance from './Guidance.vue';
@@ -138,7 +165,6 @@ import BuildCSV from '../mixins/buildCSV.vue'
 import toggle from '../mixins/toggle.vue'
 
 
-// TODO changing type to non-trend changes this.trendIndex to ""; changing type to a trend changes this.trendIndex to 0
 export default {
 	name: 'MenuDiv',
 	mixins: [ BuildCSV, toggle],

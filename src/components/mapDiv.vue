@@ -32,7 +32,7 @@ export default {
 		}
 	},
 	mixins: [GetData, Popup, listeners, pointStyle ],
-	props: ['param', 'type', 'trend', 'layerArr', 'reset', 'trendIndex'],
+	props: ['param', 'type', 'layerArr', 'reset', 'trendIndex'],
 
 	computed: {
 		isATrends(){

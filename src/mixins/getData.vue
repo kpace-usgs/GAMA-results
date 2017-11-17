@@ -22,10 +22,9 @@ export default {
 			console.log('building data')
 			var url = this.urlForData; // pick which url endpoint will be used
 
-			var defs = buildDef(this.type, this.param.PCODE); // get a layer definition based on type, and param.PCODE
-			console.log(defs);
+			// var defs = buildDef(this.type, this.param.PCODE); // get a layer definition based on type, and param.PCODE
+			// console.log(defs);
 
-			//var data = esri.find(url).layers('0').layerDefs({0: defs});
 			var data = this.getData(url).layers('0').fields('PCode').text(this.param.PCODE);
 
 			var that = this;

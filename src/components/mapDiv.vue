@@ -127,6 +127,7 @@ export default {
 			for(var i = 0; i < this.layerArr.length; i++){
 				var layerName = this.layerArr[i];
 				var layer = this.buildPolygonLayer(layerName);
+
 				this.addEventListeners(layer);
 				this.polygonGroup.addLayer(layer);
 			}
@@ -163,7 +164,7 @@ export default {
 				alert('No results found')
 			}
 
-			this.addPoints(layer); // add to pointGroup()
+			this.addLayer(layer); // add to pointGroup()
 
 			this.countTrendVisits(fc); // count how many trend visits
 		},
@@ -187,7 +188,7 @@ export default {
 				}
 			});
 
-			this.addPoints(layer);
+			this.addLayer(layer);
 		},
 
 		wellsByType(){
@@ -205,8 +206,8 @@ export default {
 				else {
 					// load all 3 type layers. order is important
 					this.addLayer(this.buildLayer(0));
-					this.addLayer(this.buildLayer(2));
 					this.addLayer(this.buildLayer(1));
+					this.addLayer(this.buildLayer(2));
 				}
 			}
 		},
@@ -214,32 +215,23 @@ export default {
 		buildPolygonLayer(val){
 			this.$emit('toggleLoading', true);
 			var layer = this.getLayer(val);
+			if(val === 7) {
+				layer.bringToBack();
+			}
 			return layer;
 		},
 
 		addLayer(layer){
-			this.addEventListeners(layer);
+			
 			if(this.pointGroup.hasLayer(layer)) {
 				layer.redraw();
 			}
 			else {
+				this.addEventListeners(layer);
 				this.pointGroup.addLayer(layer);
 			}
 			this.$emit('toggleLoading', false);
 		},
-
-		addPoints(layer){
-			// if constituent layer of markers not already added to map, add it now
-			if(!this.pointGroup.hasLayer(layer)){
-				console.log('add layer');
-				this.addEventListeners(layer);
-				this.pointGroup.addLayer(layer);
-			} else {
-				layer.redraw();
-			}
-			this.$emit('toggleLoading', false)
-		},
-
 
 		/* go through all results and find what the max number of trend visits is. pass info to app, to popup, and to menu */
 		countTrendVisits(fc){

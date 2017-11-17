@@ -26,10 +26,10 @@
 	            	<!-- do not change the values unless you are going to change the rest of the code -->
 	                <option default value="">Select One</option>
 	                <option value='3'>All Sites</option>
-	                <option value='2'>Public-supply Aquifer Sites</option>
-	                <option value='1'>Domestic-supply Aquifer Sites</option>
-	                <option value='0'>Public-supply Trends Sites</option>
-	                <option value='4'>Domestic-supply Trends Sites</option>
+	                <option value='2'>Public-supply Aquifer</option>
+	                <option value='1'>Domestic-supply Aquifer</option>
+	                <option value='0'>Public-supply Trends</option>
+	                <option value='4'>Domestic-supply Trends</option>
 	            </select>
 	        </div>
 
@@ -307,6 +307,7 @@ export default {
 		zipHref(){
 			if(this.parameterGroup.groupName !== ""){
 				var stringName = this.parameterGroup.groupName.replace(/\s/g, '');
+				console.log('./downloads/groups/' + stringName + '.zip');
 				return './downloads/groups/'+ stringName + '.zip'
 			}
 		},

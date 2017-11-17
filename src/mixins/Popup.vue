@@ -80,7 +80,7 @@ export default {
 			var date = moment(properties.SampleDate).format('MM/DD/YYYY');
 
 			return `<p>Study Unit: ${properties.StudyUnit}<br/>\
-			USGS Station ID: ${properties.USGSStationID}<br/>\
+			GAMA ID: ${properties.PROJ_ID}<br/>\
 			Sample Date: ${date}<br/>\
 			${this.lookFor}: ${properties.ReptValue} ${this.units}<br/>\
 			Category: ${this.param.Units ? properties.Category : "N/A"}`
@@ -149,6 +149,8 @@ export default {
 					data: result ? resultNum : null,
 					properties: result ? result.properties: {}
 				});
+
+				//TODO change chart so that NA sample dates get points connected across the empty spot
 			};
 
 			// add final line to popup now that numOfSamples has been calculated
@@ -191,7 +193,8 @@ export default {
 						pointBackgroundColor: this.backgroundColors,
 						pointHoverBackgroundColor: hoverColors,
 						pointBorderColor: 'black',
-						lineTension: 0
+						lineTension: 0,
+						spanGaps: true
 					}]
 				},
 				options: {

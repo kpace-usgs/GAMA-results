@@ -6,9 +6,17 @@ export default {
 
 		// save the symbology colors for each entry in the selected parameter's legend array
 		color_low(){
-			return this.param.Legend.find(item => {
-				return item.LegendItem == this.param.LegendCount; //find the final item
-			}).Color;
+			if(this.param.Threshold_Low){
+				return this.param.Legend.find(item => {
+					return item.LegendItem == this.param.LegendCount; //find the final item
+				}).Color;
+			}
+			else {
+				return this.param.Legend.find(item => {
+					return item.LegendItem == this.param.LegendCount - 1; // if a number of detects sort, the final item's color is "none". we want the penultimate entry.
+				}).Color
+			}
+			
 		},
 
 		color_med() {
@@ -25,42 +33,79 @@ export default {
 		},
 
 		thresh_low(){
-			return this.param.Threshold_Low ? parseFloat(this.param.Threshold_Low) : parseInt(this.param.Legend[this.param.LegendCount - 1].Category);  // this still isn't great for Carbon-14 where no Threshold_Low is given but also shouldn't be using Category
+
+			var thresh = this.param.Threshold_Low ? this.param.Threshold_Low : this.param.Legend[this.param.LegendCount - 2].Category;
+
+			console.log('thresh low: ' + thresh);
+			return parseFloat(thresh);  // this still isn't great for Carbon-14 where no Threshold_Low is given but also shouldn't be using Category
 		},
 
 		thresh_high() {
-			return this.param.Threshold_Hi ? parseFloat(this.param.Threshold_Hi) : parseInt(this.param.Legend[0].Category.slice(1));
+			var thresh = this.param.Threshold_Hi ? this.param.Threshold_Hi : this.param.Legend[0].Category.slice(1);
+
+			console.log('thresh high: ' + thresh);
+
+			return parseFloat(thresh);
 		}
 	},
 	methods: {
 		pointStyle(feature, latlng) {
+			var compare = this.compare(feature);
+
 			return L.circleMarker(latlng, {
-				fillColor: this.color(feature),
+				fillColor: compare.color,
 				fillOpacity: 1,
 				weight: 0.5,
 				opacity: 1,
 				color: 'black',
 				radius: 4,
-				zIndexOffset: 40
+				className: compare.result
 			});
 		},
 
-		color(feature, param) {
+		compare(feature) {
 			var result = parseFloat(feature.properties.LabValue);
 
+			var color; 
+			var result;
+
 			if( result > this.thresh_high) {
-				return `#${this.color_high}`
+				color = `#${this.color_high}`;
+				result = 'high'
 			}
 			else if (result > this.thresh_low) {
-				return `#${this.color_med}`
+				color = `#${this.color_med}`;
+				result = 'med'
 			}
-			else if(result == 0) {
-				return 'none'
+
+			else if (result > 0) {
+				color =  `#${this.color_low}`;
+				result = 'low'
 			}
+
 			else {
-				return `#${this.color_low}`
+				color = 'none';
+				result = 'none'
 			}
+
+			return {
+				color: color,
+				result: result
+			}
+
 		}
 	}
 };
 </script>
+
+<style>
+
+.low{
+	z-index: 3;
+}
+.med {
+	z-index: 10;
+}
+.high {
+	z-index: 200;
+}

@@ -45,10 +45,10 @@
 					</div>
 				</div>
 				<div>
-					<p>Benchmark:</p>
+					<p v-if='param.BenchmarkType'>Benchmark:</p>
 					<div>
 						<p> {{param.BenchmarkType}} </p>
-						<img src='../assets/images/moreInfo.png' :alt='param.BenchmarkDefinition' :title='param.BenchmarkDefinition' />
+						<img src='../assets/images/moreInfo.png' :alt='param.BenchmarkDefinition' :title='param.BenchmarkDefinition'  v-if='param.BenchmarkType'/>
 					</div>
 				</div>
 			</div>
@@ -197,6 +197,9 @@ export default {
 .legendContent h3{
 	margin-top: -20px;
 	width: 80%;
+}
+.subLegend{
+	padding-top: 45px;
 }
 .subLegend>div{
 	display: flex;

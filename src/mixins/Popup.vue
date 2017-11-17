@@ -109,7 +109,7 @@ export default {
 			console.log('filter to only see usgsstationid equal to ' + id);
 			var uniqueVals = [];
 			// filter featureCollection to only those where GAMA_ID = gamaID
-			thisfiltered = featureCollection.features.filter(feature => {
+			this.filtered = featureCollection.features.filter(feature => {
 				var idVal = feature.properties.USGSStationID; //save as shorter variable
 				var visit = feature.properties.SU_VisitNo;
 				// only add this feature to the filtered array if it matches the id AND if that SU Trend visit isn't already represented

@@ -206,6 +206,7 @@ export default {
 		},
 
 		buildPolygonLayer(val){
+			this.$emit('toggleLoading', true);
 			var layer = this.getLayer(val);
 			return layer;
 		},
@@ -218,6 +219,7 @@ export default {
 			else {
 				this.pointGroup.addLayer(layer);
 			}
+			this.$emit('toggleLoading', false);
 		},
 
 		addPoints(layer){

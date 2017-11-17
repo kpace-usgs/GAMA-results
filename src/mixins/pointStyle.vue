@@ -21,15 +21,21 @@ export default {
 			var hex = this.param.Legend.find(item => {
 				return item.LegendItem == 1;
 			}).Color;
-
-			console.log(hex);
 			return hex;
+		},
+
+		thresh_low(){
+			return this.param.Threshold_Low ? parseFloat(this.param.Threshold_Low) : parseInt(this.param.Legend[this.param.LegendCount - 1].Category);
+		},
+
+		thresh_high() {
+			return this.param.Threshold_Hi ? parseFloat(this.param.Threshold_Hi) : parseInt(this.param.Legend[0].Category.slice(1));
 		}
 	},
 	methods: {
 		pointStyle(feature, latlng) {
 			return L.circleMarker(latlng, {
-				fillColor: `#${this.color(feature)}`,
+				fillColor: this.color(feature),
 				fillOpacity: 1,
 				weight: 0.5,
 				opacity: 1,
@@ -40,22 +46,19 @@ export default {
 		},
 
 		color(feature, param) {
-			var result = parseInt(feature.properties.LabValue);
-			var thresh_low = this.param.Threshold_low ? parseInt(this.param.Threshold_Low) : parseInt(this.param.Legend[this.param.LegendCount - 1].Category); //e.g. 1 Detect Count
-			var thresh_hi = this.param.Threshold_Hi ? parseInt(this.param.Threshold_Hi) : parseInt(this.param.Legend[0].Category.slice(-1));
+			var result = parseFloat(feature.properties.LabValue);
 
-
-			if( result > thresh_hi) {
-				return this.color_high
+			if( result > this.thresh_high) {
+				return `#${this.color_high}`
 			}
-			else if (result > thresh_low) {
-				return this.color_med
+			else if (result > this.thresh_low) {
+				return `#${this.color_med}`
 			}
 			else if(result == 0) {
 				return 'none'
 			}
 			else {
-				return this.color_low
+				return `#${this.color_low}`
 			}
 		}
 	}

@@ -56,21 +56,21 @@
 
 		    <!-- Shapefiles Legend -->
 		    <div id="extraLayerLegend" style="max-height:300px;overflow:auto;">
-		    	<div v-if='layers.includes(0)' class='subLegend'>
+		    	<div v-if='layers.includes(3)' class='subLegend'>
 			    	<h3>Domestic-supply Aquifer Grid Cells</h3>
 			     	<div>
 			     		<div style="border:1px solid rgb(078,078,078);"></div>
 			        </div>
 			    </div>
 
-				<div v-if='layers.includes(1)' class='subLegend'>
+				<div v-if='layers.includes(4)' class='subLegend'>
 			    	<h3>Public-supply Aquifer Grid Cells</h3>
 			     	<div>
 			     		<div style="border:1px solid black;"></div>
 			        </div>
 			    </div>
 
-				<div v-if='layers.includes(2)' class='subLegend'>
+				<div v-if='layers.includes(5)' class='subLegend'>
 			    	<h3>Domestic-supply Aquifers <br/>Study Unit Boundaries</h3>
 			     	<div>
 			     		<div style="background-color:#9c8a5a;"></div>
@@ -94,7 +94,7 @@
 			        </div>
 			    </div>
 
-				<div v-if='layers.includes(3)' class="subLegend">
+				<div v-if='layers.includes(6)' class="subLegend">
 					<h3>Public-supply Aquifers <br/>Study Unit Boundaries</h3>
 					<div v-for='unit in listOfUnits'>
 						<div :style="{backgroundColor: unit.color}"></div>
@@ -102,7 +102,7 @@
 					</div>
 				</div>	
 
-		  		<div v-if='layers.includes(4)' class="subLegend">
+		  		<div v-if='layers.includes(7)' class="subLegend">
 		  			<h3>Hydrogeologic Provinces</h3>
 		  			<div v-for='unit in listOfProvinces'>
 						<div :style="{backgroundColor: unit.color}"></div>

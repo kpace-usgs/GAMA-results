@@ -94,7 +94,7 @@
 				<!-- show only study units and provinces on initial render, show all options when "all sites" is checked -->
 				<!-- only show the public/domestic options if "public" or "domestic" types are selected -->
 		        <div v-for='(layer, index) in layers'
-		        	v-if=' type == "" || type === "3" || layer.value == 4 || domesticOrPublic === layer.prefix ? true: false' >
+		        	v-if=' type == "" || type === "3" || layer.value == 7 || domesticOrPublic === layer.prefix ? true: false' >
 
 					<input type='checkbox' 
 					:id='layer' :value='layer.value' 
@@ -167,26 +167,26 @@ export default {
 				"prefix": "Domestic-supply",
 				 "string": 'Domestic-supply Aquifer Grid Cells',
 				"pane": 'shallowGridCells',
-				"value": 0
+				"value": 3
 			}, {
 				"prefix": "Public-supply",
 				"string": 'Public-supply Aquifer Grid Cells', 
 				"pane": 'deepGridCells',
-				"value": 1
+				"value": 4
 			}, {
 				"prefix": "Domestic-supply",
 				"string": 'Domestic-supply Aquifer Study Units', 
 				"pane": 'shallowStudyUnits',
-				"value": 2
+				"value": 5
 			}, {
 				"prefix": "Public-supply",
 				"string": 'Public-supply Aquifer Study Units',
 				"pane": 'deepStudyUnits',
-				"value": 3
+				"value": 6
 			}, {
 				"string": 'Hydrogeologic Provinces',
 				"pane": 'provinces',
-				"value": 4
+				"value": 7
 			}],
 			layerName: [],
 			thresholds: '',

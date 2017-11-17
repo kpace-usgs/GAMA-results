@@ -189,8 +189,8 @@ export default {
 						yAxes: [{
 							ticks: {
 								min: 0,
-								max: this.param.Threshold_Hi,
-								stepSize: this.param.Threshold_Hi / 3
+								max: this.param.Threshold_Hi ? this.param.Threshold_Hi * 1.5 : 4,
+								stepSize: this.param.Threshold_Hi ? this.param.Threshold_Hi / 4 : 1
 							},
 							scaleLabel: {
 								display: true,

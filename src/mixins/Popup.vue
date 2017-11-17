@@ -36,11 +36,11 @@ export default {
 			return 4 //TODO pass this value from getData.vue
 		},
 
-		backgroundColors(){
-			return Array(this.chartData.length).fill().map((item, i) => {
-				return i === this.trendIndex ? '#896FC3'  : '#CCC5CE' ;
-			});
-		}
+		// backgroundColors(){
+		// 	return Array(this.chartData.length).fill().map((item, i) => {
+		// 		return i === this.trendIndex ? '#896FC3'  : '#CCC5CE' ;
+		// 	});
+		// }
 	},
 
 	watch: {
@@ -97,93 +97,77 @@ export default {
 			this.chartData = []; //clear array
 			this.results.insertAdjacentHTML('afterbegin', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.SU_VisitNo}<br/>`); //add additional line
 			//this.popup.insertAdjacentElement('beforeend', this.canvas);
+
+			// send that feature's USGSStationID to the buildGraph function, which will return the popup
 			return this.buildGraph(properties.USGSStationID, featureCollection);
 		},
 
 		/* run the esri find object for rows where GAMA_ID = gamaID */
 		buildGraph(id, featureCollection) {
-
+			console.log('filter to only see usgsstationid equal to ' + id);
+			var uniqueVals = [];
 			// filter featureCollection to only those where GAMA_ID = gamaID
-			var filtered = featureCollection.filter(feature => {
-				return feature.USGSStationID == id
+			var filtered = featureCollection.features.filter(feature => {
+				var idVal = feature.properties.USGSStationID; //save as shorter variable
+				var visit = feature.properties.SU_VisitNo;
+				// only add this feature to the filtered array if it matches the id AND if that SU Trend visit isn't already represented
+				if(idVal == id) {
+					if(uniqueVals.indexOf(visit) == -1) {
+						uniqueVals.push(visit); // save
+						return true;
+					}
+				}
+				return false;
 			});
 
-			// push properties from each object in filtered into this.chartData
-			this.numOfSamples = filtered.length;
-			var hasResults = this.numOfSamples > 0;
+			console.log(filtered);
 
-			for(var i = 0; i < filtered.length; i ++){
-				this.chartData.push({
-					index: i,
-					label: hasResults ? filtered[0].properties.SampleDate : 'NA',
-					data: hasResults ? filtered[0].properties[this.column] : null,
-					properties: hasResults ? filtered[i].properties: {}
+
+			// create all charts to have same number of x intervals as slider in menu has, using this.trendVisits across components
+			for(var i = 1; i <= this.trendVisits; i ++){
+
+				// find the filtered value for trendVisit i
+				var result = filtered.find(item => {
+					return parseInt(item.properties.SU_VisitNo) == i 
 				});
 
-				// hack of a callback
-				if(i === this.numOfSamples - 1 ) {
-					this.chartData.sort(this.compare);
-					// add final line to popup now that numOfSamples has been calculated
-					this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${this.numOfSamples}</p>`);
-					this.createChart(this.trendIndex);
-					return this.popup;
-				}
+				console.log(result);
+	
+				// push data into form that will go to the chart
+				this.chartData.push({
+					index: i,
+					label: result ? result.properties.SampleDate : 'NA',
+					data: result ? result.properties.ReptValue : null,
+					properties: result ? result.properties: {}
+				});
 			};
+
+			this.chartData.sort(this.compare);
+			// add final line to popup now that numOfSamples has been calculated
+			this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${filtered.length}</p>`);
 			
+			this.createChart(this.trendIndex);
 
-			//esriObj.text(gamaID).fields("GAMA_ID");
+			return this.popup;
 
-			// for(var i = 0; i < this.param.trends.length; i++){
-			// 	var val = this.param.trends[i];
-			// 	esriObj.layers(val);
-			// 	this.runFind(esriObj, i); //run esri find object
-
-			// 	// when done, return popup
-			// 	if(i === this.param.trends.length - 1){
-			// 		return this.popup;
-			// 	}
-			// }
 		},
-
-		// runFind(find, i){
-
-		// 	return find.run( (err, fc) => {
-		// 		if(err) {
-		// 			return; //catch error
-		// 		}
-		// 		// if a layer exists for the param.value at the given trend, push data to arrays
-		// 		var hasResults = fc.features.length > 0;
-
-		// 		// add to a counter if the well has results at that trend index
-		// 		if(hasResults){
-		// 			this.numOfSamples ++;
-		// 		}
-
-		// 		this.chartData.push({
-		// 			index: i,
-		// 			label: hasResults ? fc.features[0].properties.SampleDate : 'NA',
-		// 			data: hasResults ? fc.features[0].properties[this.column] : null,
-		// 			properties: hasResults ? fc.features[0].properties: {}
-		// 		});
-
-		// 		/* hack of a callback */
-		// 		if(this.chartData.length === this.trendsLength){
-		// 			this.chartData.sort(this.compare);
-		// 			// add final line to popup now that numOfSamples has been calculated
-		// 			this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${this.numOfSamples}</p>`)
-		// 			return this.createChart(this.trendIndex); //this.trendIndex is received as a prop by mapDiv.vue
-		// 		}
-		// 	});
-		// },
 
 		createChart(index) {
 			/* declare variables used by chart from chartData array*/
+
+			//createFromArr is resable function for creating labels, data, and hovercolors
 			function createFromArr(arr, key) {
 				return arr.map((dataPoint, i) => {return dataPoint[key]})
 			};
 			var labels = createFromArr(this.chartData, 'label');
 			var data = createFromArr(this.chartData, 'data');
 			var hoverColors = Array(this.chartData.length).fill().map(() => { '#896FC3' });
+			var backgroundColors = Array(this.chartData.length).fill().map((item, i) => {
+				return i === this.trendIndex ? '#896FC3'  : '#CCC5CE' ;
+			});
+
+			console.log(data);
+			console.log(labels);
 
 			// build graph from the array
 			var graph = this.canvas.getContext('2d')
@@ -193,7 +177,7 @@ export default {
 					labels: labels,
 					datasets: [{
 						data: data,
-						pointBackgroundColor: this.backgroundColors,
+						pointBackgroundColor: backgroundColors,
 						pointHoverBackgroundColor: hoverColors,
 						pointBorderColor: 'black',
 						lineTension: 0

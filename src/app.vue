@@ -104,6 +104,7 @@ export default {
 		},
 
 		updateTrendVisits(num){
+			console.log('app sees number of trend visits changed to: ' + num);
 			this.trendVisits = num;
 		},
 		// getTypeInfo(){

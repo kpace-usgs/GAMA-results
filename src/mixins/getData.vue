@@ -25,13 +25,8 @@ export default {
 			var defs = buildDef(this.type, this.param.PCODE); // get a layer definition based on type, and param.PCODE
 			console.log(defs);
 
-			// create esri-leaflet find object
-			// var data = this.getTable(url);
-			// data.layer(0)
-			// data.limit(100)
-			// data.where(defs);
-
-			var data = this.getData(url).layers('0').layerDefs(0, defs).fields('PCode').text(this.param.PCODE);
+			//var data = esri.find(url).layers('0').layerDefs({0: defs});
+			var data = this.getData(url).layers('0').fields('PCode').text(this.param.PCODE);
 
 			var that = this;
 			/* run query and return the resulting feature collection */

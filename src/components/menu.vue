@@ -64,7 +64,9 @@
 	        	<VueSlider
 	        	ref='slider'
 	        	v-model='trendIndex'
+	     
 	        	:data='trendArr'
+	        	:interval = 1
 	        	:piecewiseLabel='true'
 	        	height= '15'
 	        	width='100%'
@@ -231,10 +233,16 @@ export default {
 			// tell rest of app about the change
 			return this.$emit('changeType', this.type);
 		},
+
+
+		/* when the slider on the menu is moved, emit to app */
 		trendIndex(){
 			console.log('trend index changed to : ' + this.trendIndex);
 			this.$emit('changeTrend', this.trendIndex)
+		},
 
+		trendVisits(){
+			console.log('menu sees number of trend visits changed')
 		}
 	},
 	methods: {
@@ -251,6 +259,14 @@ export default {
 	computed: {
 		domesticOrPublic(){
 			return this.type == 1  || this.type == 4 ? 'Domestic-supply' : this.type == 2  || this.type == 0 ? 'Public-supply' : 'Trends';
+		},
+
+		trendArr(){
+			var arr = [];
+			for(var i = 0; i < parseInt(this.trendVisits); i++){
+				arr.push(i);
+			}
+			return arr;
 		},
 		
 
@@ -289,16 +305,6 @@ export default {
 				  // names must be equal
 				  return 0;
 			})
-		},
-
-		trendArr(){
-			var arrToReturn = [];
-
-			for(var i = 0; i < this.trendVisits; i++){
-				arrToReturn.push(i);
-			};
-
-			return arrToReturn;
 		}
 	}
 }

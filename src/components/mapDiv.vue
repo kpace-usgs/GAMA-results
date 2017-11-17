@@ -44,15 +44,32 @@ export default {
 	// watch for changes made on the menu component
 	watch: { 
 
+		trendIndex(){
+
+			if(this.trendIndex === "" || !this.trendIndex){
+				console.log('map sees trendIndex has been changed to: ' + this.trendIndex)
+				// trend is being reset by type changing
+			} else{
+				this.pointGroup.clearLayers();
+				console.log("map sees trend has been changed to a value")
+
+				// the trend value has been changed to an integer, get trend layer
+				//this.buildData( this.buildTrendLayer);
+				this.buildTrendLayer(this.fc);
+			}
+		},
+
 		type(){	
 			this.map.closePopup(); // close any popups
 			this.pointGroup.clearLayers();
 
 			if(this.param.PCODE != '') { // if a constituent has been selected
-	
+		
 				if(this.isATrends){ // if a trends type has been selected 
-					var callback = this.buildTrendLayer;
-					this.buildData( callback);
+					// var callback = this.buildTrendLayer;
+					// this.buildData( callback);
+					console.log('build trend layer');
+					this.buildTrendLayer(this.fc);
 				} 
 
 				else{
@@ -68,20 +85,6 @@ export default {
 			// if no constituent has been selected, then show the well locations by type
 			else {
 				this.wellsByType();
-			}
-		},
-
-		trendIndex(){
-		
-			if(this.trendIndex == "" || !this.trendIndex){
-				console.log('map sees trend has been changed to blank')
-				// trend is being reset by type changing
-			} else{
-				this.pointGroup.clearLayers();
-				console.log("map sees trend has been changed to a value")
-
-				// the trend value has been changed to an integer, get trend layer
-				this.buildData( this.buildTrendLayer);
 			}
 		},
 
@@ -130,31 +133,32 @@ export default {
 	
 	methods: {
 
-		buildTrendLayerfc() {
+		buildTrendLayer(fc) {
 
 			var popup = this.returnTrendPopup;
-			console.log(fc); 
 			var index = this.trendIndex + 1;
+			console.log('filter feature collection to only show trends at SU_VisitNo' + index)
 			var param = this.param;
+			var typeString = this.typeString;
 
 			var layer = L.geoJSON(fc, {
 				pointToLayer: (feature, latlng) => {
 					return pointStyle(feature,latlng, param);
 				},
 				onEachFeature: (feature, layer) => {
-					return layer.bindPopup(popup(feature.properties, fc));
+					return layer.bindPopup(() => popup(feature.properties, fc));
 				},
-				filter: ( feature ) => {
-					return feature.properties.SU_VisitNo == index;
-					// filter by this.trendIndex
+				filter: feature  => {
+					return this.type == "" || this.type == 3 ? feature.properties.SU_VisitNo == index : feature.properties.SU_VisitNo == index && feature.properties.StudyType == typeString
+					// filter by visit number or by visit number and studytype
 				}
 			});
 
-			this.addEventListeners(layer);
+			if(Object.keys(layer._layers).length === 0){ 
+				alert('No results found')
+			}
 
-			// filter by trendIndex
-			this.constituentLayer = layer;
-			this.addPoints(this.constituentLayer);
+			this.addPoints(layer); // add to pointGroup()
 
 			this.countTrendVisits(fc); // count how many trend visits
 		},
@@ -180,9 +184,7 @@ export default {
 				}
 			});
 
-			this.addEventListeners(layer);
-			this.constituentLayer = layer;
-			this.addPoints(this.constituentLayer);
+			this.addPoints(layer);
 		},
 
 		wellsByType(){
@@ -221,28 +223,35 @@ export default {
 			}
 		},
 
-		addPoints(){
+		addPoints(layer){
 			// if constituent layer of markers not already added to map, add it now
-			if(!this.pointGroup.hasLayer(this.constituentLayer)){
-				console.log('add layer')
-				this.pointGroup.addLayer(this.constituentLayer);
+			if(!this.pointGroup.hasLayer(layer)){
+				console.log('add layer');
+				this.addEventListeners(layer);
+				this.pointGroup.addLayer(layer);
 			} else {
-				this.constituentLayer.redraw();
+				layer.redraw();
 			}
 			this.$emit('toggleLoading', false)
 		},
 
+
+		/* go through all results and find what the max number of trend visits is. pass info to app, to popup, and to menu */
 		countTrendVisits(fc){
 			var uniqueVisits = [];
-			this.trendVisits = 0;
+			var trendVisits = 0;
 
 			for(var i = 0; i < fc.features.length; i ++) {
-				var visit = fc.features[i].SU_VisitNo;
+				var visit = fc.features[i].properties.SU_VisitNo;
 				if(uniqueVisits.indexOf(visit) === -1) {
 					uniqueVisits.push(visit);
-					this.trendVisits ++;
+					trendVisits ++;
 				}
 			}
+
+			console.log(uniqueVisits);
+
+			this.trendVisits = trendVisits;
 
 			this.$emit('trendsCounted', this.trendVisits);
 		},

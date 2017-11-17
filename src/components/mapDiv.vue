@@ -8,7 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import GetData from '../mixins/getData.vue' //functions that talk to arcserver
 import Popup from '../mixins/Popup.vue';
 import listeners from '../mixins/addEventListeners.vue'
-import pointStyle from '../mixins/pointStyle.js'
+import pointStyle from '../mixins/pointStyle.vue'
 
 export default {
 	name: 'MapDiv',
@@ -31,7 +31,7 @@ export default {
 			fc: ''
 		}
 	},
-	mixins: [GetData, Popup, listeners ],
+	mixins: [GetData, Popup, listeners, pointStyle ],
 	props: ['param', 'type', 'trend', 'layerArr', 'reset', 'trendIndex'],
 
 	computed: {
@@ -138,18 +138,17 @@ export default {
 			var popup = this.returnTrendPopup;
 			var index = this.trendIndex + 1;
 			console.log('filter feature collection to only show trends at SU_VisitNo' + index)
-			var param = this.param;
-			var typeString = this.typeString;
+			var that = this;
 
 			var layer = L.geoJSON(fc, {
 				pointToLayer: (feature, latlng) => {
-					return pointStyle(feature,latlng, param);
+					return that.pointStyle(feature,latlng);
 				},
 				onEachFeature: (feature, layer) => {
 					return layer.bindPopup(() => popup(feature.properties, fc));
 				},
 				filter: feature  => {
-					return this.type == "" || this.type == 3 ? feature.properties.SU_VisitNo == index : feature.properties.SU_VisitNo == index && feature.properties.StudyType == typeString
+					return this.type == "" || this.type == 3 ? feature.properties.SU_VisitNo == index : feature.properties.SU_VisitNo == index && feature.properties.StudyType == this.typeString
 					// filter by visit number or by visit number and studytype
 				}
 			});
@@ -166,13 +165,11 @@ export default {
 		buildStatusLayer(fc) {
 
 			var popup = this.returnParamPopup;
-			var param = this.param;
-			var typeString = this.typeString;
-			console.log(typeString)
+			var that = this;
 
 			var layer = L.geoJSON(fc, {
 				pointToLayer: (feature, latlng) => {
-					return pointStyle(feature, latlng, param)
+					return that.pointStyle(feature, latlng)
 				},
 				onEachFeature: (feature, layer) => {
 					return layer.bindPopup( () => popup(feature.properties)
@@ -180,7 +177,7 @@ export default {
 				},
 				filter: feature => {
 
-					return this.type == "" || this.type == 3 ? feature.properties.SU_VisitNo == '1' : feature.properties.SU_VisitNo == '1' && feature.properties.StudyType == typeString;
+					return this.type == "" || this.type == 3 ? feature.properties.SU_VisitNo == '1' : feature.properties.SU_VisitNo == '1' && feature.properties.StudyType == this.typeString;
 				}
 			});
 

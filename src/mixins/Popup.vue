@@ -95,6 +95,7 @@ export default {
 			this.numOfSamples = 0; //reset
 			this.popupProperties = properties;
 			this.chartData = []; //clear array
+			if(this.chart){ this.chart.destroy()}
 			this.results.insertAdjacentHTML('afterbegin', this.returnString(properties) + `<br/>Study Unit Trend Visit: ${properties.SU_VisitNo}<br/>`); //add additional line
 			//this.popup.insertAdjacentElement('beforeend', this.canvas);
 
@@ -130,19 +131,16 @@ export default {
 				var result = filtered.find(item => {
 					return parseInt(item.properties.SU_VisitNo) == i 
 				});
-
-				console.log(result);
 	
 				// push data into form that will go to the chart
 				this.chartData.push({
 					index: i,
 					label: result ? result.properties.SampleDate : 'NA',
-					data: result ? result.properties.ReptValue : null,
+					data: result ? parseInt(result.properties.ReptValue) : null,
 					properties: result ? result.properties: {}
 				});
 			};
 
-			this.chartData.sort(this.compare);
 			// add final line to popup now that numOfSamples has been calculated
 			this.results.insertAdjacentHTML('beforeend', `Number of Samples at this Well: ${filtered.length}</p>`);
 			
@@ -191,9 +189,8 @@ export default {
 						yAxes: [{
 							ticks: {
 								min: 0,
-								suggestedMax: 4,
 								max: this.param.Threshold_Hi,
-								stepSize: 1
+								stepSize: this.param.Threshold_Hi / 3
 							},
 							scaleLabel: {
 								display: true,
@@ -209,20 +206,11 @@ export default {
 								labelString: 'Sample Date'
 							}
 						}]
-					}
+					},
+					events: ['mousemove', 'mouseout']
 				}
 			});
 			return this.popup;
-		},
-
-		compare(a, b){
-			/* function to order results by their trend order, since call to arcserver is async and results may not be returned in order */
-			if(a.index < b.index) {
-				return -1;
-			} else if( a.index > b.index) {
-				return 1;
-			}
-			return 0;
 		}
 	}
 }

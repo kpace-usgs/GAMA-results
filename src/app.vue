@@ -119,7 +119,7 @@ export default {
 			// go through the array and look for group names that haven't been handled yet. 
 			for(var i = 0; i < arr.length; i++) {
 
-				var name = arr[i].properties.ConstituentGroup;
+				var name = arr[i].properties.Constituen;
 
 				// when the loop encounters a new constituent group, add that name to the tracking array
 				if(uniqueNames.indexOf(name) === -1 && name !== null) {
@@ -132,7 +132,7 @@ export default {
 
 					// create a subarray of all objects that have the constituent group name being handled
 					var paramArray = arr.filter( feature => {
-						return feature.properties.ConstituentGroup == name;
+						return feature.properties.Constituen == name;
 					});
 
 					// go through that subarray and handle each unique PCODE value
@@ -141,7 +141,7 @@ export default {
 
 						// if not already handled, add to the object
 						if(uniqueParameters.indexOf(param.PCODE) == -1 ) {
-
+						
 							uniqueParameters.push(param.PCODE); //push to tracking array
 
 							// final step: get all legend items for that pcode, to show in menu
@@ -154,7 +154,8 @@ export default {
 								legendArrToReturn.push({
 									LegendItem: legend.properties.LegendItem,
 									Category: legend.properties.Category,
-									Symbology: legend.properties.Symbology
+									Symbology: legend.properties.Symbology,
+									Color: legend.properties.HEX
 								});
 							});
 							
@@ -166,19 +167,20 @@ export default {
 							});
 							// // save a parameter object
 							paramArrToReturn.push({
-								Constituent: param.Constituent,
+								Constituent: param.Constitu_1,
 								PCODE: param.PCODE,
-								Threshold_Low: param.Threshold_Low,
-								Threshold_Hi: param.Threshold_Hi,
-								ThresholdSource: param.ThresholdSource,
+								Threshold_Low: param.Threshold_,
+								Threshold_Hi: param.Threshold1,
+								ThresholdSource: param.ThresholdS,
 								Benchmark: param.Benchmark,
-								BenchmarkType: param.BenchmarkType,
-								BenchmarkDefinition: param.BenchmarkDefinition,
+								BenchmarkType: param.BenchmarkT,
+								BenchmarkDefinition: param.BenchmarkD,
 								Units: param.Units,
-								LegendCount: param.LegendCount,
+								LegendCount: param.LegendCoun,
 								Legend: legendArrToReturn
 							});
 						}
+		
 					};
 
 					toReturn.push({

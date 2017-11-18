@@ -101,11 +101,14 @@ export default {
 <style>
 
 .low{
-	z-index: 3;
+	z-index: 5;
 }
 .med {
 	z-index: 10;
 }
 .high {
 	z-index: 200;
+}
+.none{
+	z-index: 1;
 }
